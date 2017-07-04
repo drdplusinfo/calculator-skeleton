@@ -28,6 +28,14 @@ abstract class Controller extends StrictObject
         );
     }
 
+    /**
+     * @return History
+     */
+    protected function getHistory(): History
+    {
+        return $this->history;
+    }
+
     public function shouldRemember(): bool
     {
         return $this->history->shouldRemember();
