@@ -6,93 +6,25 @@ use Granam\Strict\Object\StrictObject;
 abstract class Controller extends StrictObject
 {
 
-    private const DELETE_CONFIGURATOR_HISTORY = 'delete_configurator_history';
-    private const CONFIGURATOR_HISTORY = 'configurator_history';
-    private const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
-    private const REMEMBER = 'remember_configurator_history';
-    private const FORGOT = 'forgot_configurator_history';
+    const DELETE_HISTORY = 'delete_history';
+    const REMEMBER_HISTORY = 'remember_history';
 
-    /** @var array */
-    private $history = [];
-    /**
-     * @var string
-     */
-    private $cookiesPostfix;
+    /** @var History */
+    private $history;
 
     protected function __construct(string $cookiesPostfix, int $cookiesTtl = null)
     {
-        $this->cookiesPostfix = $cookiesPostfix;
-        if (!empty($_POST[$this->getDeleteHistoryInputName()])) {
-            $this->deleteHistory();
-            header('Location: /', true, 301);
-            exit;
-        }
-        $afterYear = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-        if (!empty($_GET)) {
-            if (!empty($_GET[$this->shouldRemember()])) {
-                $this->setCookie(self::FORGOT . '-' . $cookiesPostfix, null, $afterYear);
-                $this->setCookie(self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix, serialize($_GET), $afterYear);
-                $this->setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $cookiesPostfix, md5_file(__FILE__), $afterYear);
-            } else {
-                $this->deleteHistory();
-                $this->setCookie(self::FORGOT . '-' . $cookiesPostfix, 1, $afterYear);
-            }
-        } elseif (!$this->cookieHistoryIsValid()) {
-            $this->deleteHistory();
-        }
-        if (!empty($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix])) {
-            $this->history = unserialize($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix], ['allowed_classes' => []]);
-            if (!is_array($this->history)) {
-                $this->history = [];
-            }
-        }
-    }
-
-    protected function deleteHistory(): void
-    {
-        $this->setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, null);
-        $this->setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, null);
-    }
-
-    protected function setCookie(string $name, $value, int $expire = 0): void
-    {
-        setcookie(
-            $name,
-            $value,
-            $expire,
-            '/',
-            '',
-            !empty($_SERVER['HTTPS']), // secure only ?
-            true // http only
+        $this->history = new History(
+            $_GET,
+            !empty($_POST[self::DELETE_HISTORY]),
+            !empty($_GET[self::REMEMBER_HISTORY]),
+            $cookiesPostfix
         );
-        $_COOKIE[$name] = $value;
-    }
-
-    private function cookieHistoryIsValid(): bool
-    {
-        return !empty($_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix])
-            && $_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix] === md5_file(__FILE__);
     }
 
     public function shouldRemember(): bool
     {
-        return empty($_COOKIE[self::FORGOT . '-' . $this->cookiesPostfix]);
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    protected function getValueFromRequest(string $name)
-    {
-        if (array_key_exists($name, $_GET)) {
-            return $_GET[$name];
-        }
-        if (array_key_exists($name, $this->history) && $this->cookieHistoryIsValid()) {
-            return $this->history[$name];
-        }
-
-        return null;
+        return $this->history->shouldRemember();
     }
 
     /**
@@ -138,23 +70,5 @@ abstract class Controller extends StrictObject
         }
 
         return $bagEnds;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCookiesPostfix(): string
-    {
-        return $this->cookiesPostfix;
-    }
-
-    public function getRememberHistoryInputName(): string
-    {
-        return self::REMEMBER . '-' . $this->cookiesPostfix;
-    }
-
-    public function getDeleteHistoryInputName(): string
-    {
-        return self::DELETE_CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix;
     }
 }
