@@ -6,11 +6,11 @@ use Granam\Strict\Object\StrictObject;
 abstract class Controller extends StrictObject
 {
 
-    const DELETE_CONFIGURATOR_HISTORY = 'delete_configurator_history';
-    const CONFIGURATOR_HISTORY = 'configurator_history';
-    const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
-    const REMEMBER = 'remember';
-    const FORGOT = 'forgot';
+    private const DELETE_CONFIGURATOR_HISTORY = 'delete_configurator_history';
+    private const CONFIGURATOR_HISTORY = 'configurator_history';
+    private const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
+    private const REMEMBER = 'remember';
+    private const FORGOT = 'forgot';
 
     /** @var array */
     private $history = [];
@@ -146,5 +146,10 @@ abstract class Controller extends StrictObject
     public function getCookiesPostfix(): string
     {
         return $this->cookiesPostfix;
+    }
+
+    public function getDeleteHistoryInputName(): string
+    {
+        return self::DELETE_CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix;
     }
 }
