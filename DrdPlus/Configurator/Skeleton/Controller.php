@@ -22,12 +22,21 @@ abstract class Controller extends StrictObject
         );
     }
 
-    /**
-     * @return History
-     */
-    public function getHistory(): History
+    public function shouldRemember(): bool
     {
-        return $this->history;
+        return $this->history->shouldRemember();
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getValueFromRequest(string $name)
+    {
+        if (array_key_exists($name, $_GET)) {
+            return $_GET[$name];
+        }
+        return $this->history->getValue($name);
     }
 
     /**

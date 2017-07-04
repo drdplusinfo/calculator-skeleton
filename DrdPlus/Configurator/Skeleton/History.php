@@ -28,8 +28,8 @@ class History extends StrictObject
         }
         if (count($valuesToRemember) > 0) {
             $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-            if (!empty($_GET[$this->shouldRemember()])) {
-                $this->remember($cookiesTtl);
+            if ($remember) {
+                $this->remember($valuesToRemember, $cookiesTtl);
             } else {
                 $this->deleteHistory();
                 Cookie::setCookie(self::FORGOT . '-' . $cookiesPostfix, 1, $cookiesTtl);
@@ -45,10 +45,10 @@ class History extends StrictObject
         }
     }
 
-    protected function remember(int $cookiesTtl): void
+    protected function remember(array $valuesToRemember, int $cookiesTtl): void
     {
         Cookie::setCookie(self::FORGOT . '-' . $this->cookiesPostfix, null, $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, serialize($_GET), $cookiesTtl);
+        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, serialize($valuesToRemember), $cookiesTtl);
         Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, md5_file(__FILE__), $cookiesTtl);
     }
 
@@ -73,7 +73,7 @@ class History extends StrictObject
      * @param string $name
      * @return mixed
      */
-    public function getValueFromRequest(string $name)
+    public function getValue(string $name)
     {
         if (array_key_exists($name, $_GET)) {
             return $_GET[$name];
