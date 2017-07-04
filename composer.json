@@ -2,5 +2,15 @@
   "name": "drd-plus/configurator-skeleton",
   "license": "MIT",
   "type": "project",
-  "description": "Style and functionality helper of a configurator Drd+"
+  "description": "Style and functionality helper of a configurator Drd+",
+  "autoload": {
+    "psr-4": {
+      "DrdPlus\\": "DrdPlus/"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "roave/security-advisories": "dev-master",
+    "granam/strict-object": "dev-master"
+  }
 }
