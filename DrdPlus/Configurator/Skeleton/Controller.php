@@ -14,11 +14,17 @@ abstract class Controller extends StrictObject
 
     protected function __construct(string $cookiesPostfix, int $cookiesTtl = null)
     {
-        $this->history = new History(
+        $this->history = $this->createHistory($cookiesPostfix, $cookiesTtl);
+    }
+
+    protected function createHistory(string $cookiesPostfix, int $cookiesTtl = null): History
+    {
+        return new History(
             $_GET,
             !empty($_POST[self::DELETE_HISTORY]),
             !empty($_GET[self::REMEMBER_HISTORY]),
-            $cookiesPostfix
+            $cookiesPostfix,
+            $cookiesTtl
         );
     }
 
@@ -36,6 +42,7 @@ abstract class Controller extends StrictObject
         if (array_key_exists($name, $_GET)) {
             return $_GET[$name];
         }
+
         return $this->history->getValue($name);
     }
 
