@@ -9,8 +9,8 @@ abstract class Controller extends StrictObject
     private const DELETE_CONFIGURATOR_HISTORY = 'delete_configurator_history';
     private const CONFIGURATOR_HISTORY = 'configurator_history';
     private const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
-    private const REMEMBER = 'remember';
-    private const FORGOT = 'forgot';
+    private const REMEMBER = 'remember_configurator_history';
+    private const FORGOT = 'forgot_configurator_history';
 
     /** @var array */
     private $history = [];
@@ -22,14 +22,14 @@ abstract class Controller extends StrictObject
     protected function __construct(string $cookiesPostfix, int $cookiesTtl = null)
     {
         $this->cookiesPostfix = $cookiesPostfix;
-        if (!empty($_POST[self::DELETE_CONFIGURATOR_HISTORY . '-' . $cookiesPostfix])) {
+        if (!empty($_POST[$this->getDeleteHistoryInputName()])) {
             $this->deleteHistory();
             header('Location: /', true, 301);
             exit;
         }
         $afterYear = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
         if (!empty($_GET)) {
-            if (!empty($_GET[self::REMEMBER . '-' . $cookiesPostfix])) {
+            if (!empty($_GET[$this->shouldRemember()])) {
                 $this->setCookie(self::FORGOT . '-' . $cookiesPostfix, null, $afterYear);
                 $this->setCookie(self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix, serialize($_GET), $afterYear);
                 $this->setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $cookiesPostfix, md5_file(__FILE__), $afterYear);
@@ -146,6 +146,11 @@ abstract class Controller extends StrictObject
     public function getCookiesPostfix(): string
     {
         return $this->cookiesPostfix;
+    }
+
+    public function getRememberHistoryInputName(): string
+    {
+        return self::REMEMBER . '-' . $this->cookiesPostfix;
     }
 
     public function getDeleteHistoryInputName(): string
