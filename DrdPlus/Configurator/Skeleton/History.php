@@ -68,7 +68,7 @@ class History extends StrictObject
      * @param string $name
      * @return mixed
      */
-    protected function getValueFromRequest(string $name)
+    public function getValueFromRequest(string $name)
     {
         if (array_key_exists($name, $_GET)) {
             return $_GET[$name];

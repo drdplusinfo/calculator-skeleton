@@ -22,9 +22,12 @@ abstract class Controller extends StrictObject
         );
     }
 
-    public function shouldRemember(): bool
+    /**
+     * @return History
+     */
+    public function getHistory(): History
     {
-        return $this->history->shouldRemember();
+        return $this->history;
     }
 
     /**
