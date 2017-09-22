@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Tests\Configurator;
+namespace DrdPlus\Tests\Configurator\Skeleton;
 
 use DrdPlus\Configurator\Skeleton\Controller;
 use DrdPlus\Configurator\Skeleton\History;
@@ -12,7 +12,7 @@ class ControllerTest extends TestCase
      * @runInSeparateProcess
      * @backupGlobals
      */
-    public function I_can_get_history_with_expected_cookies_sufix_and_ttl(): void
+    public function I_can_get_history_with_expected_cookies_suffix_and_ttl(): void
     {
         $reflection = new \ReflectionClass(Controller::class);
         $constructor = $reflection->getMethod('__construct');

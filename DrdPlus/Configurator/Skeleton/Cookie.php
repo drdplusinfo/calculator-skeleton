@@ -17,9 +17,27 @@ class Cookie extends StrictObject
             true // http only
         );
         if ($result) {
-            $_COOKIE[$name] = $value;
+            if ($value === null) {
+                unset($_COOKIE[$name]);
+            } else {
+                $_COOKIE[$name] = $value;
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed|null
+     */
+    public static function getCookie(string $name)
+    {
+        return $_COOKIE[$name] ?? null;
+    }
+
+    public static function deleteCookie(string $name): bool
+    {
+        return self::setCookie($name, null);
     }
 }
