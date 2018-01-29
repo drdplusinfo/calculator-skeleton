@@ -6,8 +6,8 @@ use Granam\Strict\Object\StrictObject;
 abstract class Controller extends StrictObject
 {
 
-    const DELETE_HISTORY = 'delete_history';
-    const REMEMBER_HISTORY = 'remember_history';
+    public const DELETE_HISTORY = 'delete_history';
+    public const REMEMBER_HISTORY = 'remember_history';
 
     /** @var History */
     private $history;
@@ -47,7 +47,7 @@ abstract class Controller extends StrictObject
      */
     public function getValueFromRequest(string $name)
     {
-        if (array_key_exists($name, $_GET)) {
+        if (\array_key_exists($name, $_GET)) {
             return $_GET[$name];
         }
 
@@ -64,7 +64,7 @@ abstract class Controller extends StrictObject
     {
         $flat = [];
         foreach ($values as $index => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $flat[] = $index;
                 foreach ($this->toFlatArray($value) as $subItem) {
                     $flat[] = $subItem;
@@ -87,7 +87,7 @@ abstract class Controller extends StrictObject
     {
         $bagEnds = [];
         foreach ($values as $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 foreach ($this->getBagEnds($value) as $subItem) {
                     $bagEnds[] = $subItem;
                 }
