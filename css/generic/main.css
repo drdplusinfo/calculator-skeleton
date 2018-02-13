@@ -59,3 +59,7 @@ button[type="submit"] {
 .keyword {
     font-style: italic;
 }
+
+.float-right {
+    float: right;
+}
