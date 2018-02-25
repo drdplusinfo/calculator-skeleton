@@ -26,7 +26,7 @@ class History extends StrictObject
         if ($deleteFightHistory) {
             $this->deleteHistory();
         }
-        if (count($valuesToRemember) > 0) {
+        if (\count($valuesToRemember) > 0) {
             $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
             if ($remember) {
                 $this->remember($valuesToRemember, $cookiesTtl);
@@ -39,7 +39,7 @@ class History extends StrictObject
         }
         if (!empty($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix])) {
             $this->historyValues = unserialize($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix], ['allowed_classes' => []]);
-            if (!is_array($this->historyValues)) {
+            if (!\is_array($this->historyValues)) {
                 $this->historyValues = [];
             }
         }
@@ -75,10 +75,10 @@ class History extends StrictObject
      */
     public function getValue(string $name)
     {
-        if (array_key_exists($name, $_GET)) {
+        if (\array_key_exists($name, $_GET)) {
             return $_GET[$name];
         }
-        if (array_key_exists($name, $this->historyValues) && $this->cookieHistoryIsValid()) {
+        if (\array_key_exists($name, $this->historyValues) && $this->cookieHistoryIsValid()) {
             return $this->historyValues[$name];
         }
 
