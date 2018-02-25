@@ -7,7 +7,7 @@ class Cookie extends StrictObject
 {
     public static function setCookie(string $name, $value, int $expire = 0): bool
     {
-        $result = setcookie(
+        $result = \setcookie(
             $name,
             $value,
             $expire,

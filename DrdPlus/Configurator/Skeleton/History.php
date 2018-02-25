@@ -15,20 +15,20 @@ class History extends StrictObject
     private $historyValues = [];
 
     public function __construct(
+        bool $deletePreviousHistory,
         array $valuesToRemember,
-        bool $deleteFightHistory,
-        bool $remember,
+        bool $rememberCurrent,
         string $cookiesPostfix,
         int $cookiesTtl = null
     )
     {
         $this->cookiesPostfix = $cookiesPostfix;
-        if ($deleteFightHistory) {
+        if ($deletePreviousHistory) {
             $this->deleteHistory();
         }
         if (\count($valuesToRemember) > 0) {
             $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-            if ($remember) {
+            if ($rememberCurrent) {
                 $this->remember($valuesToRemember, $cookiesTtl);
             } else {
                 $this->deleteHistory();
@@ -38,9 +38,9 @@ class History extends StrictObject
             $this->deleteHistory();
         }
         if (!empty($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix])) {
-            $this->historyValues = unserialize($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix], ['allowed_classes' => []]);
-            if (!\is_array($this->historyValues)) {
-                $this->historyValues = [];
+            $historyValues = \unserialize($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix], ['allowed_classes' => []]);
+            if (\is_array($historyValues)) {
+                $this->historyValues = $historyValues;
             }
         }
     }
@@ -48,8 +48,8 @@ class History extends StrictObject
     protected function remember(array $valuesToRemember, int $cookiesTtl): void
     {
         Cookie::setCookie(self::FORGOT . '-' . $this->cookiesPostfix, null, $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, serialize($valuesToRemember), $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, md5_file(__FILE__), $cookiesTtl);
+        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), $cookiesTtl);
+        Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), $cookiesTtl);
     }
 
     protected function deleteHistory(): void
@@ -61,10 +61,10 @@ class History extends StrictObject
     private function cookieHistoryIsValid(): bool
     {
         return !empty($_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix])
-            && $_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix] === md5_file(__FILE__);
+            && $_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix] === \md5_file(__FILE__);
     }
 
-    public function shouldRemember(): bool
+    public function shouldRememberCurrent(): bool
     {
         return empty($_COOKIE[self::FORGOT . '-' . $this->cookiesPostfix]);
     }

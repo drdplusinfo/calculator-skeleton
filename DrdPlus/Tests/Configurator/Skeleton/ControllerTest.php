@@ -19,14 +19,14 @@ class ControllerTest extends TestCase
         $constructor->setAccessible(true);
         $controller = \Mockery::mock(Controller::class);
         $_GET['bar'] = 'baz';
-        $_GET[Controller::REMEMBER_HISTORY] = true;
+        $_GET[Controller::REMEMBER_CURRENT] = true;
         $constructor->invoke($controller, 'foo', 123 /* cookies TTL */);
         $getHistory = $reflection->getMethod('getHistory');
         $getHistory->setAccessible(true);
         /** @var History $history */
         $history = $getHistory->invoke($controller);
 
-        self::assertTrue($history->shouldRemember());
+        self::assertTrue($history->shouldRememberCurrent());
         self::assertSame('baz', $history->getValue('bar'));
     }
 }
