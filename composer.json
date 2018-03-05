@@ -1,8 +1,8 @@
 {
-  "name": "drd-plus/configurator-skeleton",
+  "name": "drd-plus/calculator-skeleton",
   "license": "MIT",
   "type": "project",
-  "description": "Style and functionality helper of a configurator Drd+",
+  "description": "Style and functionality helper of a DrD+ calculator",
   "autoload": {
     "psr-4": {
       "DrdPlus\\": "DrdPlus/"
