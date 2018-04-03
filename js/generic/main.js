@@ -1,6 +1,7 @@
 var form = document.getElementById('configurator');
 var inputs = document.getElementsByTagName('input');
 var selects = document.getElementsByTagName('select');
+var buttons = document.getElementsByTagName('button');
 var controls = [];
 for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength; inputIndex++) {
     var input = inputs[inputIndex];
@@ -10,6 +11,11 @@ for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength
 }
 for (var selectIndex = 0, selectsLength = selects.length; selectIndex < selectsLength; selectIndex++) {
     controls.push(selects[selectIndex]);
+}
+for (var buttonIndex = 0, buttonsLength = buttons.length; buttonIndex < buttonsLength; buttonIndex++) {
+    if (buttons[buttonIndex].type === 'button') {
+        controls.push(buttons[buttonIndex]);
+    }
 }
 var submitForm = function () {
     form.submit();
@@ -28,8 +34,12 @@ var disableControls = function (forMilliSeconds) {
     }
 };
 var invalidateResult = function () {
-    document.getElementById('result').className += ' obsolete';
-    document.getElementById('result').style.opacity = '0.5';
+    var result = document.getElementById('result');
+    if (!result) {
+        return;
+    }
+    result.classList.add('obsolete');
+    result.style.opacity = '0.5';
 };
 for (selectIndex = 0; selectIndex < selectsLength; selectIndex++) {
     selects[selectIndex].addEventListener('change', (function (selectIndex) {
@@ -41,11 +51,20 @@ for (selectIndex = 0; selectIndex < selectsLength; selectIndex++) {
         }
     })(selectIndex));
 }
+var submitOnChange = function () {
+    submitForm();
+    disableControls(5000);
+    invalidateResult();
+};
 for (var i = 0, controlsLength = controls.length; i < controlsLength; i++) {
     var control = controls[i];
-    control.addEventListener('change', function () {
-        submitForm();
-        disableControls(5000);
-        invalidateResult();
-    });
+    if (typeof control.type === 'undefined' || control.type !== 'button') {
+        control.addEventListener('change', function () {
+            submitOnChange()
+        });
+    } else {
+        control.addEventListener('click', function () {
+            submitOnChange()
+        });
+    }
 }
