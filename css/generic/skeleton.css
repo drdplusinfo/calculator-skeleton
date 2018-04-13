@@ -3,8 +3,9 @@ body {
     font-size: 16px;
 }
 
-.trap {
-    font-size: small;
+.note, .example {
+    font-style: italic;
+    font-size: smaller;
 }
 
 .hidden {
