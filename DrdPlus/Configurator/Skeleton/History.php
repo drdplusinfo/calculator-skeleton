@@ -75,9 +75,6 @@ class History extends StrictObject
      */
     public function getValue(string $name)
     {
-        if (\array_key_exists($name, $_GET)) {
-            return $_GET[$name];
-        }
         if (\array_key_exists($name, $this->historyValues) && $this->cookieHistoryIsValid()) {
             return $this->historyValues[$name];
         }

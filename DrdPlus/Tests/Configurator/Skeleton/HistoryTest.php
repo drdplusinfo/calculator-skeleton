@@ -10,7 +10,7 @@ class HistoryTest extends TestCase
      * @test
      * @runInSeparateProcess
      */
-    public function Values_from_url_get_have_priority(): void
+    public function Values_from_url_get_are_ignored(): void
     {
         $history = new History(
             true, // remove previous history, if any
@@ -21,8 +21,6 @@ class HistoryTest extends TestCase
         self::assertTrue($history->shouldRememberCurrent());
         self::assertSame('inner memory', $history->getValue('from'));
         $_GET['from'] = 'get';
-        self::assertSame('get', $history->getValue('from'));
-        unset($_GET['from']);
         self::assertSame('inner memory', $history->getValue('from'));
     }
 
