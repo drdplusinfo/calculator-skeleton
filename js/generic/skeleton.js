@@ -5,16 +5,20 @@ var buttons = document.getElementsByTagName('button');
 var controls = [];
 for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength; inputIndex++) {
     var input = inputs[inputIndex];
-    if (input.type !== 'hidden') {
+    if (input.type !== 'hidden' && !input.classList.contains('manual')) {
         controls.push(inputs[inputIndex]);
     }
 }
 for (var selectIndex = 0, selectsLength = selects.length; selectIndex < selectsLength; selectIndex++) {
-    controls.push(selects[selectIndex]);
+    var select = selects[selectIndex];
+    if (!select.classList.contains('manual')) {
+        controls.push(select);
+    }
 }
 for (var buttonIndex = 0, buttonsLength = buttons.length; buttonIndex < buttonsLength; buttonIndex++) {
-    if (buttons[buttonIndex].type === 'button') {
-        controls.push(buttons[buttonIndex]);
+    var button = buttons[buttonIndex];
+    if (button.type === 'button' && !button.classList.contains('manual')) {
+        controls.push(button);
     }
 }
 var submitForm = function () {
