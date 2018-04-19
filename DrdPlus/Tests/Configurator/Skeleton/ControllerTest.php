@@ -11,8 +11,9 @@ class ControllerTest extends TestCase
      * @test
      * @runInSeparateProcess
      * @backupGlobals
+     * @throws \ReflectionException
      */
-    public function I_can_get_history_with_expected_cookies_suffix_and_ttl(): void
+    public function Current_history_is_not_affected_by_current_get(): void
     {
         $reflection = new \ReflectionClass(Controller::class);
         $constructor = $reflection->getMethod('__construct');
@@ -25,8 +26,11 @@ class ControllerTest extends TestCase
         $getHistory->setAccessible(true);
         /** @var History $history */
         $history = $getHistory->invoke($controller);
-
         self::assertTrue($history->shouldRememberCurrent());
-        self::assertSame('baz', $history->getValue('bar'));
+        self::assertNull($history->getValue('bar'));
+        unset($_GET['bar']);
+        $constructor->invoke($controller, 'foo', 123 /* cookies TTL */); // creates history again
+        $nextHistory = $getHistory->invoke($controller);
+        self::assertSame('baz', $nextHistory->getValue('bar'));
     }
 }

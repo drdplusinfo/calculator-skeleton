@@ -27,11 +27,9 @@ class History extends StrictObject
             $this->deleteHistory();
         }
         if (\count($valuesToRemember) > 0) {
-            $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-            if ($rememberCurrent) {
-                $this->remember($valuesToRemember, $cookiesTtl);
-            } else {
+            if (!$rememberCurrent) {
                 $this->deleteHistory();
+                $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
                 Cookie::setCookie(self::FORGOT . '-' . $cookiesPostfix, 1, $cookiesTtl);
             }
         } elseif (!$this->cookieHistoryIsValid()) {
@@ -42,6 +40,10 @@ class History extends StrictObject
             if (\is_array($historyValues)) {
                 $this->historyValues = $historyValues;
             }
+        }
+        if ($rememberCurrent && \count($valuesToRemember) > 0) {
+            $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
+            $this->remember($valuesToRemember, $cookiesTtl);
         }
     }
 
