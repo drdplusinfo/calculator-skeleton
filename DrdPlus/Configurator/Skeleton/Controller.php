@@ -9,12 +9,26 @@ abstract class Controller extends StrictObject
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
+    /** @var Memory */
+    private $memory;
     /** @var History */
     private $history;
 
     protected function __construct(string $cookiesPostfix, int $cookiesTtl = null)
     {
+        $this->memory = $this->createMemory($cookiesPostfix, $cookiesTtl);
         $this->history = $this->createHistory($cookiesPostfix, $cookiesTtl);
+    }
+
+    protected function createMemory(string $cookiesPostfix, int $cookiesTtl = null): Memory
+    {
+        return new Memory(
+            !empty($_POST[self::DELETE_HISTORY]),
+            $_GET,
+            !empty($_GET[self::REMEMBER_CURRENT]),
+            $cookiesPostfix,
+            $cookiesTtl
+        );
     }
 
     protected function createHistory(string $cookiesPostfix, int $cookiesTtl = null): History
@@ -29,6 +43,14 @@ abstract class Controller extends StrictObject
     }
 
     /**
+     * @return Memory
+     */
+    protected function getMemory(): Memory
+    {
+        return $this->memory;
+    }
+
+    /**
      * @return History
      */
     protected function getHistory(): History
@@ -38,7 +60,7 @@ abstract class Controller extends StrictObject
 
     public function shouldRemember(): bool
     {
-        return $this->history->shouldRememberCurrent();
+        return $this->getMemory()->shouldRememberCurrent();
     }
 
     /**
@@ -51,7 +73,7 @@ abstract class Controller extends StrictObject
             return $_GET[$name];
         }
 
-        return $this->history->getValue($name);
+        return $this->getMemory()->getValue($name);
     }
 
     /**

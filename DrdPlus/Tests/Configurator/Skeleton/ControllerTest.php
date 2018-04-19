@@ -13,6 +13,29 @@ class ControllerTest extends TestCase
      * @backupGlobals
      * @throws \ReflectionException
      */
+    public function Current_memory_is_affected_by_current_get(): void
+    {
+        $reflection = new \ReflectionClass(Controller::class);
+        $constructor = $reflection->getMethod('__construct');
+        $constructor->setAccessible(true);
+        $controller = \Mockery::mock(Controller::class);
+        $_GET['bar'] = 'baz';
+        $_GET[Controller::REMEMBER_CURRENT] = true;
+        $constructor->invoke($controller, 'foo', 123 /* cookies TTL */);
+        $getMemory = $reflection->getMethod('getMemory');
+        $getMemory->setAccessible(true);
+        /** @var History $history */
+        $history = $getMemory->invoke($controller);
+        self::assertTrue($history->shouldRememberCurrent());
+        self::assertSame('baz', $history->getValue('bar'));
+    }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @backupGlobals
+     * @throws \ReflectionException
+     */
     public function Current_history_is_not_affected_by_current_get(): void
     {
         $reflection = new \ReflectionClass(Controller::class);

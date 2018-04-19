@@ -7,7 +7,7 @@ class History extends StrictObject
 {
     private const CONFIGURATOR_HISTORY = 'configurator_history';
     private const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
-    private const FORGOT = 'forgot_configurator_history';
+    private const FORGOT_HISTORY = 'forgot_configurator_history';
 
     /** @var string */
     private $cookiesPostfix;
@@ -30,7 +30,7 @@ class History extends StrictObject
             if (!$rememberCurrent) {
                 $this->deleteHistory();
                 $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-                Cookie::setCookie(self::FORGOT . '-' . $cookiesPostfix, 1, $cookiesTtl);
+                Cookie::setCookie(self::FORGOT_HISTORY . '-' . $cookiesPostfix, 1, $cookiesTtl);
             }
         } elseif (!$this->cookieHistoryIsValid()) {
             $this->deleteHistory();
@@ -49,7 +49,7 @@ class History extends StrictObject
 
     protected function remember(array $valuesToRemember, int $cookiesTtl): void
     {
-        Cookie::setCookie(self::FORGOT . '-' . $this->cookiesPostfix, null, $cookiesTtl);
+        Cookie::setCookie(self::FORGOT_HISTORY . '-' . $this->cookiesPostfix, null, $cookiesTtl);
         Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), $cookiesTtl);
         Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), $cookiesTtl);
     }
@@ -68,7 +68,7 @@ class History extends StrictObject
 
     public function shouldRememberCurrent(): bool
     {
-        return empty($_COOKIE[self::FORGOT . '-' . $this->cookiesPostfix]);
+        return empty($_COOKIE[self::FORGOT_HISTORY . '-' . $this->cookiesPostfix]);
     }
 
     /**
