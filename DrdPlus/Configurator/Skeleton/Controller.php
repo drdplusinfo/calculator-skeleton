@@ -9,34 +9,37 @@ abstract class Controller extends StrictObject
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
+    /** @var array */
+    private $currentValues;
     /** @var Memory */
     private $memory;
     /** @var History */
     private $history;
 
-    protected function __construct(string $cookiesPostfix, int $cookiesTtl = null)
+    protected function __construct(string $cookiesPostfix, int $cookiesTtl = null, array $currentValues = null)
     {
-        $this->memory = $this->createMemory($cookiesPostfix, $cookiesTtl);
-        $this->history = $this->createHistory($cookiesPostfix, $cookiesTtl);
+        $this->currentValues = $currentValues ?? $_GET;
+        $this->memory = $this->createMemory($this->currentValues, $cookiesPostfix, $cookiesTtl);
+        $this->history = $this->createHistory($this->currentValues, $cookiesPostfix, $cookiesTtl);
     }
 
-    protected function createMemory(string $cookiesPostfix, int $cookiesTtl = null): Memory
+    protected function createMemory(array $values, string $cookiesPostfix, int $cookiesTtl = null): Memory
     {
         return new Memory(
             !empty($_POST[self::DELETE_HISTORY]),
-            $_GET,
-            !empty($_GET[self::REMEMBER_CURRENT]),
+            $values,
+            !empty($values[self::REMEMBER_CURRENT]),
             $cookiesPostfix,
             $cookiesTtl
         );
     }
 
-    protected function createHistory(string $cookiesPostfix, int $cookiesTtl = null): History
+    protected function createHistory(array $values, string $cookiesPostfix, int $cookiesTtl = null): History
     {
         return new History(
             !empty($_POST[self::DELETE_HISTORY]),
-            $_GET,
-            !empty($_GET[self::REMEMBER_CURRENT]),
+            $values,
+            !empty($values[self::REMEMBER_CURRENT]),
             $cookiesPostfix,
             $cookiesTtl
         );
@@ -63,14 +66,20 @@ abstract class Controller extends StrictObject
         return $this->getMemory()->shouldRememberCurrent();
     }
 
+    protected function rewriteValueFromRequest(string $name, $values): void
+    {
+        $this->currentValues[$name] = $values;
+        $this->getMemory()->rewrite($name, $values);
+    }
+
     /**
      * @param string $name
      * @return mixed
      */
     public function getValueFromRequest(string $name)
     {
-        if (\array_key_exists($name, $_GET)) {
-            return $_GET[$name];
+        if (\array_key_exists($name, $this->currentValues)) {
+            return $this->currentValues[$name];
         }
 
         return $this->getMemory()->getValue($name);
