@@ -13,6 +13,8 @@ class Memory extends StrictObject
     private $cookiesPostfix;
     /** @var array */
     private $memoryValues = [];
+    /** @var int|null */
+    private $cookiesTtl;
 
     public function __construct(
         bool $deletePreviousMemory,
@@ -43,6 +45,7 @@ class Memory extends StrictObject
                 $this->memoryValues = $memoryValues;
             }
         }
+        $this->cookiesTtl = $cookiesTtl;
     }
 
     protected function remember(array $valuesToRemember, int $cookiesTtl): void
@@ -80,5 +83,15 @@ class Memory extends StrictObject
         }
 
         return null;
+    }
+
+    /**
+     * @param string $name
+     * @param $values
+     */
+    public function rewrite(string $name, $values): void
+    {
+        $this->memoryValues[$name] = $values;
+        $this->remember($this->memoryValues, $this->cookiesTtl);
     }
 }
