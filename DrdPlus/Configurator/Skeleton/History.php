@@ -17,7 +17,7 @@ class History extends StrictObject
     public function __construct(
         bool $deletePreviousHistory,
         array $valuesToRemember,
-        bool $rememberCurrent,
+        bool $rememberHistory,
         string $cookiesPostfix,
         int $cookiesTtl = null
     )
@@ -27,7 +27,7 @@ class History extends StrictObject
             $this->deleteHistory();
         }
         if (\count($valuesToRemember) > 0) {
-            if (!$rememberCurrent) {
+            if (!$rememberHistory) {
                 $this->deleteHistory();
                 $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
                 Cookie::setCookie(self::FORGOT_HISTORY . '-' . $cookiesPostfix, 1, $cookiesTtl);
@@ -41,7 +41,7 @@ class History extends StrictObject
                 $this->historyValues = $historyValues;
             }
         }
-        if ($rememberCurrent && \count($valuesToRemember) > 0) {
+        if ($rememberHistory && \count($valuesToRemember) > 0) {
             $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
             $this->remember($valuesToRemember, $cookiesTtl);
         }
