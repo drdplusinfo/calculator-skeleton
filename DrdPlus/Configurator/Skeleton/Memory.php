@@ -28,8 +28,8 @@ class Memory extends StrictObject
         if ($deletePreviousMemory) {
             $this->deleteMemory();
         }
+        $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
         if (\count($valuesToRemember) > 0) {
-            $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
             if ($rememberCurrent) {
                 $this->remember($valuesToRemember, $cookiesTtl);
             } else {

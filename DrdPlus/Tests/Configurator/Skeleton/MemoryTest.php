@@ -129,4 +129,20 @@ class MemoryTest extends TestCase
         $fooMemory->rewrite('bar', 'Whisky');
         self::assertSame('Whisky', $fooMemory->getValue('bar'));
     }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     */
+    public function I_can_set_value_by_rewrite_even_if_no_values_were_set_before(): void
+    {
+        $memory = new Memory(
+            true, // remove previous memory, if any
+            [], // no values
+            true, // remember current values
+            __FUNCTION__ // cookies prefix
+        );
+        $memory->rewrite('foo', 'FOO');
+        self::assertSame('FOO', $memory->getValue('foo'));
+    }
 }
