@@ -129,4 +129,48 @@ abstract class Controller extends StrictObject
 
         return $bagEnds;
     }
+
+    /**
+     * @param array $additionalParameters
+     * @return string
+     */
+    public function getRequestUrl(array $additionalParameters = []): string
+    {
+        if (!$additionalParameters) {
+            return $_SERVER['REQUEST_URI'] ?? '';
+        }
+        $values = $_GET;
+        $values = \array_merge($values, $additionalParameters); // values from GET can be overwritten
+
+        $query = [];
+        foreach ($values as $name => $value) {
+            foreach ($this->buildUrlParts($name, $value) as $pair) {
+                $query[] = $pair;
+            }
+        }
+        $urlParts = \parse_url($_SERVER['REQUEST_URI'] ?? '');
+
+        return $urlParts['scheme'] . '://' . $urlParts['host'] . '/?' . \implode('&', $query);
+    }
+
+    /**
+     * @param string $name
+     * @param array $value
+     * @return array|string[]
+     */
+    private function buildUrlParts(string $name, $value): array
+    {
+        if (!\is_array($value)) {
+            return [\urlencode($name) . '=' . \urlencode($value)];
+        }
+        $pairs = [];
+        foreach ($value as $part) {
+            foreach ($this->buildUrlParts($name . '[]', $part) as $pair) {
+                $pairs[] = $pair;
+            }
+        }
+
+        return $pairs;
+    }
+
 }

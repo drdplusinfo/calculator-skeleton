@@ -56,4 +56,37 @@ class ControllerTest extends TestCase
         $nextHistory = $getHistory->invoke($controller);
         self::assertSame('baz', $nextHistory->getValue('bar'));
     }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @throws \ReflectionException
+     */
+    public function I_can_get_original_as_well_as_modified_url(): void
+    {
+        $reflection = new \ReflectionClass(Controller::class);
+        $constructor = $reflection->getMethod('__construct');
+        $constructor->setAccessible(true);
+        /** @var Controller|\Mockery\MockInterface $controller */
+        $controller = \Mockery::mock(Controller::class);
+        $_SERVER['REQUEST_URI'] = 'http://odpocinek.drdplus.loc/?remember_current=1&strength=0&will=0&race=human&sub_race=common&gender=male&roll_against_malus_from_wounds=9&fresh_wound_size[]=1&serious_wound_origin[]=mechanical_stab';
+        $_GET = [
+            'remember_current' => '1',
+            'strength' => '0',
+            'will' => '0',
+            'race' => 'human',
+            'sub_race' => 'common',
+            'gender' => 'male',
+            'roll_against_malus_from_wounds' => '9',
+            'fresh_wound_size' => ['1'],
+            'serious_wound_origin' => ['mechanical_stab'],
+        ];
+        $constructor->invoke($controller, 'foo', 123 /* cookies TTL */);
+        $controller->shouldDeferMissing();
+        self::assertSame($_SERVER['REQUEST_URI'], $controller->getRequestUrl());
+        self::assertSame(
+            \str_replace(['remember_current=1', '[]'], ['remember_current=0', \urlencode('[]')], $_SERVER['REQUEST_URI']),
+            $controller->getRequestUrl(['remember_current' => '0'])
+        );
+    }
 }
