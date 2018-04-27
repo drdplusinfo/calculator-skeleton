@@ -166,4 +166,20 @@ class MemoryTest extends TestCase
         }
         self::assertSame($values, $collectedValues);
     }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     */
+    public function I_can_get_all_values_at_once(): void
+    {
+        $values = ['foo' => 123, 'bar' => 456];
+        $memory = new Memory(
+            true, // remove previous memory, if any
+            $values,
+            true, // remember current values
+            __FUNCTION__ // cookies prefix
+        );
+        self::assertSame($values, $memory->getIterator()->getArrayCopy());
+    }
 }

@@ -95,7 +95,7 @@ class Memory extends StrictObject implements \IteratorAggregate
         $this->remember($this->memoryValues, $this->cookiesTtl);
     }
 
-    public function getIterator(): \Iterator
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->memoryValues);
     }
