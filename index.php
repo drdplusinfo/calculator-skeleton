@@ -25,6 +25,12 @@ ini_set('display_errors', '1');
   <body class="container">
     <div class="background"></div>
       <?php include __DIR__ . '/history_deletion.php' ?>
+    <div>
+      <form method="get" action="">
+        <label>nic
+          <input type="checkbox" value="1" name="nic" <?php if (!empty($_GET['nic'])) { ?>checked="checked"<?php } ?> ></label>
+      </form>
+    </div>
       <?php
       /** @noinspection PhpUnusedLocalVariableInspection */
       $sourceCodeUrl = 'https://github.com/jaroslavtyc/drdplus-calculator-skeleton';
