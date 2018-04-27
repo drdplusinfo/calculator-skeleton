@@ -1,6 +1,8 @@
 <?php
 namespace DrdPlus\Calculators\Rest;
 
+use DrdPlus\Calculator\Skeleton\Controller;
+
 include_once __DIR__ . '/vendor/autoload.php';
 
 error_reporting(-1);
@@ -24,7 +26,11 @@ ini_set('display_errors', '1');
   </head>
   <body class="container">
     <div class="background"></div>
-      <?php include __DIR__ . '/history_deletion.php' ?>
+      <?php include __DIR__ . '/history_deletion.php';
+      $controller = \Mockery::mock(Controller::class);
+      $controller->shouldReceive('shouldRemember')
+          ->andReturn(false);
+      include __DIR__ . '/history_remember.php' ?>
     <div>
       <form method="get" action="">
         <label>nic
