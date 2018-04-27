@@ -1,8 +1,8 @@
 <?php
-namespace DrdPlus\Tests\Configurator\Skeleton;
+namespace DrdPlus\Tests\Calculator\Skeleton;
 
-use DrdPlus\Configurator\Skeleton\Controller;
-use DrdPlus\Configurator\Skeleton\History;
+use DrdPlus\Calculator\Skeleton\Controller;
+use DrdPlus\Calculator\Skeleton\History;
 use PHPUnit\Framework\TestCase;
 
 class ControllerTest extends TestCase

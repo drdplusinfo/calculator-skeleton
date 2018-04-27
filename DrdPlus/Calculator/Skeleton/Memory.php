@@ -3,7 +3,7 @@ namespace DrdPlus\Calculator\Skeleton;
 
 use Granam\Strict\Object\StrictObject;
 
-class Memory extends StrictObject
+class Memory extends StrictObject implements \IteratorAggregate
 {
     private const CONFIGURATOR_MEMORY = 'configurator_memory';
     private const CONFIGURATOR_MEMORY_TOKEN = 'configurator_memory_token';
@@ -94,4 +94,10 @@ class Memory extends StrictObject
         $this->memoryValues[$name] = $values;
         $this->remember($this->memoryValues, $this->cookiesTtl);
     }
+
+    public function getIterator(): \Iterator
+    {
+        return new \ArrayIterator($this->memoryValues);
+    }
+
 }

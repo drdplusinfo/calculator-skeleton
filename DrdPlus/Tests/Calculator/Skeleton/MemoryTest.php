@@ -1,7 +1,7 @@
 <?php
-namespace DrdPlus\Tests\Configurator\Skeleton;
+namespace DrdPlus\Tests\Calculator\Skeleton;
 
-use DrdPlus\Configurator\Skeleton\Memory;
+use DrdPlus\Calculator\Skeleton\Memory;
 use PHPUnit\Framework\TestCase;
 
 class MemoryTest extends TestCase
@@ -144,5 +144,26 @@ class MemoryTest extends TestCase
         );
         $memory->rewrite('foo', 'FOO');
         self::assertSame('FOO', $memory->getValue('foo'));
+    }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     */
+    public function I_can_get_all_values_by_iteration(): void
+    {
+        $values = ['foo' => 123, 'bar' => 456];
+        $memory = new Memory(
+            true, // remove previous memory, if any
+            $values,
+            true, // remember current values
+            __FUNCTION__ // cookies prefix
+        );
+
+        $collectedValues = [];
+        foreach ($memory as $name => $value) {
+            $collectedValues[$name] = $value;
+        }
+        self::assertSame($values, $collectedValues);
     }
 }
