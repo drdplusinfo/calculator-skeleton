@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Configurator\Skeleton;
+namespace DrdPlus\Calculator\Skeleton;
 
 use Granam\Strict\Object\StrictObject;
 
@@ -155,7 +155,7 @@ abstract class Controller extends StrictObject
 
     /**
      * @param string $name
-     * @param array $value
+     * @param array|string $value
      * @return array|string[]
      */
     private function buildUrlParts(string $name, $value): array
@@ -164,7 +164,7 @@ abstract class Controller extends StrictObject
             return [\urlencode($name) . '=' . \urlencode($value)];
         }
         $pairs = [];
-        foreach ($value as $part) {
+        foreach ((array)$value as $part) {
             foreach ($this->buildUrlParts($name . '[]', $part) as $pair) {
                 $pairs[] = $pair;
             }
