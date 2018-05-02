@@ -153,8 +153,12 @@ abstract class Controller extends StrictObject
             }
         }
         $urlParts = \parse_url($_SERVER['REQUEST_URI'] ?? '');
+        $host = '';
+        if (!empty($urlParts['scheme'] && !empty($urlParts['host']))) {
+            $host = $urlParts['scheme'] . '://' . $urlParts['host'];
+        }
 
-        return $urlParts['scheme'] . '://' . $urlParts['host'] . '/?' . \implode('&', $query);
+        return $host . '/?' . \implode('&', $query);
     }
 
     /**
