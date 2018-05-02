@@ -1,4 +1,4 @@
-<div class="row issues">
+<div class="issues">
   <a href="https://rpgforum.cz/forum/viewtopic.php?f=238&t=14870">
     Máš nápad 😀? Vidíš chybu 😱?️ Sem s tím!
     <img src="images/generic/rpgforum-ico.png">
