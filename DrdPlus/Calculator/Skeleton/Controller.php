@@ -139,9 +139,13 @@ abstract class Controller extends StrictObject
         if (!$additionalParameters) {
             return $_SERVER['REQUEST_URI'] ?? '';
         }
-        $values = $_GET;
-        $values = \array_merge($values, $additionalParameters); // values from GET can be overwritten
+        $values = \array_merge($_GET, $additionalParameters); // values from GET can be overwritten
 
+        return $this->buildUrl($values);
+    }
+
+    private function buildUrl(array $values): string
+    {
         $query = [];
         foreach ($values as $name => $value) {
             foreach ($this->buildUrlParts($name, $value) as $pair) {
@@ -195,5 +199,17 @@ abstract class Controller extends StrictObject
     public function getCurrentValues(): array
     {
         return $this->getMemory()->getIterator()->getArrayCopy();
+    }
+
+    public function getRequestUrlExcept(array $exceptParameterNames): string
+    {
+        $values = $_GET;
+        foreach ($exceptParameterNames as $name) {
+            if (\array_key_exists($name, $values)) {
+                unset($values[$name]);
+            }
+        }
+
+        return $this->buildUrl($values);
     }
 }
