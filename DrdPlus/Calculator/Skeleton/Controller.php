@@ -157,8 +157,12 @@ abstract class Controller extends StrictObject
         if (!empty($urlParts['scheme'] && !empty($urlParts['host']))) {
             $host = $urlParts['scheme'] . '://' . $urlParts['host'];
         }
+        $queryString = '';
+        if ($query) {
+            $queryString = '/?' . \implode('&', $query);
+        }
 
-        return $host . '/?' . \implode('&', $query);
+        return $host . $queryString;
     }
 
     /**
