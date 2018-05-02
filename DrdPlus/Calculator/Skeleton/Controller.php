@@ -173,4 +173,27 @@ abstract class Controller extends StrictObject
         return $pairs;
     }
 
+    public function getCurrentValuesAsHiddenInputs(array $except = []): string
+    {
+        $html = [];
+        foreach ($this->getCurrentValues() as $name => $value) {
+            if (\in_array($name, $except, true)) {
+                continue;
+            }
+            if (!\is_array($value)) {
+                $html[] = "<input type='hidden' name='" . \htmlspecialchars($name) . "' value='" . \htmlspecialchars($value) . "'>";
+            } else {
+                foreach ($value as $item) {
+                    $html[] = "<input type='hidden' name='" . \htmlspecialchars($name) . "[]' value='" . \htmlspecialchars($item) . "'>";
+                }
+            }
+        }
+
+        return \implode("\n", $html);
+    }
+
+    public function getCurrentValues(): array
+    {
+        return $this->getMemory()->getIterator()->getArrayCopy();
+    }
 }
