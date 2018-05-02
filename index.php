@@ -30,6 +30,8 @@ ini_set('display_errors', '1');
       $controller = \Mockery::mock(Controller::class);
       $controller->shouldReceive('shouldRemember')
           ->andReturn(false);
+      $controller->shouldReceive('getCurrentValuesAsHiddenInputs')
+          ->andReturn('');
       include __DIR__ . '/history_remember.php' ?>
     <div>
       <form method="get" action="">
