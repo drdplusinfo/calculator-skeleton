@@ -75,11 +75,6 @@ abstract class Controller extends StrictObject
         return $this->currentValues;
     }
 
-    public function shouldRemember(): bool
-    {
-        return $this->getCurrentValues()->getCurrentValue(self::REMEMBER_CURRENT) && !$this->getMemory()->shouldForgotMemory();
-    }
-
     /**
      * Its almost same as @see getBagEnds, but gives in a flat array BOTH array values AND indexes from given array
      *

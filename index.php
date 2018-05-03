@@ -31,8 +31,7 @@ ini_set('display_errors', '1');
       $controller->shouldReceive('shouldRemember')
           ->andReturn(false);
       $controller->shouldReceive('getCurrentValuesAsHiddenInputs')
-          ->andReturn('');
-      include __DIR__ . '/history_remember.php' ?>
+          ->andReturn(''); ?>
     <div>
       <form method="get" action="">
         <label>nic
