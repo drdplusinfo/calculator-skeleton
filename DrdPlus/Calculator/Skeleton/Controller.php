@@ -35,7 +35,7 @@ abstract class Controller extends StrictObject
         );
     }
 
-    private function createCurrentValues(array $selectedValues, Memory $memory): CurrentValues
+    protected function createCurrentValues(array $selectedValues, Memory $memory): CurrentValues
     {
         return new CurrentValues($selectedValues, $memory);
     }
