@@ -66,9 +66,9 @@ class History extends StrictObject
             && $_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix] === \md5_file(__FILE__);
     }
 
-    public function shouldRememberCurrent(): bool
+    public function shouldForgotHistory(): bool
     {
-        return empty($_COOKIE[self::FORGOT_HISTORY . '-' . $this->cookiesPostfix]);
+        return !empty($_COOKIE[self::FORGOT_HISTORY . '-' . $this->cookiesPostfix]);
     }
 
     /**

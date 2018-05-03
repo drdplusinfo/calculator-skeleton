@@ -18,7 +18,7 @@ class HistoryTest extends TestCase
             true, // remember current values
             'foo'
         );
-        self::assertTrue($history->shouldRememberCurrent());
+        self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('from'));
         $nextHistory = new History(
             false, // do not remove previous history

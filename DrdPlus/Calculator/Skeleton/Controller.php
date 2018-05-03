@@ -9,18 +9,19 @@ abstract class Controller extends StrictObject
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
-    /** @var array */
-    private $currentValues;
     /** @var Memory */
     private $memory;
+    /** @var CurrentValues */
+    private $currentValues;
     /** @var History */
     private $history;
 
-    protected function __construct(string $cookiesPostfix, int $cookiesTtl = null, array $currentValues = null)
+    protected function __construct(string $cookiesPostfix, int $cookiesTtl = null, array $selectedValues = null)
     {
-        $this->currentValues = $currentValues ?? $_GET;
-        $this->memory = $this->createMemory($this->currentValues, $cookiesPostfix, $cookiesTtl);
-        $this->history = $this->createHistory($this->currentValues, $cookiesPostfix, $cookiesTtl);
+        $selectedValues = $selectedValues ?? $_GET;
+        $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
+        $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
+        $this->history = $this->createHistory($selectedValues, $cookiesPostfix, $cookiesTtl);
     }
 
     protected function createMemory(array $values, string $cookiesPostfix, int $cookiesTtl = null): Memory
@@ -32,6 +33,11 @@ abstract class Controller extends StrictObject
             $cookiesPostfix,
             $cookiesTtl
         );
+    }
+
+    private function createCurrentValues(array $selectedValues, Memory $memory): CurrentValues
+    {
+        return new CurrentValues($selectedValues, $memory);
     }
 
     protected function createHistory(array $values, string $cookiesPostfix, int $cookiesTtl = null): History
@@ -61,28 +67,17 @@ abstract class Controller extends StrictObject
         return $this->history;
     }
 
+    /**
+     * @return CurrentValues
+     */
+    public function getCurrentValues(): CurrentValues
+    {
+        return $this->currentValues;
+    }
+
     public function shouldRemember(): bool
     {
-        return $this->getMemory()->shouldRememberCurrent();
-    }
-
-    protected function rewriteValueFromRequest(string $name, $values): void
-    {
-        $this->currentValues[$name] = $values;
-        $this->getMemory()->rewrite($name, $values);
-    }
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getValueFromRequest(string $name)
-    {
-        if (\array_key_exists($name, $this->currentValues)) {
-            return $this->currentValues[$name];
-        }
-
-        return $this->getMemory()->getValue($name);
+        return $this->getCurrentValues()->getCurrentValue(self::REMEMBER_CURRENT) && !$this->getMemory()->shouldForgotMemory();
     }
 
     /**
@@ -144,6 +139,10 @@ abstract class Controller extends StrictObject
         return $this->buildUrl($values);
     }
 
+    /**
+     * @param array $values
+     * @return string
+     */
     private function buildUrl(array $values): string
     {
         $query = [];
@@ -185,10 +184,14 @@ abstract class Controller extends StrictObject
         return $pairs;
     }
 
+    /**
+     * @param array $except
+     * @return string
+     */
     public function getCurrentValuesAsHiddenInputs(array $except = []): string
     {
         $html = [];
-        foreach ($this->getCurrentValues() as $name => $value) {
+        foreach ($this->getSelectedValues() as $name => $value) {
             if (\in_array($name, $except, true)) {
                 continue;
             }
@@ -204,11 +207,18 @@ abstract class Controller extends StrictObject
         return \implode("\n", $html);
     }
 
-    public function getCurrentValues(): array
+    /**
+     * @return array
+     */
+    public function getSelectedValues(): array
     {
         return $this->getMemory()->getIterator()->getArrayCopy();
     }
 
+    /**
+     * @param array $exceptParameterNames
+     * @return string
+     */
     public function getRequestUrlExcept(array $exceptParameterNames): string
     {
         $values = $_GET;

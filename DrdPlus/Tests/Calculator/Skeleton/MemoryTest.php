@@ -18,7 +18,7 @@ class MemoryTest extends TestCase
             true, // remember current values
             'foo'
         );
-        self::assertTrue($memory->shouldRememberCurrent());
+        self::assertFalse($memory->shouldForgotMemory());
         self::assertSame('inner memory', $memory->getValue('from'));
         $_GET['from'] = 'get';
         self::assertSame('inner memory', $memory->getValue('from'));

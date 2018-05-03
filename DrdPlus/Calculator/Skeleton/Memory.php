@@ -67,9 +67,9 @@ class Memory extends StrictObject implements \IteratorAggregate
             && $_COOKIE[self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix] === \md5_file(__FILE__);
     }
 
-    public function shouldRememberCurrent(): bool
+    public function shouldForgotMemory(): bool
     {
-        return empty($_COOKIE[self::FORGOT_MEMORY . '-' . $this->cookiesPostfix]);
+        return !empty($_COOKIE[self::FORGOT_MEMORY . '-' . $this->cookiesPostfix]);
     }
 
     /**

@@ -3,6 +3,7 @@ namespace DrdPlus\Tests\Calculator\Skeleton;
 
 use DrdPlus\Calculator\Skeleton\Controller;
 use DrdPlus\Calculator\Skeleton\History;
+use DrdPlus\Calculator\Skeleton\Memory;
 use PHPUnit\Framework\TestCase;
 
 class ControllerTest extends TestCase
@@ -24,10 +25,10 @@ class ControllerTest extends TestCase
         $constructor->invoke($controller, 'foo', 123 /* cookies TTL */);
         $getMemory = $reflection->getMethod('getMemory');
         $getMemory->setAccessible(true);
-        /** @var History $history */
-        $history = $getMemory->invoke($controller);
-        self::assertTrue($history->shouldRememberCurrent());
-        self::assertSame('baz', $history->getValue('bar'));
+        /** @var Memory $memory */
+        $memory = $getMemory->invoke($controller);
+        self::assertFalse($memory->shouldForgotMemory());
+        self::assertSame('baz', $memory->getValue('bar'));
     }
 
     /**
@@ -49,7 +50,7 @@ class ControllerTest extends TestCase
         $getHistory->setAccessible(true);
         /** @var History $history */
         $history = $getHistory->invoke($controller);
-        self::assertTrue($history->shouldRememberCurrent());
+        self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('bar'));
         unset($_GET['bar']);
         $constructor->invoke($controller, 'foo', 123 /* cookies TTL */); // creates history again
