@@ -2,9 +2,9 @@
 namespace DrdPlus\Tests\Calculator\Skeleton;
 
 use DrdPlus\Calculator\Skeleton\History;
-use PHPUnit\Framework\TestCase;
+use Granam\Tests\Tools\TestWithMockery;
 
-class HistoryTest extends TestCase
+class HistoryTest extends TestWithMockery
 {
     /**
      * @test

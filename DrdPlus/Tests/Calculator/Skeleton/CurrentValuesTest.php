@@ -3,15 +3,10 @@ namespace DrdPlus\Tests\Calculator\Skeleton;
 
 use DrdPlus\Calculator\Skeleton\CurrentValues;
 use DrdPlus\Calculator\Skeleton\Memory;
-use PHPUnit\Framework\TestCase;
+use Granam\Tests\Tools\TestWithMockery;
 
-class CurrentValuesTest extends TestCase
+class CurrentValuesTest extends TestWithMockery
 {
-    protected function tearDown()
-    {
-        \Mockery::close();
-    }
-
     /**
      * @test
      */
@@ -55,7 +50,7 @@ class CurrentValuesTest extends TestCase
      */
     private function createMemory(array $values): Memory
     {
-        $memory = \Mockery::mock(Memory::class);
+        $memory = $this->mockery(Memory::class);
         $memory->shouldReceive('getValue')
             ->zeroOrMoreTimes()
             ->andReturnUsing(function (string $name) use ($values) {

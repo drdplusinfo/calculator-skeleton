@@ -4,9 +4,9 @@ namespace DrdPlus\Tests\Calculator\Skeleton;
 use DrdPlus\Calculator\Skeleton\Controller;
 use DrdPlus\Calculator\Skeleton\History;
 use DrdPlus\Calculator\Skeleton\Memory;
-use PHPUnit\Framework\TestCase;
+use Granam\Tests\Tools\TestWithMockery;
 
-class ControllerTest extends TestCase
+class ControllerTest extends TestWithMockery
 {
     /**
      * @test

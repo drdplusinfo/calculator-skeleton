@@ -3,16 +3,16 @@ declare(strict_types=1); // on PHP 7+ are standard PHP methods strict to types o
 
 namespace DrdPlus\Calculator\Skeleton;
 
-use PHPUnit\Framework\TestCase;
+use Granam\Tests\Tools\TestWithMockery;
 
-class CookieTest extends TestCase
+class CookieTest extends TestWithMockery
 {
     /**
      * @test
      * @runInSeparateProcess
      * @backupGlobals
      */
-    public function I_can_set_get_and_delete_cookie()
+    public function I_can_set_get_and_delete_cookie(): void
     {
         self::assertNull(Cookie::getCookie('foo'));
         self::assertTrue(Cookie::setCookie('foo', 'bar'));

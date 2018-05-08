@@ -2,9 +2,9 @@
 namespace DrdPlus\Tests\Calculator\Skeleton;
 
 use DrdPlus\Calculator\Skeleton\Memory;
-use PHPUnit\Framework\TestCase;
+use Granam\Tests\Tools\TestWithMockery;
 
-class MemoryTest extends TestCase
+class MemoryTest extends TestWithMockery
 {
     /**
      * @test
