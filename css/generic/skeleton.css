@@ -26,7 +26,7 @@ body {
     text-decoration: line-through;
 }
 
-button[type="submit"]:not(.manual) {
+button[type="submit"]:not(.manual), input[type="submit"]:not(.manual) {
     display: none;
 }
 
