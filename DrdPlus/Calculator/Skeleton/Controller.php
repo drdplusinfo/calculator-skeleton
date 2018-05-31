@@ -9,6 +9,10 @@ abstract class Controller extends StrictObject
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
+    /** @var string */
+    private $documentRoot;
+    /** @var string */
+    private $sourceCodeUrl;
     /** @var Memory */
     private $memory;
     /** @var CurrentValues */
@@ -16,8 +20,16 @@ abstract class Controller extends StrictObject
     /** @var History */
     private $history;
 
-    protected function __construct(string $cookiesPostfix, int $cookiesTtl = null, array $selectedValues = null)
+    protected function __construct(
+        string $documentRoot,
+        string $sourceCodeUrl,
+        string $cookiesPostfix,
+        int $cookiesTtl = null,
+        array $selectedValues = null
+    )
     {
+        $this->documentRoot = $documentRoot;
+        $this->sourceCodeUrl = $sourceCodeUrl;
         $selectedValues = $selectedValues ?? $_GET;
         $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
         $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
@@ -49,6 +61,22 @@ abstract class Controller extends StrictObject
             $cookiesPostfix,
             $cookiesTtl
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocumentRoot(): string
+    {
+        return $this->documentRoot;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSourceCodeUrl(): string
+    {
+        return $this->sourceCodeUrl;
     }
 
     /**

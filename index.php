@@ -2,6 +2,9 @@
 namespace DrdPlus\Calculators\Rest;
 
 use DrdPlus\Calculator\Skeleton\Controller;
+use Granam\Tests\Tools\CalledMethodExistsPass;
+use Mockery\Generator\CachingGenerator;
+use Mockery\Generator\StringManipulationGenerator;
 
 include_once __DIR__ . '/vendor/autoload.php';
 
@@ -27,6 +30,10 @@ ini_set('display_errors', '1');
   <body class="container">
     <div class="background"></div>
       <?php include __DIR__ . '/history_deletion.php';
+      $strictGenerator = StringManipulationGenerator::withDefaultPasses();
+      // add check if mocked methods exist
+      $strictGenerator->addPass(new CalledMethodExistsPass());
+      \Mockery::setGenerator(new CachingGenerator($strictGenerator));
       $controller = \Mockery::mock(Controller::class);
       $controller->shouldReceive('shouldRemember')
           ->andReturn(false);
