@@ -10,12 +10,39 @@
   },
   "require": {
     "php": ">=7.1",
-    "granam/strict-object": "dev-master"
+    "granam/strict-object": "dev-master",
+    "granam/string": "dev-master",
+    "granam/scalar": "dev-master",
+    "granam/exceptions-hierarchy": "dev-master",
+    "drd-plus/frontend-skeleton": "dev-master"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
     "granam/tools": "dev-master",
-    "phpunit/phpunit": "^6.2",
+    "phpunit/phpunit": "~7.0",
     "mockery/mockery": "~1.0"
+  },
+  "minimal-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "pre-update-cmd": [
+      "if [ -d ./vendor/drd-plus/frontend-skeleton ]; then cd ./vendor/drd-plus/frontend-skeleton && git checkout *.css; fi"
+    ],
+    "pre-install-cmd": [
+      "if [ -d ./vendor/drd-plus/frontend-skeleton ]; then cd ./vendor/drd-plus/frontend-skeleton && git checkout *.css; fi"
+    ],
+    "pre-autoload-dump": [
+      "rm -fr DrdPlus/Tests/FrontendSkeleton && cp -r vendor/drd-plus/frontend-skeleton/DrdPlus/Tests/FrontendSkeleton DrdPlus/Tests/",
+      "cp -r ./vendor/drd-plus/frontend-skeleton/images/generic ./images/",
+      "cp -r ./vendor/drd-plus/frontend-skeleton/css/generic ./css/",
+      "cp -r ./vendor/drd-plus/frontend-skeleton/js/generic ./js/",
+      "find ./cache -mindepth 2 -type f -exec rm {} +"
+    ],
+    "post-update-cmd": [
+      "php ./vendor/drd-plus/frontend-skeleton/bin/assets --dir=css"
+    ],
+    "post-install-cmd": [
+      "php ./vendor/drd-plus/frontend-skeleton/bin/assets --dir=css"
+    ]
   }
 }

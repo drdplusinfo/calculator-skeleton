@@ -10,7 +10,7 @@ class CookieTest extends TestWithMockery
     /**
      * @test
      * @runInSeparateProcess
-     * @backupGlobals
+     * @backupGlobals enabled
      */
     public function I_can_set_get_and_delete_cookie(): void
     {

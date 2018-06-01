@@ -20,6 +20,14 @@ abstract class Controller extends StrictObject
     /** @var History */
     private $history;
 
+    /**
+     * @param string $documentRoot
+     * @param string $sourceCodeUrl
+     * @param string $cookiesPostfix
+     * @param int|null $cookiesTtl
+     * @param array|null $selectedValues
+     * @throws \DrdPlus\Calculator\Skeleton\Exceptions\SourceCodeUrlIsNotValid
+     */
     protected function __construct(
         string $documentRoot,
         string $sourceCodeUrl,
@@ -29,6 +37,9 @@ abstract class Controller extends StrictObject
     )
     {
         $this->documentRoot = $documentRoot;
+        if (!\filter_var($sourceCodeUrl, \FILTER_VALIDATE_URL)) {
+            throw new Exceptions\SourceCodeUrlIsNotValid("Given source code URL is not a valid one: '{$sourceCodeUrl}'");
+        }
         $this->sourceCodeUrl = $sourceCodeUrl;
         $selectedValues = $selectedValues ?? $_GET;
         $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);

@@ -11,7 +11,7 @@ class ControllerTest extends TestWithMockery
     /**
      * @test
      * @runInSeparateProcess
-     * @backupGlobals
+     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_memory_is_affected_by_current_get(): void
@@ -37,7 +37,7 @@ class ControllerTest extends TestWithMockery
     /**
      * @test
      * @runInSeparateProcess
-     * @backupGlobals
+     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_history_is_not_affected_by_current_get(): void
@@ -92,5 +92,19 @@ class ControllerTest extends TestWithMockery
             \str_replace(['remember_current=1', '[]'], ['remember_current=0', \urlencode('[]')], $_SERVER['REQUEST_URI']),
             $controller->getRequestUrl(['remember_current' => '0'])
         );
+    }
+
+    /**
+     * @test
+     * @expectedException \DrdPlus\Calculator\Skeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @throws \ReflectionException
+     */
+    public function I_can_not_create_it_with_invalid_source_code_url(): void
+    {
+        $reflection = new \ReflectionClass(Controller::class);
+        $constructor = $reflection->getMethod('__construct');
+        $constructor->setAccessible(true);
+        $controller = \Mockery::mock(Controller::class);
+        $constructor->invoke($controller, 'foo', 'codeOnMyDisk', 'bar', 123 /* cookies TTL */);
     }
 }
