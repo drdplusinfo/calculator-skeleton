@@ -33,9 +33,9 @@
     ],
     "pre-autoload-dump": [
       "rm -fr DrdPlus/Tests/FrontendSkeleton && cp -r vendor/drd-plus/frontend-skeleton/DrdPlus/Tests/FrontendSkeleton DrdPlus/Tests/",
-      "cp -r ./vendor/drd-plus/frontend-skeleton/images/generic ./images/",
-      "cp -r ./vendor/drd-plus/frontend-skeleton/css/generic ./css/",
-      "cp -r ./vendor/drd-plus/frontend-skeleton/js/generic ./js/",
+      "rm -fr ./images/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/images/generic/frontend-skeleton ./images/generic/",
+      "rm -fr ./css/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/css/generic/frontend-skeleton ./css/generic/",
+      "rm -fr ./js/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/js/generic/frontend-skeleton ./js/generic/",
       "find ./cache -mindepth 2 -type f -exec rm {} +"
     ],
     "post-update-cmd": [
