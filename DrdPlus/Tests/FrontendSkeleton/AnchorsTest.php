@@ -44,6 +44,12 @@ class AnchorsTest extends AbstractContentTest
     public function Local_anchors_with_hashes_point_to_existing_ids(): void
     {
         $html = $this->getHtmlDocument();
+        $localAnchors = $this->getLocalAnchors();
+        if (!$this->getTestsConfiguration()->hasIds()) { // no IDs no local anchors
+            self::assertCount(0, $localAnchors, 'No local anchors expected as there are no IDs to make anchors from');
+
+            return;
+        }
         foreach ($this->getLocalAnchors() as $localAnchor) {
             $expectedId = \substr($localAnchor->getAttribute('href'), 1); // just remove leading #
             /** @var Element $target */
@@ -235,13 +241,12 @@ class AnchorsTest extends AbstractContentTest
     {
         $document = $this->getHtmlDocument();
         $noAnchorsForMe = $document->getElementById(StringTools::toConstantLikeValue('no-anchor-for-me'));
-        if (!$noAnchorsForMe && !$this->isSkeletonChecked($document)
-        ) {
+        if (!$noAnchorsForMe && !$this->isSkeletonChecked()) {
             self::assertFalse(false, 'Nothing to test here');
 
             return;
         }
-        self::assertNotEmpty($noAnchorsForMe);
+        self::assertNotEmpty($noAnchorsForMe, "Missing testing element with ID 'no-anchor-for-me'");
         $links = $noAnchorsForMe->getElementsByTagName('a');
         self::assertNotEmpty($links);
         /** @var \DOMElement $noAnchorsForMe */
@@ -259,10 +264,32 @@ class AnchorsTest extends AbstractContentTest
     {
         $document = $this->getHtmlDocument();
         $originalIds = $document->getElementsByClassName(HtmlHelper::INVISIBLE_ID_CLASS);
+        if (!$this->getTestsConfiguration()->hasIds()) {
+            self::assertCount(
+                0,
+                $originalIds,
+                'No original IDs, identified by CSS class ' . HtmlHelper::INVISIBLE_ID_CLASS . ' expected, got '
+                . \implode("\n", \array_map(function (Element $element) {
+                    return $element->outerHTML;
+                }, $this->collectionToArray($originalIds)))
+            );
+
+            return;
+        }
         self::assertNotEmpty($originalIds);
         foreach ($originalIds as $originalId) {
             self::assertSame('', $originalId->innerHTML);
         }
+    }
+
+    protected function collectionToArray(\Iterator $collection): array
+    {
+        $array = [];
+        foreach ($collection as $item) {
+            $array[] = $item;
+        }
+
+        return $array;
     }
 
     /**
@@ -272,12 +299,15 @@ class AnchorsTest extends AbstractContentTest
     {
         $document = $this->getHtmlDocument();
         $withAllowedElementsOnly = $document->getElementById(self::ID_WITH_ALLOWED_ELEMENTS_ONLY);
-        if (!$withAllowedElementsOnly && !$this->isSkeletonChecked($document)) {
+        if (!$withAllowedElementsOnly && !$this->isSkeletonChecked()) {
             self::assertFalse(false, 'Nothing to test here');
 
             return;
         }
-        self::assertNotEmpty($withAllowedElementsOnly);
+        self::assertNotEmpty(
+            $withAllowedElementsOnly,
+            'Missing testing HTML element with ID ' . self::ID_WITH_ALLOWED_ELEMENTS_ONLY
+        );
         $anchors = $withAllowedElementsOnly->getElementsByTagName('a');
         self::assertCount(1, $anchors);
         $anchor = $anchors->item(0);
@@ -295,7 +325,7 @@ class AnchorsTest extends AbstractContentTest
     {
         $document = $this->getHtmlDocument();
         $calculations = $document->getElementsByClassName(HtmlHelper::CALCULATION_CLASS);
-        if (!$this->isSkeletonChecked($document) && \count($calculations) === 0) {
+        if (\count($calculations) === 0 && !$this->isSkeletonChecked()) {
             self::assertFalse(false, 'No calculations in current document');
 
             return;
@@ -321,7 +351,7 @@ class AnchorsTest extends AbstractContentTest
             }
             $linksToAltar[] = $link;
         }
-        if (\defined('NO_LINKS_TO_ALTAR') && NO_LINKS_TO_ALTAR) {
+        if (!$this->getTestsConfiguration()->hasLinksToAltar()) {
             self::assertCount(0, $linksToAltar, 'No link to Altar expected according to tests config');
         }
         foreach ($linksToAltar as $linkToAltar) {
@@ -331,6 +361,7 @@ class AnchorsTest extends AbstractContentTest
 
     /**
      * @test
+     * @backupGlobals enabled
      */
     public function No_links_point_to_local_hosts(): void
     {
