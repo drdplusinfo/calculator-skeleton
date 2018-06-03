@@ -1,6 +1,9 @@
 <?php
 namespace DrdPlus\Tests\FrontendSkeleton;
 
+/**
+ * @runTestsInSeparateProcesses because of headers
+ */
 class StandardModeTest extends AbstractContentTest
 {
     /**

@@ -8,7 +8,11 @@ $partsRoot = \file_exists($documentRoot . '/parts')
 /** @noinspection PhpUnusedLocalVariableInspection */
 $genericPartsRoot = $genericPartsRoot ?? __DIR__ . '/parts/calculator-skeleton';
 
-$controller = $controller ?? include __DIR__ . '/parts/mocked-controller.php';
+$controller = $controller ?? new \DrdPlus\CalculatorSkeleton\Controller(
+        $documentRoot,
+        'https://github.com/jaroslavtyc/drd-plus-calculator-skeleton',
+        \basename($documentRoot)
+    );
 
 /** @noinspection PhpIncludeInspection */
 require $vendorRoot . '/drd-plus/frontend-skeleton/index.php';

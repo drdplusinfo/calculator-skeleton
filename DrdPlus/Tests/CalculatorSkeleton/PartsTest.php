@@ -3,6 +3,9 @@ namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
 
+/**
+ * @runTestsInSeparateProcesses because of headers
+ */
 class PartsTest extends AbstractContentTest
 {
     /**

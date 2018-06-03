@@ -3,7 +3,7 @@ namespace DrdPlus\CalculatorSkeleton;
 
 use Granam\Strict\Object\StrictObject;
 
-abstract class Controller extends StrictObject
+class Controller extends StrictObject
 {
 
     public const DELETE_HISTORY = 'delete_history';
@@ -28,7 +28,7 @@ abstract class Controller extends StrictObject
      * @param array|null $selectedValues
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
-    protected function __construct(
+    public function __construct(
         string $documentRoot,
         string $sourceCodeUrl,
         string $cookiesPostfix,
