@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Tests\Skeleton;
+namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\Controller;
 use DrdPlus\CalculatorSkeleton\History;

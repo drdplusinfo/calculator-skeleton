@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Tests\Skeleton;
+namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CurrentValues;
 use DrdPlus\CalculatorSkeleton\Memory;
