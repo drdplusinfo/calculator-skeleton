@@ -1,9 +1,9 @@
 <?php
-namespace DrdPlus\Tests\Calculator\Skeleton;
+namespace DrdPlus\Tests\Skeleton;
 
-use DrdPlus\Calculator\Skeleton\Controller;
-use DrdPlus\Calculator\Skeleton\History;
-use DrdPlus\Calculator\Skeleton\Memory;
+use DrdPlus\CalculatorSkeleton\Controller;
+use DrdPlus\CalculatorSkeleton\History;
+use DrdPlus\CalculatorSkeleton\Memory;
 use Granam\Tests\Tools\TestWithMockery;
 
 class ControllerTest extends TestWithMockery
@@ -96,7 +96,7 @@ class ControllerTest extends TestWithMockery
 
     /**
      * @test
-     * @expectedException \DrdPlus\Calculator\Skeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @expectedException \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      * @throws \ReflectionException
      */
     public function I_can_not_create_it_with_invalid_source_code_url(): void

@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Calculator\Skeleton;
+namespace DrdPlus\CalculatorSkeleton;
 
 use Granam\Strict\Object\StrictObject;
 
@@ -26,7 +26,7 @@ abstract class Controller extends StrictObject
      * @param string $cookiesPostfix
      * @param int|null $cookiesTtl
      * @param array|null $selectedValues
-     * @throws \DrdPlus\Calculator\Skeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
     protected function __construct(
         string $documentRoot,

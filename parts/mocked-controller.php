@@ -1,7 +1,7 @@
 <?php
 namespace DrdPlus\Calculators\Rest;
 
-use DrdPlus\Calculator\Skeleton\Controller;
+use DrdPlus\CalculatorSkeleton\Controller;
 use Granam\Tests\Tools\CalledMethodExistsPass;
 use Mockery\Generator\CachingGenerator;
 use Mockery\Generator\StringManipulationGenerator;

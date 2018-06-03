@@ -1,7 +1,7 @@
 <?php
-namespace DrdPlus\Tests\Calculator\Skeleton;
+namespace DrdPlus\Tests\Skeleton;
 
-use DrdPlus\Calculator\Skeleton\Memory;
+use DrdPlus\CalculatorSkeleton\Memory;
 use Granam\Tests\Tools\TestWithMockery;
 
 class MemoryTest extends TestWithMockery

@@ -1,8 +1,8 @@
 <?php
-namespace DrdPlus\Tests\Calculator\Skeleton;
+namespace DrdPlus\Tests\Skeleton;
 
-use DrdPlus\Calculator\Skeleton\CurrentValues;
-use DrdPlus\Calculator\Skeleton\Memory;
+use DrdPlus\CalculatorSkeleton\CurrentValues;
+use DrdPlus\CalculatorSkeleton\Memory;
 use Granam\Tests\Tools\TestWithMockery;
 
 class CurrentValuesTest extends TestWithMockery

@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Tests\Calculator\Skeleton;
+namespace DrdPlus\Tests\Skeleton;
 
 use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
 

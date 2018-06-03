@@ -1,5 +1,5 @@
 <?php
-namespace DrdPlus\Calculator\Skeleton;
+namespace DrdPlus\CalculatorSkeleton;
 
 use Granam\Strict\Object\StrictObject;
 

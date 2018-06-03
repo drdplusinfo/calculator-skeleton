@@ -1,7 +1,7 @@
 <?php
-namespace DrdPlus\Tests\Calculator\Skeleton;
+namespace DrdPlus\Tests\Skeleton;
 
-use DrdPlus\Calculator\Skeleton\History;
+use DrdPlus\CalculatorSkeleton\History;
 use Granam\Tests\Tools\TestWithMockery;
 
 class HistoryTest extends TestWithMockery
