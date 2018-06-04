@@ -6,9 +6,6 @@ use Granam\String\StringTools;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 
-/**
- * @runTestsInSeparateProcesses because of headers
- */
 class AnchorsTest extends AbstractContentTest
 {
 

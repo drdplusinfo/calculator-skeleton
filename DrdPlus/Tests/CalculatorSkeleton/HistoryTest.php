@@ -8,7 +8,6 @@ class HistoryTest extends TestWithMockery
 {
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function Values_from_url_get_are_ignored(): void
     {
@@ -34,7 +33,6 @@ class HistoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function History_is_immediately_forgotten_if_requested(): void
     {
@@ -61,7 +59,6 @@ class HistoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function History_is_truncated_when_current_values_are_empty_only_if_cookie_history_expires(): void
     {

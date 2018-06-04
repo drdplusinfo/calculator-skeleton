@@ -6,3 +6,4 @@ $testsConfiguration->disableHasTables();
 $testsConfiguration->disableHasNotes();
 $testsConfiguration->disableHasExternalAnchorsWithHashes();
 $testsConfiguration->disableHasLinksToAltar();
+$testsConfiguration->setExpectedPageTitle('HTML kostra pro DrD+ kalkulátory');

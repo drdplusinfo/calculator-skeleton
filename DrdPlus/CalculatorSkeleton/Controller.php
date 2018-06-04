@@ -1,16 +1,12 @@
 <?php
 namespace DrdPlus\CalculatorSkeleton;
 
-use Granam\Strict\Object\StrictObject;
-
-class Controller extends StrictObject
+class Controller extends \DrdPlus\FrontendSkeleton\Controller
 {
 
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
-    /** @var string */
-    private $documentRoot;
     /** @var string */
     private $sourceCodeUrl;
     /** @var Memory */
@@ -22,6 +18,7 @@ class Controller extends StrictObject
 
     /**
      * @param string $documentRoot
+     * @param string $vendorRoot
      * @param string $sourceCodeUrl
      * @param string $cookiesPostfix
      * @param int|null $cookiesTtl
@@ -30,13 +27,21 @@ class Controller extends StrictObject
      */
     public function __construct(
         string $documentRoot,
+        string $vendorRoot,
         string $sourceCodeUrl,
         string $cookiesPostfix,
         int $cookiesTtl = null,
         array $selectedValues = null
     )
     {
-        $this->documentRoot = $documentRoot;
+        parent::__construct(
+            $documentRoot,
+            $vendorRoot,
+            \file_exists($documentRoot . '/parts') // parts root
+                ? ($documentRoot . '/parts')
+                : ($vendorRoot . '/drd-plus/calculator-skeleton/parts'),
+            __DIR__ . '/../../parts/calculator-skeleton' // generic parts root
+        );
         if (!\filter_var($sourceCodeUrl, \FILTER_VALIDATE_URL)) {
             throw new Exceptions\SourceCodeUrlIsNotValid("Given source code URL is not a valid one: '{$sourceCodeUrl}'");
         }
@@ -72,14 +77,6 @@ class Controller extends StrictObject
             $cookiesPostfix,
             $cookiesTtl
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocumentRoot(): string
-    {
-        return $this->documentRoot;
     }
 
     /**

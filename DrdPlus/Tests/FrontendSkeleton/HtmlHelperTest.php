@@ -5,9 +5,6 @@ use DrdPlus\FrontendSkeleton\HtmlHelper;
 use Granam\String\StringTools;
 use Gt\Dom\Element;
 
-/**
- * @runTestsInSeparateProcesses because of headers
- */
 class HtmlHelperTest extends AbstractContentTest
 {
 

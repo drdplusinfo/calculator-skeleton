@@ -1,3 +1,4 @@
 <?php
+/** @var \DrdPlus\CalculatorSkeleton\Controller $controller */
 /** @noinspection PhpIncludeInspection */
-include $genericPartsRoot . '/history_deletion.php';
+include $controller->getGenericPartsRoot() . '/history_deletion.php';

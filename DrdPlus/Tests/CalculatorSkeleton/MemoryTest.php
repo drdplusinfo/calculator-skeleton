@@ -8,7 +8,6 @@ class MemoryTest extends TestWithMockery
 {
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function Values_from_url_get_are_ignored(): void
     {
@@ -26,7 +25,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function Memory_is_immediately_forgotten_if_requested(): void
     {
@@ -70,7 +68,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function Memory_is_truncated_when_current_values_are_empty_only_if_cookie_memory_expires(): void
     {
@@ -112,7 +109,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function I_can_set_new_value_as_well_as_rewrite_it(): void
     {
@@ -132,7 +128,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function I_can_set_value_by_rewrite_even_if_no_values_were_set_before(): void
     {
@@ -148,7 +143,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function I_can_get_all_values_by_iteration(): void
     {
@@ -169,7 +163,6 @@ class MemoryTest extends TestWithMockery
 
     /**
      * @test
-     * @runInSeparateProcess
      */
     public function I_can_get_all_values_at_once(): void
     {

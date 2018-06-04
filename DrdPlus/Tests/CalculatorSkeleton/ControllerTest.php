@@ -10,8 +10,6 @@ class ControllerTest extends TestWithMockery
 {
     /**
      * @test
-     * @runInSeparateProcess
-     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_memory_is_affected_by_current_get(): void
@@ -21,23 +19,22 @@ class ControllerTest extends TestWithMockery
         $constructor->setAccessible(true);
         $controller = \Mockery::mock(Controller::class);
         $controller->makePartial(); // call original methods if not mocked
-        $_GET['qux'] = 'baz';
+        $_GET['qux'] = 'quux';
         $_GET[Controller::REMEMBER_CURRENT] = true;
-        $constructor->invoke($controller, 'foo', 'https://example.com', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'baz', 123 /* cookies TTL */);
         self::assertSame('foo', $controller->getDocumentRoot());
+        self::assertSame('vendor root', $controller->getVendorRoot());
         self::assertSame('https://example.com', $controller->getSourceCodeUrl());
         $getMemory = $reflection->getMethod('getMemory');
         $getMemory->setAccessible(true);
         /** @var Memory $memory */
         $memory = $getMemory->invoke($controller);
         self::assertFalse($memory->shouldForgotMemory());
-        self::assertSame('baz', $memory->getValue('qux'));
+        self::assertSame('quux', $memory->getValue('qux'));
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_history_is_not_affected_by_current_get(): void
@@ -48,7 +45,7 @@ class ControllerTest extends TestWithMockery
         $controller = \Mockery::mock(Controller::class);
         $_GET['qux'] = 'baz';
         $_GET[Controller::REMEMBER_CURRENT] = true;
-        $constructor->invoke($controller, 'foo', 'https://example.com', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */);
         $getHistory = $reflection->getMethod('getHistory');
         $getHistory->setAccessible(true);
         /** @var History $history */
@@ -56,14 +53,13 @@ class ControllerTest extends TestWithMockery
         self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('qux'));
         unset($_GET['qux']);
-        $constructor->invoke($controller, 'foo', 'https://example.com', 'bar', 123 /* cookies TTL */); // creates history again
+        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */); // creates history again
         $nextHistory = $getHistory->invoke($controller);
         self::assertSame('baz', $nextHistory->getValue('qux'));
     }
 
     /**
      * @test
-     * @runInSeparateProcess
      * @throws \ReflectionException
      */
     public function I_can_get_original_as_well_as_modified_url(): void
@@ -85,7 +81,7 @@ class ControllerTest extends TestWithMockery
             'fresh_wound_size' => ['1'],
             'serious_wound_origin' => ['mechanical_stab'],
         ];
-        $constructor->invoke($controller, 'foo', 'https://example.com', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */);
         $controller->makePartial();
         self::assertSame($_SERVER['REQUEST_URI'], $controller->getRequestUrl());
         self::assertSame(
@@ -105,6 +101,6 @@ class ControllerTest extends TestWithMockery
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
         $controller = \Mockery::mock(Controller::class);
-        $constructor->invoke($controller, 'foo', 'codeOnMyDisk', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'foo', 'vendor root', 'codeOnMyDisk', 'bar', 123 /* cookies TTL */);
     }
 }

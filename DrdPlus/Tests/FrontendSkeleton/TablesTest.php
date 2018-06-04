@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\FrontendSkeleton;
 
-/**
- * @runTestsInSeparateProcesses because of headers
- */
 class TablesTest extends AbstractContentTest
 {
     /**

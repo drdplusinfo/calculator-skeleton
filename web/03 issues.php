@@ -1,2 +1,4 @@
-<?php /** @noinspection PhpIncludeInspection */
-include $genericPartsRoot . '/issues.php';
+<?php
+/** @var \DrdPlus\CalculatorSkeleton\Controller $controller */
+/** @noinspection PhpIncludeInspection */
+include $controller->getGenericPartsRoot() . '/issues.php';
