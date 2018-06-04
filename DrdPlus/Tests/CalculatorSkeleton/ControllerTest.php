@@ -21,7 +21,7 @@ class ControllerTest extends TestWithMockery
         $controller->makePartial(); // call original methods if not mocked
         $_GET['qux'] = 'quux';
         $_GET[Controller::REMEMBER_CURRENT] = true;
-        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'baz', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'https://example.com', 'baz', 'foo', 'vendor root', 123 /* cookies TTL */);
         self::assertSame('foo', $controller->getDocumentRoot());
         self::assertSame('vendor root', $controller->getVendorRoot());
         self::assertSame('https://example.com', $controller->getSourceCodeUrl());
@@ -45,7 +45,7 @@ class ControllerTest extends TestWithMockery
         $controller = \Mockery::mock(Controller::class);
         $_GET['qux'] = 'baz';
         $_GET[Controller::REMEMBER_CURRENT] = true;
-        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'https://example.com', 'bar', 'foo', 'vendor root', 123 /* cookies TTL */);
         $getHistory = $reflection->getMethod('getHistory');
         $getHistory->setAccessible(true);
         /** @var History $history */
@@ -53,7 +53,7 @@ class ControllerTest extends TestWithMockery
         self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('qux'));
         unset($_GET['qux']);
-        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */); // creates history again
+        $constructor->invoke($controller, 'https://example.com', 'bar', 'foo', 'vendor root', 123 /* cookies TTL */); // creates history again
         $nextHistory = $getHistory->invoke($controller);
         self::assertSame('baz', $nextHistory->getValue('qux'));
     }
@@ -81,7 +81,7 @@ class ControllerTest extends TestWithMockery
             'fresh_wound_size' => ['1'],
             'serious_wound_origin' => ['mechanical_stab'],
         ];
-        $constructor->invoke($controller, 'foo', 'vendor root', 'https://example.com', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'https://example.com', 'bar', 'foo', 'vendor root', 123 /* cookies TTL */);
         $controller->makePartial();
         self::assertSame($_SERVER['REQUEST_URI'], $controller->getRequestUrl());
         self::assertSame(
@@ -101,6 +101,6 @@ class ControllerTest extends TestWithMockery
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
         $controller = \Mockery::mock(Controller::class);
-        $constructor->invoke($controller, 'foo', 'vendor root', 'codeOnMyDisk', 'bar', 123 /* cookies TTL */);
+        $constructor->invoke($controller, 'codeOnMyDisk', 'foo', 'vendor root', 'bar', 123 /* cookies TTL */);
     }
 }

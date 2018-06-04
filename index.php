@@ -11,10 +11,10 @@ $vendorRoot = $vendorRoot ?? $documentRoot . '/vendor';
 require_once $vendorRoot . '/autoload.php';
 
 $controller = $controller ?? new \DrdPlus\CalculatorSkeleton\Controller(
-        $documentRoot,
-        $vendorRoot,
         'https://github.com/jaroslavtyc/drd-plus-calculator-skeleton',
-        \basename($documentRoot)
+        \basename($documentRoot),
+        $documentRoot,
+        $vendorRoot
     );
 
 /** @noinspection PhpIncludeInspection */

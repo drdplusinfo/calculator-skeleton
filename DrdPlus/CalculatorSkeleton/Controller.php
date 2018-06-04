@@ -17,19 +17,23 @@ class Controller extends \DrdPlus\FrontendSkeleton\Controller
     private $history;
 
     /**
-     * @param string $documentRoot
-     * @param string $vendorRoot
      * @param string $sourceCodeUrl
      * @param string $cookiesPostfix
+     * @param string $documentRoot
+     * @param string $vendorRoot
+     * @param string|null $partsRoot
+     * @param string|null $genericPartsRoot
      * @param int|null $cookiesTtl
      * @param array|null $selectedValues
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
     public function __construct(
-        string $documentRoot,
-        string $vendorRoot,
         string $sourceCodeUrl,
         string $cookiesPostfix,
+        string $documentRoot,
+        string $vendorRoot,
+        string $partsRoot = null,
+        string $genericPartsRoot = null,
         int $cookiesTtl = null,
         array $selectedValues = null
     )
@@ -37,10 +41,10 @@ class Controller extends \DrdPlus\FrontendSkeleton\Controller
         parent::__construct(
             $documentRoot,
             $vendorRoot,
-            \file_exists($documentRoot . '/parts') // parts root
+            $partsRoot ?? \file_exists($documentRoot . '/parts') // parts root
                 ? ($documentRoot . '/parts')
                 : ($vendorRoot . '/drd-plus/calculator-skeleton/parts'),
-            __DIR__ . '/../../parts/calculator-skeleton' // generic parts root
+            $genericPartsRoot ?? __DIR__ . '/../../parts/calculator-skeleton' // generic parts root
         );
         if (!\filter_var($sourceCodeUrl, \FILTER_VALIDATE_URL)) {
             throw new Exceptions\SourceCodeUrlIsNotValid("Given source code URL is not a valid one: '{$sourceCodeUrl}'");
