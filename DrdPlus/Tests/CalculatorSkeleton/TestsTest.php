@@ -15,7 +15,7 @@ class TestsTest extends TestCase
      */
     public function All_frontend_skeleton_tests_are_used(): void
     {
-        $reflectionClass = new \ReflectionClass(AbstractContentTest::class);
+        $reflectionClass = new \ReflectionClass($this->getParentTestsReferentialClass());
         $frontendSkeletonNamespace = $reflectionClass->getNamespaceName();
         $currentNamespace = $this->getClassNamespace(static::class);
         $frontendSkeletonDir = \dirname($reflectionClass->getFileName());
@@ -27,6 +27,11 @@ class TestsTest extends TestCase
             self::assertTrue(\class_exists($expectedRulesTestClass), "Missing test class {$expectedRulesTestClass} adopting {$frontendSkeletonTestClass}");
             self::assertTrue(\is_a($expectedRulesTestClass, $frontendSkeletonTestClass, true), "$expectedRulesTestClass should be a child of $frontendSkeletonTestClass");
         }
+    }
+
+    protected function getParentTestsReferentialClass(): string
+    {
+        return AbstractContentTest::class;
     }
 
     private function getClassesFromDir(string $dir): array
