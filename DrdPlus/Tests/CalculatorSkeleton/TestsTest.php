@@ -16,16 +16,16 @@ class TestsTest extends TestCase
     public function All_frontend_skeleton_tests_are_used(): void
     {
         $reflectionClass = new \ReflectionClass($this->getParentTestsReferentialClass());
-        $frontendSkeletonNamespace = $reflectionClass->getNamespaceName();
+        $parentTestsReferentialClassNamespace = $reflectionClass->getNamespaceName();
         $currentNamespace = $this->getClassNamespace(static::class);
-        $frontendSkeletonDir = \dirname($reflectionClass->getFileName());
-        foreach ($this->getClassesFromDir($frontendSkeletonDir) as $frontendSkeletonTestClass) {
-            if (!($frontendSkeletonTestClass instanceof TestCase) || (new \ReflectionClass($frontendSkeletonTestClass))->isAbstract()) {
+        $parentTestsDir = \dirname($reflectionClass->getFileName());
+        foreach ($this->getClassesFromDir($parentTestsDir) as $parentTestClass) {
+            if (!\preg_match('~Test$~', $parentTestClass) || (new \ReflectionClass($parentTestClass))->isAbstract()) {
                 continue;
             }
-            $expectedRulesTestClass = \str_replace($frontendSkeletonNamespace, $currentNamespace, $frontendSkeletonTestClass);
-            self::assertTrue(\class_exists($expectedRulesTestClass), "Missing test class {$expectedRulesTestClass} adopting {$frontendSkeletonTestClass}");
-            self::assertTrue(\is_a($expectedRulesTestClass, $frontendSkeletonTestClass, true), "$expectedRulesTestClass should be a child of $frontendSkeletonTestClass");
+            $expectedRulesTestClass = \str_replace($parentTestsReferentialClassNamespace, $currentNamespace, $parentTestClass);
+            self::assertTrue(\class_exists($expectedRulesTestClass), "Missing test class {$expectedRulesTestClass} adopting {$parentTestClass}");
+            self::assertTrue(\is_a($expectedRulesTestClass, $parentTestClass, true), "$expectedRulesTestClass should be a child of $parentTestClass");
         }
     }
 
