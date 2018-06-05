@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1); // on PHP 7+ are standard PHP methods strict to types of given parameters
 
-namespace DrdPlus\CalculatorSkeleton;
+namespace DrdPlus\Tests\CalculatorSkeleton;
 
+use DrdPlus\CalculatorSkeleton\Cookie;
 use Granam\Tests\Tools\TestWithMockery;
 
 class CookieTest extends TestWithMockery

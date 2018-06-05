@@ -13,13 +13,40 @@ class TestsTest extends TestCase
      * @test
      * @throws \ReflectionException
      */
+    public function Every_test_lives_in_drd_plus_tests_namespace(): void
+    {
+        $reflectionClass = new \ReflectionClass(static::class);
+        $testsDir = \dirname($reflectionClass->getFileName());
+        $testClasses = $this->getClassesFromDir($testsDir);
+        self::assertNotEmpty($testClasses, "No test classes found in {$testsDir}");
+        foreach ($testClasses as $testClass) {
+            self::assertStringStartsWith(
+                'DrdPlus\\Tests',
+                (new \ReflectionClass($testClass))->getNamespaceName(),
+                "Class {$testClass} should be in DrdPlus\\Test namespace"
+            );
+        }
+    }
+
+    /**
+     * @test
+     * @throws \ReflectionException
+     */
     public function All_frontend_skeleton_tests_are_used(): void
     {
+        $parentTestsReferentialClass = $this->getParentTestsReferentialClass();
+        self::assertContains(
+            'DrdPlus\Tests\\',
+            $parentTestsReferentialClass,
+            'Given parent tests referential class should be from DrdPlus\Tests namespace'
+        );
         $reflectionClass = new \ReflectionClass($this->getParentTestsReferentialClass());
         $parentTestsReferentialClassNamespace = $reflectionClass->getNamespaceName();
         $currentNamespace = $this->getClassNamespace(static::class);
         $parentTestsDir = \dirname($reflectionClass->getFileName());
-        foreach ($this->getClassesFromDir($parentTestsDir) as $parentTestClass) {
+        $parentTestClasses = $this->getClassesFromDir($parentTestsDir);
+        self::assertNotEmpty($parentTestClasses, "No parent test classes found in {$parentTestsDir}");
+        foreach ($parentTestClasses as $parentTestClass) {
             if (!\preg_match('~Test$~', $parentTestClass) || (new \ReflectionClass($parentTestClass))->isAbstract()) {
                 continue;
             }
