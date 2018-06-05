@@ -32,7 +32,6 @@
       "if [ -d ./vendor/drd-plus/frontend-skeleton ]; then cd ./vendor/drd-plus/frontend-skeleton && git checkout *.css; fi"
     ],
     "pre-autoload-dump": [
-      "rm -fr DrdPlus/Tests/FrontendSkeleton && cp -r vendor/drd-plus/frontend-skeleton/DrdPlus/Tests/FrontendSkeleton DrdPlus/Tests/",
       "rm -fr ./images/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/images/generic/frontend-skeleton ./images/generic/",
       "rm -fr ./css/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/css/generic/frontend-skeleton ./css/generic/",
       "rm -fr ./js/generic/frontend-skeleton && cp -r ./vendor/drd-plus/frontend-skeleton/js/generic/frontend-skeleton ./js/generic/",

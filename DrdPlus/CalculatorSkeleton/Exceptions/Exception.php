@@ -1,7 +1,7 @@
 <?php
 namespace DrdPlus\CalculatorSkeleton\Exceptions;
 
-interface Exception
+interface Exception extends \DrdPlus\FrontendSkeleton\Exceptions\Exception
 {
 
 }
