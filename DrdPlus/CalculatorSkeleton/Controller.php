@@ -40,6 +40,7 @@ class Controller extends \DrdPlus\FrontendSkeleton\Controller
     {
         parent::__construct(
             $documentRoot,
+            null, // web root detected automatically
             $vendorRoot,
             $partsRoot ?? \file_exists($documentRoot . '/parts') // parts root
                 ? ($documentRoot . '/parts')

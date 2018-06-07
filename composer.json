@@ -26,8 +26,11 @@
   "prefer-stable": true,
   "scripts": {
     "pre-autoload-dump": [
-      "cp -r ./vendor/drd-plus/frontend-skeleton/images/generic/skeleton ./images/generic/",
+      "find ./css/generic/skeleton -type f -name 'frontend-*' -exec rm {} +",
       "cp -r ./vendor/drd-plus/frontend-skeleton/css/generic/skeleton ./css/generic/",
+      "find ./images/generic/skeleton -type f -name 'frontend-*' -exec rm {} +",
+      "cp -r ./vendor/drd-plus/frontend-skeleton/images/generic/skeleton ./images/generic/",
+      "find ./js/generic/skeleton -type f -name 'frontend-*' -exec rm {} +",
       "cp -r ./vendor/drd-plus/frontend-skeleton/js/generic/skeleton ./js/generic/",
       "cp './vendor/drd-plus/frontend-skeleton/web/9 element with id and anchor inside.html' ./web/",
       "cp './vendor/drd-plus/frontend-skeleton/web/10 Only allowed elements are moved to anchor.html' ./web/",
