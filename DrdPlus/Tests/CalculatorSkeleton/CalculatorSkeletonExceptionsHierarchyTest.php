@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\Controller;
+use DrdPlus\CalculatorSkeleton\CalculatorController;
 use Granam\Tests\ExceptionsHierarchy\Exceptions\AbstractExceptionsHierarchyTest;
 
 class CalculatorSkeletonExceptionsHierarchyTest extends AbstractExceptionsHierarchyTest
@@ -15,7 +15,7 @@ class CalculatorSkeletonExceptionsHierarchyTest extends AbstractExceptionsHierar
      */
     protected function getTestedNamespace(): string
     {
-        return (new \ReflectionClass(Controller::class))->getNamespaceName();
+        return (new \ReflectionClass(CalculatorController::class))->getNamespaceName();
     }
 
     /**

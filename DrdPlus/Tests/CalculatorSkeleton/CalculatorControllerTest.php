@@ -1,11 +1,12 @@
 <?php
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\CalculatorSkeleton\Controller;
+use DrdPlus\CalculatorSkeleton\CalculatorController;
 use DrdPlus\CalculatorSkeleton\History;
 use DrdPlus\CalculatorSkeleton\Memory;
+use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
 
-class ControllerTest extends \DrdPlus\Tests\FrontendSkeleton\ControllerTest
+class CalculatorControllerTest extends AbstractContentTest
 {
     /**
      * @test
@@ -13,13 +14,13 @@ class ControllerTest extends \DrdPlus\Tests\FrontendSkeleton\ControllerTest
      */
     public function Current_memory_is_affected_by_current_get(): void
     {
-        $reflection = new \ReflectionClass(Controller::class);
+        $reflection = new \ReflectionClass(CalculatorController::class);
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
-        $controller = \Mockery::mock(Controller::class);
+        $controller = \Mockery::mock(CalculatorController::class);
         $controller->makePartial(); // call original methods if not mocked
         $_GET['qux'] = 'quux';
-        $_GET[Controller::REMEMBER_CURRENT] = true;
+        $_GET[CalculatorController::REMEMBER_CURRENT] = true;
         $constructor->invoke($controller, 'https://example.com', 'baz', 'foo', 'vendor root', 123 /* cookies TTL */);
         self::assertSame('foo', $controller->getDocumentRoot());
         self::assertSame('vendor root', $controller->getVendorRoot());
@@ -38,12 +39,12 @@ class ControllerTest extends \DrdPlus\Tests\FrontendSkeleton\ControllerTest
      */
     public function Current_history_is_not_affected_by_current_get(): void
     {
-        $reflection = new \ReflectionClass(Controller::class);
+        $reflection = new \ReflectionClass(CalculatorController::class);
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
-        $controller = \Mockery::mock(Controller::class);
+        $controller = \Mockery::mock(CalculatorController::class);
         $_GET['qux'] = 'baz';
-        $_GET[Controller::REMEMBER_CURRENT] = true;
+        $_GET[CalculatorController::REMEMBER_CURRENT] = true;
         $constructor->invoke($controller, 'https://example.com', 'bar', 'foo', 'vendor root', 123 /* cookies TTL */);
         $getHistory = $reflection->getMethod('getHistory');
         $getHistory->setAccessible(true);
@@ -63,11 +64,11 @@ class ControllerTest extends \DrdPlus\Tests\FrontendSkeleton\ControllerTest
      */
     public function I_can_get_original_as_well_as_modified_url(): void
     {
-        $reflection = new \ReflectionClass(Controller::class);
+        $reflection = new \ReflectionClass(CalculatorController::class);
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
-        /** @var Controller|\Mockery\MockInterface $controller */
-        $controller = \Mockery::mock(Controller::class);
+        /** @var CalculatorController|\Mockery\MockInterface $controller */
+        $controller = \Mockery::mock(CalculatorController::class);
         $_SERVER['REQUEST_URI'] = 'http://odpocinek.drdplus.loc/?remember_current=1&strength=0&will=0&race=human&sub_race=common&gender=male&roll_against_malus_from_wounds=9&fresh_wound_size[]=1&serious_wound_origin[]=mechanical_stab';
         $_GET = [
             'remember_current' => '1',
@@ -96,10 +97,10 @@ class ControllerTest extends \DrdPlus\Tests\FrontendSkeleton\ControllerTest
      */
     public function I_can_not_create_it_with_invalid_source_code_url(): void
     {
-        $reflection = new \ReflectionClass(Controller::class);
+        $reflection = new \ReflectionClass(CalculatorController::class);
         $constructor = $reflection->getMethod('__construct');
         $constructor->setAccessible(true);
-        $controller = \Mockery::mock(Controller::class);
+        $controller = \Mockery::mock(CalculatorController::class);
         $constructor->invoke($controller, 'codeOnMyDisk', 'foo', 'vendor root', 'bar', 123 /* cookies TTL */);
     }
 }

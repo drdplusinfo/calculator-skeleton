@@ -1,7 +1,7 @@
 <?php
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\CalculatorSkeleton\Controller;
+use DrdPlus\CalculatorSkeleton\CalculatorController;
 use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
 
 class CalculatorContentTest extends AbstractContentTest
@@ -15,7 +15,7 @@ class CalculatorContentTest extends AbstractContentTest
         $inputs = $htmlDocument->getElementsByTagName('input');
         self::assertNotCount(0, $inputs, 'No inputs found so no button for history deletion');
         foreach ($inputs as $input) {
-            if ($input->getAttribute('name') === Controller::DELETE_HISTORY) {
+            if ($input->getAttribute('name') === CalculatorController::DELETE_HISTORY) {
                 self::assertNotEmpty($input->value, 'Value of button to delete history should not be empty');
 
                 return;

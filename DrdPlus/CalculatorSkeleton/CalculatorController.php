@@ -1,7 +1,7 @@
 <?php
 namespace DrdPlus\CalculatorSkeleton;
 
-class Controller extends \DrdPlus\FrontendSkeleton\Controller
+class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
 {
 
     public const DELETE_HISTORY = 'delete_history';
