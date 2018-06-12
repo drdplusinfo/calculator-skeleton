@@ -19,6 +19,6 @@ class CookieTest extends TestWithMockery
         self::assertSame('bar', $_COOKIE['foo'] ?? false);
         self::assertTrue(Cookie::deleteCookie('foo'));
         self::assertNull(Cookie::getCookie('foo'));
-        self::assertFalse(array_key_exists('foo', $_COOKIE));
+        self::assertFalse(\array_key_exists('foo', $_COOKIE));
     }
 }
