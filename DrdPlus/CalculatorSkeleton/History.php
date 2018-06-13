@@ -29,8 +29,7 @@ class History extends StrictObject
         if (\count($valuesToRemember) > 0) {
             if (!$rememberHistory) {
                 $this->deleteHistory();
-                $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-                Cookie::setCookie(self::FORGOT_HISTORY . '-' . $cookiesPostfix, 1, $cookiesTtl);
+                Cookie::setCookie(self::FORGOT_HISTORY . '-' . $cookiesPostfix, 1, false, $this->createCookiesTtlDate($cookiesTtl));
             }
         } elseif (!$this->cookieHistoryIsValid()) {
             $this->deleteHistory();
@@ -42,22 +41,28 @@ class History extends StrictObject
             }
         }
         if ($rememberHistory && \count($valuesToRemember) > 0) {
-            $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
-            $this->remember($valuesToRemember, $cookiesTtl);
+            $this->remember($valuesToRemember, $this->createCookiesTtlDate($cookiesTtl));
         }
     }
 
-    protected function remember(array $valuesToRemember, int $cookiesTtl): void
+    protected function createCookiesTtlDate(?int $cookiesTtl): \DateTime
     {
-        Cookie::setCookie(self::FORGOT_HISTORY . '-' . $this->cookiesPostfix, null, $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), $cookiesTtl);
+        return $cookiesTtl !== null
+            ? new \DateTime('@' . (\time() + $cookiesTtl))
+            : new \DateTime('+ 1 year');
+    }
+
+    protected function remember(array $valuesToRemember, \DateTime $cookiesTtlDate): void
+    {
+        Cookie::deleteCookie(self::FORGOT_HISTORY . '-' . $this->cookiesPostfix);
+        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), false, $cookiesTtlDate);
+        Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), false, $cookiesTtlDate);
     }
 
     protected function deleteHistory(): void
     {
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, null);
-        Cookie::setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, null);
+        Cookie::deleteCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix);
+        Cookie::deleteCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix);
     }
 
     private function cookieHistoryIsValid(): bool

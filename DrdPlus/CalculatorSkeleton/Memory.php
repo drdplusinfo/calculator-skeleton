@@ -13,8 +13,8 @@ class Memory extends StrictObject implements \IteratorAggregate
     private $cookiesPostfix;
     /** @var array */
     private $memoryValues = [];
-    /** @var int|null */
-    private $cookiesTtl;
+    /** @var \DateTime */
+    private $cookiesTtlDate;
 
     public function __construct(
         bool $deletePreviousMemory,
@@ -28,13 +28,12 @@ class Memory extends StrictObject implements \IteratorAggregate
         if ($deletePreviousMemory) {
             $this->deleteMemory();
         }
-        $cookiesTtl = $cookiesTtl ?? (new \DateTime('+ 1 year'))->getTimestamp();
         if (\count($valuesToRemember) > 0) {
             if ($rememberCurrent) {
-                $this->remember($valuesToRemember, $cookiesTtl);
+                $this->remember($valuesToRemember, $this->createCookiesTtlDate($cookiesTtl));
             } else {
                 $this->deleteMemory();
-                Cookie::setCookie(self::FORGOT_MEMORY . '-' . $cookiesPostfix, 1, $cookiesTtl);
+                Cookie::setCookie(self::FORGOT_MEMORY . '-' . $cookiesPostfix, 1, false, $this->createCookiesTtlDate($cookiesTtl));
             }
         } elseif (!$this->cookieMemoryIsValid()) {
             $this->deleteMemory();
@@ -45,20 +44,27 @@ class Memory extends StrictObject implements \IteratorAggregate
                 $this->memoryValues = $memoryValues;
             }
         }
-        $this->cookiesTtl = $cookiesTtl;
+        $this->cookiesTtlDate = $this->createCookiesTtlDate($cookiesTtl);
     }
 
-    protected function remember(array $valuesToRemember, int $cookiesTtl): void
+    protected function createCookiesTtlDate(?int $cookiesTtl): ?\DateTime
     {
-        Cookie::setCookie(self::FORGOT_MEMORY . '-' . $this->cookiesPostfix, null, $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), $cookiesTtl);
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), $cookiesTtl);
+        return $cookiesTtl !== null
+            ? new \DateTime('@' . (\time() + $cookiesTtl))
+            : null;
+    }
+
+    protected function remember(array $valuesToRemember, ?\DateTime $cookiesTtlDate): void
+    {
+        Cookie::deleteCookie(self::FORGOT_MEMORY . '-' . $this->cookiesPostfix);
+        Cookie::setCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), false, $cookiesTtlDate);
+        Cookie::setCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), false, $cookiesTtlDate);
     }
 
     protected function deleteMemory(): void
     {
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix, null);
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix, null);
+        Cookie::deleteCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix);
+        Cookie::deleteCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix);
     }
 
     private function cookieMemoryIsValid(): bool
@@ -92,7 +98,7 @@ class Memory extends StrictObject implements \IteratorAggregate
     public function rewrite(string $name, $values): void
     {
         $this->memoryValues[$name] = $values;
-        $this->remember($this->memoryValues, $this->cookiesTtl);
+        $this->remember($this->memoryValues, $this->cookiesTtlDate);
     }
 
     public function getIterator(): \ArrayIterator
