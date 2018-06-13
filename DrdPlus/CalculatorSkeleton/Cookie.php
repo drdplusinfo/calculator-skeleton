@@ -11,11 +11,11 @@ class Cookie extends StrictObject
      * @param string $cookieName
      * @param $value
      * @param bool $httpOnly forbidden for JS ?
-     * @param \DateTime|null $expiresAt
+     * @param \DateTime|null $expiresAt null for at end of browser sessions
      * @return bool
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\CookieCanNotBeSet
      */
-    public static function setCookie(string $cookieName, $value, bool $httpOnly = true, \DateTime $expiresAt = null): bool
+    public static function setCookie(string $cookieName, string $value, bool $httpOnly = true, \DateTime $expiresAt = null): bool
     {
         if (PHP_SAPI !== 'cli') {
             $cookieSet = \setcookie(
@@ -48,7 +48,7 @@ class Cookie extends StrictObject
 
     public static function deleteCookie(string $cookieName): bool
     {
-        $set = self::setCookie($cookieName, null);
+        $set = self::setCookie($cookieName, '');
         if ($set) {
             unset($_COOKIE[$cookieName]);
         }
