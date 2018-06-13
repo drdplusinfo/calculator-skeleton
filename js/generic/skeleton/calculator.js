@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var inputs = document.getElementsByTagName('input');
     var selects = document.getElementsByTagName('select');
     var buttons = document.getElementsByTagName('button');
+    var controls = [];
     for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength; inputIndex++) {
         var input = inputs[inputIndex];
         if (input.type !== 'hidden' && !input.classList.contains('manual')) {
