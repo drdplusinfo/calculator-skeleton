@@ -8,3 +8,4 @@ $testsConfiguration->disableHasExternalAnchorsWithHashes();
 $testsConfiguration->disableHasLinksToAltar();
 $testsConfiguration->setExpectedWebName('HTML kostra pro DrD+ kalkulátory');
 $testsConfiguration->setExpectedPageTitle('HTML kostra pro DrD+ kalkulátory');
+$testsConfiguration->disableHasMoreVersions();
