@@ -1,6 +1,7 @@
 <?php
 namespace DrdPlus\CalculatorSkeleton;
 
+use DrdPlus\FrontendSkeleton\Cookie;
 use Granam\Strict\Object\StrictObject;
 
 class Memory extends StrictObject implements \IteratorAggregate
