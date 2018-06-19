@@ -11,6 +11,7 @@ $vendorRoot = $vendorRoot ?? $documentRoot . '/vendor';
 require_once $vendorRoot . '/autoload.php';
 
 $controller = $controller ?? new \DrdPlus\CalculatorSkeleton\CalculatorController(
+        \DrdPlus\FrontendSkeleton\HtmlHelper::createFromGlobals($documentRoot),
         'https://github.com/jaroslavtyc/drd-plus-calculator-skeleton',
         \basename($documentRoot),
         $documentRoot,

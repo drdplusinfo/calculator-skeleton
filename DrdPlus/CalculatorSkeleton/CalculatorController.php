@@ -1,6 +1,8 @@
 <?php
 namespace DrdPlus\CalculatorSkeleton;
 
+use DrdPlus\FrontendSkeleton\HtmlHelper;
+
 class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
 {
 
@@ -17,6 +19,7 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     private $history;
 
     /**
+     * @param HtmlHelper $htmlHelper
      * @param string $sourceCodeUrl
      * @param string $cookiesPostfix
      * @param string $documentRoot
@@ -28,6 +31,7 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
     public function __construct(
+        HtmlHelper $htmlHelper,
         string $sourceCodeUrl,
         string $cookiesPostfix,
         string $documentRoot,
@@ -39,6 +43,7 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     )
     {
         parent::__construct(
+            $htmlHelper,
             $documentRoot,
             null, // web root detected automatically
             $vendorRoot,
