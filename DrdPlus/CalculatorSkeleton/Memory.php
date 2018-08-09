@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\Cookie;
+use DrdPlus\FrontendSkeleton\CookiesService;
 use Granam\Strict\Object\StrictObject;
 
 class Memory extends StrictObject implements \IteratorAggregate
@@ -10,6 +12,9 @@ class Memory extends StrictObject implements \IteratorAggregate
     private const CONFIGURATOR_MEMORY_TOKEN = 'configurator_memory_token';
     private const FORGOT_MEMORY = 'forgot_configurator_memory';
 
+
+    /** @var CookiesService */
+    private $cookiesService;
     /** @var string */
     private $cookiesPostfix;
     /** @var array */
@@ -18,6 +23,7 @@ class Memory extends StrictObject implements \IteratorAggregate
     private $cookiesTtlDate;
 
     public function __construct(
+        CookiesService $cookiesService,
         bool $deletePreviousMemory,
         array $valuesToRemember,
         bool $rememberCurrent,
@@ -25,6 +31,7 @@ class Memory extends StrictObject implements \IteratorAggregate
         int $cookiesTtl = null
     )
     {
+        $this->cookiesService = $cookiesService;
         $this->cookiesPostfix = $cookiesPostfix;
         if ($deletePreviousMemory) {
             $this->deleteMemory();
@@ -34,7 +41,7 @@ class Memory extends StrictObject implements \IteratorAggregate
                 $this->remember($valuesToRemember, $this->createCookiesTtlDate($cookiesTtl));
             } else {
                 $this->deleteMemory();
-                Cookie::setCookie(self::FORGOT_MEMORY . '-' . $cookiesPostfix, 1, false, $this->createCookiesTtlDate($cookiesTtl));
+                $cookiesService->setCookie(self::FORGOT_MEMORY . '-' . $cookiesPostfix, '1', false, $this->createCookiesTtlDate($cookiesTtl));
             }
         } elseif (!$this->cookieMemoryIsValid()) {
             $this->deleteMemory();
@@ -57,15 +64,15 @@ class Memory extends StrictObject implements \IteratorAggregate
 
     protected function remember(array $valuesToRemember, ?\DateTime $cookiesTtlDate): void
     {
-        Cookie::deleteCookie(self::FORGOT_MEMORY . '-' . $this->cookiesPostfix);
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), false, $cookiesTtlDate);
-        Cookie::setCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), false, $cookiesTtlDate);
+        $this->cookiesService->deleteCookie(self::FORGOT_MEMORY . '-' . $this->cookiesPostfix);
+        $this->cookiesService->setCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), false, $cookiesTtlDate);
+        $this->cookiesService->setCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), false, $cookiesTtlDate);
     }
 
     protected function deleteMemory(): void
     {
-        Cookie::deleteCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix);
-        Cookie::deleteCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix);
+        $this->cookiesService->deleteCookie(self::CONFIGURATOR_MEMORY_TOKEN . '-' . $this->cookiesPostfix);
+        $this->cookiesService->deleteCookie(self::CONFIGURATOR_MEMORY . '-' . $this->cookiesPostfix);
     }
 
     private function cookieMemoryIsValid(): bool

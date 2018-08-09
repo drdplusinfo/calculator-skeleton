@@ -1,3 +1,4 @@
+<?php /** @var \DrdPlus\CalculatorSkeleton\CalculatorController $controller */ ?>
 <div class="row">
   <div class="col">
     <div class="issues">

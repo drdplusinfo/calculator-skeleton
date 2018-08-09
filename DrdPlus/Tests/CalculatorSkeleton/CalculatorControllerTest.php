@@ -1,15 +1,21 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CalculatorController;
 use DrdPlus\CalculatorSkeleton\History;
 use DrdPlus\CalculatorSkeleton\Memory;
-use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
+use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\Tests\FrontendSkeleton\Partials\AbstractContentTest;
 
 class CalculatorControllerTest extends AbstractContentTest
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @test
+     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_memory_is_affected_by_current_get(): void
@@ -17,16 +23,17 @@ class CalculatorControllerTest extends AbstractContentTest
         $_GET['qux'] = 'quux';
         $_GET[CalculatorController::REMEMBER_CURRENT] = true;
         $controller = new CalculatorController(
+            $googleAnalyticsIds = 'Google Analytics ID foo',
             $this->createHtmlHelper(),
-            'https://example.com',
-            'baz',
+            $dirs = $this->createDirs(),
+            $sourceCodeUrl = 'https://example.com',
+            $this->createCookiesService(),
             'foo',
-            'vendor root',
             123 /* cookies TTL */
         );
-        self::assertSame('foo', $controller->getDocumentRoot());
-        self::assertSame('vendor root', $controller->getVendorRoot());
-        self::assertSame('https://example.com', $controller->getSourceCodeUrl());
+        self::assertSame($dirs, $controller->getDirs());
+        self::assertSame($googleAnalyticsIds, $controller->getGoogleAnalyticsId());
+        self::assertSame($sourceCodeUrl, $controller->getSourceCodeUrl());
         $reflection = new \ReflectionClass(CalculatorController::class);
         $getMemory = $reflection->getMethod('getMemory');
         $getMemory->setAccessible(true);
@@ -36,8 +43,14 @@ class CalculatorControllerTest extends AbstractContentTest
         self::assertSame('quux', $memory->getValue('qux'));
     }
 
+    protected function createCookiesService(): CookiesService
+    {
+        return new CookiesService();
+    }
+
     /**
      * @test
+     * @backupGlobals enabled
      * @throws \ReflectionException
      */
     public function Current_history_is_not_affected_by_current_get(): void
@@ -45,11 +58,12 @@ class CalculatorControllerTest extends AbstractContentTest
         $_GET['qux'] = 'baz';
         $_GET[CalculatorController::REMEMBER_CURRENT] = true;
         $controller = new CalculatorController(
+            $googleAnalyticsIds = 'Google Analytics ID foo',
             $this->createHtmlHelper(),
-            'https://example.com',
-            'bar',
+            $dirs = $this->createDirs(),
+            $sourceCodeUrl = 'https://example.com',
+            $this->createCookiesService(),
             'foo',
-            'vendor root',
             123 /* cookies TTL */
         );
         $reflection = new \ReflectionClass(CalculatorController::class);
@@ -61,11 +75,12 @@ class CalculatorControllerTest extends AbstractContentTest
         self::assertNull($history->getValue('qux'));
         unset($_GET['qux']);
         $controller = new CalculatorController( // creates history again
+            $googleAnalyticsIds = 'Google Analytics ID foo',
             $this->createHtmlHelper(),
-            'https://example.com',
-            'bar',
+            $dirs = $this->createDirs(),
+            $sourceCodeUrl = 'https://example.com',
+            $this->createCookiesService(),
             'foo',
-            'vendor root',
             123 /* cookies TTL */
         );
         $nextHistory = $getHistory->invoke($controller);
@@ -74,6 +89,7 @@ class CalculatorControllerTest extends AbstractContentTest
 
     /**
      * @test
+     * @backupGlobals enabled
      */
     public function I_can_get_original_as_well_as_modified_url(): void
     {
@@ -90,11 +106,12 @@ class CalculatorControllerTest extends AbstractContentTest
             'serious_wound_origin' => ['mechanical_stab'],
         ];
         $controller = new CalculatorController(
+            $googleAnalyticsIds = 'Google Analytics ID foo',
             $this->createHtmlHelper(),
-            'https://example.com',
-            'bar',
+            $dirs = $this->createDirs(),
+            $sourceCodeUrl = 'https://example.com',
+            $this->createCookiesService(),
             'foo',
-            'vendor root',
             123 /* cookies TTL */
         );
         self::assertSame($_SERVER['REQUEST_URI'], $controller->getRequestUrl());
@@ -106,16 +123,18 @@ class CalculatorControllerTest extends AbstractContentTest
 
     /**
      * @test
+     * @backupGlobals enabled
      * @expectedException \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
     public function I_can_not_create_it_with_invalid_source_code_url(): void
     {
         new CalculatorController(
+            'Google Analytics ID foo',
             $this->createHtmlHelper(),
+            $dirs = $this->createDirs(),
             'codeOnMyDisk',
+            $this->createCookiesService(),
             'foo',
-            'vendor root',
-            'bar',
             123 /* cookies TTL */
         );
     }

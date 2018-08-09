@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-/** be strict for parameter types, https://www.quora.com/Are-strict_types-in-PHP-7-not-a-bad-idea */
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CalculatorController;
-use Granam\Tests\ExceptionsHierarchy\Exceptions\AbstractExceptionsHierarchyTest;
 
-class CalculatorSkeletonExceptionsHierarchyTest extends AbstractExceptionsHierarchyTest
+class CalculatorSkeletonExceptionsHierarchyTest extends FrontendSkeletonExceptionsHierarchyTest
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @return string
      * @throws \ReflectionException

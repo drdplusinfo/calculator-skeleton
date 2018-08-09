@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
-/** be strict for parameter types, https://www.quora.com/Are-strict_types-in-PHP-7-not-a-bad-idea */
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
+use DrdPlus\Tests\FrontendSkeleton\FrontendControllerTest;
 use PHPUnit\Framework\TestCase;
 
 class TestsTest extends TestCase
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @test
      * @throws \ReflectionException
@@ -34,31 +35,31 @@ class TestsTest extends TestCase
      */
     public function All_frontend_skeleton_tests_are_used(): void
     {
-        $parentTestsReferentialClass = $this->getParentTestsReferentialClass();
-        self::assertContains(
-            'DrdPlus\Tests\\',
-            $parentTestsReferentialClass,
-            'Given parent tests referential class should be from DrdPlus\Tests namespace'
-        );
-        $reflectionClass = new \ReflectionClass($this->getParentTestsReferentialClass());
-        $parentTestsReferentialClassNamespace = $reflectionClass->getNamespaceName();
-        $currentNamespace = $this->getClassNamespace(static::class);
-        $parentTestsDir = \dirname($reflectionClass->getFileName());
-        $parentTestClasses = $this->getClassesFromDir($parentTestsDir);
-        self::assertNotEmpty($parentTestClasses, "No parent test classes found in {$parentTestsDir}");
-        foreach ($parentTestClasses as $parentTestClass) {
-            if (!\preg_match('~Test$~', $parentTestClass) || (new \ReflectionClass($parentTestClass))->isAbstract()) {
+        $reflectionClass = new \ReflectionClass(\DrdPlus\Tests\FrontendSkeleton\ContentTest::class);
+        $frontendSkeletonDir = \dirname($reflectionClass->getFileName());
+        foreach ($this->getClassesFromDir($frontendSkeletonDir) as $frontendSkeletonTestClass) {
+            if (\is_a($frontendSkeletonTestClass, \Throwable::class, true)
+                || \is_a($frontendSkeletonTestClass, FrontendControllerTest::class, true) // it is solved via CalculatorController
+            ) {
                 continue;
             }
-            $expectedRulesTestClass = \str_replace($parentTestsReferentialClassNamespace, $currentNamespace, $parentTestClass);
-            self::assertTrue(\class_exists($expectedRulesTestClass), "Missing test class {$expectedRulesTestClass} adopting {$parentTestClass}");
-            self::assertTrue(\is_a($expectedRulesTestClass, $parentTestClass, true), "$expectedRulesTestClass should be a child of $parentTestClass");
+            $frontendSkeletonTestClassReflection = new \ReflectionClass($frontendSkeletonTestClass);
+            if ($frontendSkeletonTestClassReflection->isAbstract()
+                || $frontendSkeletonTestClassReflection->isInterface()
+                || $frontendSkeletonTestClassReflection->isTrait()
+            ) {
+                continue;
+            }
+            $expectedCalculatorTestClass = \str_replace('\\FrontendSkeleton', '\\CalculatorSkeleton', $frontendSkeletonTestClass);
+            self::assertTrue(
+                \class_exists($expectedCalculatorTestClass),
+                "Missing test class {$expectedCalculatorTestClass} adopted from frontend skeleton test class {$frontendSkeletonTestClass}"
+            );
+            self::assertTrue(
+                \is_a($expectedCalculatorTestClass, $frontendSkeletonTestClass, true),
+                "$expectedCalculatorTestClass should be a child of $frontendSkeletonTestClass"
+            );
         }
-    }
-
-    protected function getParentTestsReferentialClass(): string
-    {
-        return AbstractContentTest::class;
     }
 
     private function getClassesFromDir(string $dir): array
@@ -84,15 +85,5 @@ class TestsTest extends TestCase
         }
 
         return $classes;
-    }
-
-    /**
-     * @param string|null $class
-     * @return string
-     * @throws \ReflectionException
-     */
-    private function getClassNamespace(string $class): string
-    {
-        return (new \ReflectionClass($class))->getNamespaceName();
     }
 }

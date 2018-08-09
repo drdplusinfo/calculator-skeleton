@@ -1,11 +1,15 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CalculatorController;
-use DrdPlus\Tests\FrontendSkeleton\AbstractContentTest;
+use DrdPlus\Tests\FrontendSkeleton\Partials\AbstractContentTest;
 
 class CalculatorContentTest extends AbstractContentTest
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @test
      */

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CurrentValues;
@@ -7,6 +9,8 @@ use Granam\Tests\Tools\TestWithMockery;
 
 class CurrentValuesTest extends TestWithMockery
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @test
      */

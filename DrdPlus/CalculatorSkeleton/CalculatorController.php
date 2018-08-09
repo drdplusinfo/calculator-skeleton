@@ -1,6 +1,10 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\CalculatorSkeleton;
 
+use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\FrontendSkeleton\Dirs;
 use DrdPlus\FrontendSkeleton\HtmlHelper;
 
 class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
@@ -11,6 +15,8 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
 
     /** @var string */
     private $sourceCodeUrl;
+    /** @var CookiesService */
+    private $cookiesService;
     /** @var Memory */
     private $memory;
     /** @var CurrentValues */
@@ -19,43 +25,33 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     private $history;
 
     /**
+     * @param string $googleAnalyticsId
      * @param HtmlHelper $htmlHelper
+     * @param Dirs $dirs
      * @param string $sourceCodeUrl
+     * @param CookiesService $cookiesService
      * @param string $cookiesPostfix
-     * @param string $documentRoot
-     * @param string $vendorRoot
-     * @param string|null $partsRoot
-     * @param string|null $genericPartsRoot
      * @param int|null $cookiesTtl
      * @param array|null $selectedValues
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
     public function __construct(
+        string $googleAnalyticsId,
         HtmlHelper $htmlHelper,
+        Dirs $dirs,
         string $sourceCodeUrl,
+        CookiesService $cookiesService,
         string $cookiesPostfix,
-        string $documentRoot,
-        string $vendorRoot,
-        string $partsRoot = null,
-        string $genericPartsRoot = null,
         int $cookiesTtl = null,
         array $selectedValues = null
     )
     {
-        parent::__construct(
-            $htmlHelper,
-            $documentRoot,
-            null, // web root detected automatically
-            $vendorRoot,
-            $partsRoot ?? \file_exists($documentRoot . '/parts') // parts root
-                ? ($documentRoot . '/parts')
-                : ($vendorRoot . '/drd-plus/calculator-skeleton/parts'),
-            $genericPartsRoot ?? __DIR__ . '/../../parts/calculator-skeleton' // generic parts root
-        );
+        parent::__construct($googleAnalyticsId, $htmlHelper, $dirs);
         if (!\filter_var($sourceCodeUrl, \FILTER_VALIDATE_URL)) {
             throw new Exceptions\SourceCodeUrlIsNotValid("Given source code URL is not a valid one: '{$sourceCodeUrl}'");
         }
         $this->sourceCodeUrl = $sourceCodeUrl;
+        $this->cookiesService = $cookiesService;
         $selectedValues = $selectedValues ?? $_GET;
         $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
         $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
@@ -65,6 +61,7 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     protected function createMemory(array $values, string $cookiesPostfix, int $cookiesTtl = null): Memory
     {
         return new Memory(
+            $this->cookiesService,
             !empty($_POST[self::DELETE_HISTORY]),
             $values,
             !empty($values[self::REMEMBER_CURRENT]),
@@ -81,6 +78,7 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     protected function createHistory(array $values, string $cookiesPostfix, int $cookiesTtl = null): History
     {
         return new History(
+            $this->cookiesService,
             !empty($_POST[self::DELETE_HISTORY]),
             $values,
             !empty($values[self::REMEMBER_CURRENT]),

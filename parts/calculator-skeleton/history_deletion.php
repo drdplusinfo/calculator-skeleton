@@ -1,3 +1,4 @@
+<?php /** @var \DrdPlus\CalculatorSkeleton\CalculatorController $controller */ ?>
 <div class="row">
   <form class="col delete" action="/" method="post" onsubmit="return window.confirm('Opravdu smazat včetně historie?')">
     <label>

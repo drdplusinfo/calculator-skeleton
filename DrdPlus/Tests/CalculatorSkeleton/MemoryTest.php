@@ -1,17 +1,32 @@
 <?php
+declare(strict_types=1);
+
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\Memory;
+use DrdPlus\FrontendSkeleton\CookiesService;
 use Granam\Tests\Tools\TestWithMockery;
 
 class MemoryTest extends TestWithMockery
 {
+    use Partials\AbstractContentTestTrait;
+
+    /** @var CookiesService */
+    private $cookiesService;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->cookiesService = new CookiesService();
+    }
+
     /**
      * @test
      */
     public function Values_from_url_get_are_ignored(): void
     {
         $memory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             ['from' => 'inner memory'],
             true, // remember current values
@@ -29,6 +44,7 @@ class MemoryTest extends TestWithMockery
     public function Memory_is_immediately_forgotten_if_requested(): void
     {
         $fooMemory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             ['foo' => 'FOO'],
             true, // remember current values
@@ -36,6 +52,7 @@ class MemoryTest extends TestWithMockery
         );
         self::assertSame('FOO', $fooMemory->getValue('foo'));
         $barMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             ['bar' => 'BAR'],
             true, // remember current values
@@ -45,6 +62,7 @@ class MemoryTest extends TestWithMockery
         self::assertNull($barMemory->getValue('foo'));
         self::assertSame('BAR', $barMemory->getValue('bar'));
         $anotherMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             ['baz' => 'BAZ'],
             true, // remember current values
@@ -56,6 +74,7 @@ class MemoryTest extends TestWithMockery
         self::assertNull($anotherMemory->getValue('bar'));
         self::assertSame('BAZ', $anotherMemory->getValue('baz'));
         $yetAnotherMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             ['baz' => 'BAZ'],
             true, // remember current values
@@ -72,6 +91,7 @@ class MemoryTest extends TestWithMockery
     public function Memory_is_truncated_when_current_values_are_empty_only_if_cookie_memory_expires(): void
     {
         $fooMemory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             ['foo' => 'FOO'],
             true, // remember current values
@@ -79,6 +99,7 @@ class MemoryTest extends TestWithMockery
         );
         self::assertSame('FOO', $fooMemory->getValue('foo'));
         $barMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             ['bar' => 'BAR'],
             true, // remember current values
@@ -89,6 +110,7 @@ class MemoryTest extends TestWithMockery
         self::assertNull($barMemory->getValue('foo'));
         self::assertSame('BAR', $barMemory->getValue('bar'));
         $anotherMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             [], // empty values
             true, // remember current values
@@ -98,6 +120,7 @@ class MemoryTest extends TestWithMockery
         self::assertSame('BAR', $anotherMemory->getValue('bar'), 'Nothing should changed with empty current values');
         $_COOKIE['configurator_memory_token-' . __FUNCTION__] = false;
         $yetAnotherMemory = new Memory(
+            $this->cookiesService,
             false, // do NOT remove previous memory
             [], // empty values
             false, // do NOT remember current values
@@ -113,6 +136,7 @@ class MemoryTest extends TestWithMockery
     public function I_can_set_new_value_as_well_as_rewrite_it(): void
     {
         $fooMemory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             ['foo' => 'FOO'],
             true, // remember current values
@@ -132,6 +156,7 @@ class MemoryTest extends TestWithMockery
     public function I_can_set_value_by_rewrite_even_if_no_values_were_set_before(): void
     {
         $memory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             [], // no values
             true, // remember current values
@@ -148,6 +173,7 @@ class MemoryTest extends TestWithMockery
     {
         $values = ['foo' => 123, 'bar' => 456];
         $memory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             $values,
             true, // remember current values
@@ -168,6 +194,7 @@ class MemoryTest extends TestWithMockery
     {
         $values = ['foo' => 123, 'bar' => 456];
         $memory = new Memory(
+            $this->cookiesService,
             true, // remove previous memory, if any
             $values,
             true, // remember current values
