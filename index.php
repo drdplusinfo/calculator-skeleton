@@ -8,7 +8,7 @@ if ((!empty($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] === '127.0.0.1')
 
 $masterDocumentRoot = $masterDocumentRoot ?? (PHP_SAPI !== 'cli' ? \rtrim(\dirname($_SERVER['SCRIPT_FILENAME']), '\/') : \getcwd());
 $documentRoot = $documentRoot ?? $masterDocumentRoot;
-$latestVersion = $latestVersion ?? 'master';
+$latestVersion = $latestVersion ?? '1.0';
 
 if (!require __DIR__ . '/parts/calculator-skeleton/solve_version.php') {
     require_once __DIR__ . '/parts/calculator-skeleton/safe_autoload.php';
