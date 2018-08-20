@@ -1,5 +1,5 @@
 {
-  "name": "drd-plus/calculator-skeleton",
+  "name": "drdplus/calculator-skeleton",
   "license": "MIT",
   "type": "project",
   "description": "Style and functionality helper of a DrD+ calculator",
@@ -14,7 +14,7 @@
     "granam/string": "^3.1",
     "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
-    "drd-plus/frontend-skeleton": "^1.0"
+    "drdplus/frontend-skeleton": "^1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -25,15 +25,15 @@
   "prefer-stable": true,
   "scripts": {
     "pre-autoload-dump": [
-      "rm -f ./images/generic/skeleton/frontend* && cp -r ./vendor/drd-plus/frontend-skeleton/images/generic ./images/",
-      "rm -f ./css/generic/skeleton/frontend* && rm -fr ./css/generic/skeleton/vendor/frontend && cp -r ./vendor/drd-plus/frontend-skeleton/css/generic ./css/ && chmod -R g+w ./css/generic/skeleton/vendor/frontend",
-      "rm -f ./js/generic/skeleton/frontend* && rm -fr ./js/generic/skeleton/vendor/frontend && cp -r ./vendor/drd-plus/frontend-skeleton/js/generic ./js/ && chmod -R g+w ./js/generic/skeleton/vendor/frontend",
+      "rm -f ./images/generic/skeleton/frontend* && cp -r ./vendor/drdplus/frontend-skeleton/images/generic ./images/",
+      "rm -f ./css/generic/skeleton/frontend* && rm -fr ./css/generic/skeleton/vendor/frontend && cp -r ./vendor/drdplus/frontend-skeleton/css/generic ./css/ && chmod -R g+w ./css/generic/skeleton/vendor/frontend",
+      "rm -f ./js/generic/skeleton/frontend* && rm -fr ./js/generic/skeleton/vendor/frontend && cp -r ./vendor/drdplus/frontend-skeleton/js/generic ./js/ && chmod -R g+w ./js/generic/skeleton/vendor/frontend",
       "find ./cache -mindepth 2 -type f -exec rm {} +",
-      "cp ./vendor/drd-plus/frontend-skeleton/google8d8724e0c2818dfc.html .",
-      "cp ./vendor/drd-plus/frontend-skeleton/phpunit.xml.dist .",
-      "cp './vendor/drd-plus/frontend-skeleton/web/9 element with id and anchor inside.html' ./web/",
-      "cp './vendor/drd-plus/frontend-skeleton/web/10 Only allowed elements are moved to anchor.html' ./web/",
-      "cp './vendor/drd-plus/frontend-skeleton/web/15 calculations.html' ./web/"
+      "cp ./vendor/drdplus/frontend-skeleton/google8d8724e0c2818dfc.html .",
+      "cp ./vendor/drdplus/frontend-skeleton/phpunit.xml.dist .",
+      "cp './vendor/drdplus/frontend-skeleton/web/9 element with id and anchor inside.html' ./web/",
+      "cp './vendor/drdplus/frontend-skeleton/web/10 Only allowed elements are moved to anchor.html' ./web/",
+      "cp './vendor/drdplus/frontend-skeleton/web/15 calculations.html' ./web/"
     ],
     "post-update-cmd": [
       "php ./vendor/bin/assets --css --dir=css"

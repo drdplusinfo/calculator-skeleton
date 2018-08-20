@@ -4,28 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fc4f9f954871b41fccece3454bf8505",
+    "hash": "b5c0eaca181d6239e5de2ac47954c4c8",
     "content-hash": "c39907ec4d68e844a5ca988f294f86eb",
     "packages": [
         {
             "name": "drd-plus/frontend-skeleton",
-            "version": "1.0.36",
+            "version": "1.0.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jaroslavtyc/drd-plus-frontend-skeleton.git",
-                "reference": "34b4cb8f94b623b4f4a03134d9b7adb1dc5010c5"
+                "reference": "858bf6ae2076beb23d6aa82dd76dfba04add5f5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaroslavtyc/drd-plus-frontend-skeleton/zipball/34b4cb8f94b623b4f4a03134d9b7adb1dc5010c5",
-                "reference": "34b4cb8f94b623b4f4a03134d9b7adb1dc5010c5",
+                "url": "https://api.github.com/repos/jaroslavtyc/drd-plus-frontend-skeleton/zipball/858bf6ae2076beb23d6aa82dd76dfba04add5f5a",
+                "reference": "858bf6ae2076beb23d6aa82dd76dfba04add5f5a",
                 "shasum": ""
             },
             "require": {
+                "composer-plugin-api": "^1.0",
+                "erusev/parsedown": "^1.7",
+                "ext-curl": "*",
                 "ext-dom": "*",
+                "ext-json": "*",
                 "ext-mbstring": "*",
+                "ext-posix": "*",
+                "ext-yaml": "*",
+                "ext-zlib": "*",
                 "granam/exceptions-hierarchy": "^4.0",
-                "granam/string": "^3.0",
+                "granam/string": "^3.1",
                 "php": ">=7.1",
                 "phpgt/dom": "~1.0",
                 "phpmailer/phpmailer": "^6.0",
@@ -33,7 +40,7 @@
                 "tracy/tracy": "^2.4"
             },
             "require-dev": {
-                "ext-curl": "*",
+                "composer/composer": "^1.7",
                 "mockery/mockery": "~1.0",
                 "phpunit/phpunit": "~7.0",
                 "roave/security-advisories": "dev-master"
@@ -41,7 +48,10 @@
             "bin": [
                 "bin/assets"
             ],
-            "type": "library",
+            "type": "composer-plugin",
+            "extra": {
+                "class": "DrdPlus\\FrontendSkeleton\\ComposerInjectorPlugin"
+            },
             "autoload": {
                 "psr-4": {
                     "DrdPlus\\": "DrdPlus/",
@@ -61,7 +71,53 @@
                 "pages",
                 "view"
             ],
-            "time": "2018-08-10 08:22:31"
+            "time": "2018-08-15 14:53:18"
+        },
+        {
+            "name": "erusev/parsedown",
+            "version": "1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/erusev/parsedown.git",
+                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
+                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Parsedown": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Emanuil Rusev",
+                    "email": "hello@erusev.com",
+                    "homepage": "http://erusev.com"
+                }
+            ],
+            "description": "Parser for Markdown.",
+            "homepage": "http://parsedown.org",
+            "keywords": [
+                "markdown",
+                "parser"
+            ],
+            "time": "2018-03-08 01:11:30"
         },
         {
             "name": "granam/exceptions-hierarchy",
@@ -106,16 +162,16 @@
         },
         {
             "name": "granam/scalar",
-            "version": "4.0.1",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jaroslavtyc/granam-scalar.git",
-                "reference": "e31a7ef14a25f9fb7a3e926773b1571c8dd35fb1"
+                "reference": "c3f78968da6a24ca24b4bb3a2729e61287df7ae3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaroslavtyc/granam-scalar/zipball/e31a7ef14a25f9fb7a3e926773b1571c8dd35fb1",
-                "reference": "e31a7ef14a25f9fb7a3e926773b1571c8dd35fb1",
+                "url": "https://api.github.com/repos/jaroslavtyc/granam-scalar/zipball/c3f78968da6a24ca24b4bb3a2729e61287df7ae3",
+                "reference": "c3f78968da6a24ca24b4bb3a2729e61287df7ae3",
                 "shasum": ""
             },
             "require": {
@@ -151,7 +207,7 @@
                 "php",
                 "scalar"
             ],
-            "time": "2018-07-10 11:55:50"
+            "time": "2018-08-13 13:05:50"
         },
         {
             "name": "granam/strict-object",
@@ -506,16 +562,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.11.0",
+            "version": "3.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "9e778c0c046987c6c4a949d5d9e000f072301962"
+                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/9e778c0c046987c6c4a949d5d9e000f072301962",
-                "reference": "9e778c0c046987c6c4a949d5d9e000f072301962",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
+                "reference": "0ec14d28cbf71c48b21697e65b892cfd8c3ca519",
                 "shasum": ""
             },
             "require": {
@@ -556,7 +612,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-07-31 15:47:21"
+            "time": "2018-08-10 18:28:32"
         },
         {
             "name": "symfony/css-selector",
@@ -613,16 +669,16 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "bea9df15a1cdbf3ec50ef3a75f5ada1ab536d679"
+                "reference": "93f89fbff33db4d583062104c71d6083b717371a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/bea9df15a1cdbf3ec50ef3a75f5ada1ab536d679",
-                "reference": "bea9df15a1cdbf3ec50ef3a75f5ada1ab536d679",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/93f89fbff33db4d583062104c71d6083b717371a",
+                "reference": "93f89fbff33db4d583062104c71d6083b717371a",
                 "shasum": ""
             },
             "require": {
@@ -674,7 +730,7 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2018-07-03 11:34:33"
+            "time": "2018-08-13 16:46:17"
         }
     ],
     "packages-dev": [
@@ -1550,12 +1606,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d"
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f834fd02a512672f298ed7c59e44e46621b6423d",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0abc14e0df387fe74b4b32e0b8647d1639256d38",
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38",
                 "shasum": ""
             },
             "conflict": {
@@ -1692,7 +1748,7 @@
                 "zendframework/zend-validator": ">=2.3,<2.3.6",
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-                "zendframework/zendframework": ">=2,<2.4.11|>=2.5,<2.5.1",
+                "zendframework/zendframework": "<2.5.1",
                 "zendframework/zendframework1": "<1.12.20",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
@@ -1714,7 +1770,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-08-10 10:05:21"
+            "time": "2018-08-14 15:39:17"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
