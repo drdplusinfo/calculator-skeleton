@@ -1,7 +1,7 @@
 {
   "name": "drdplus/calculator-skeleton",
   "license": "MIT",
-  "type": "project",
+  "type": "library",
   "description": "Style and functionality helper of a DrD+ calculator",
   "autoload": {
     "psr-4": {
@@ -21,25 +21,5 @@
     "phpunit/phpunit": "~7.0",
     "mockery/mockery": "~1.0",
     "granam/tools": "^3.0"
-  },
-  "prefer-stable": true,
-  "scripts": {
-    "pre-autoload-dump": [
-      "rm -f ./images/generic/skeleton/frontend* && cp -r ./vendor/drdplus/frontend-skeleton/images/generic ./images/",
-      "rm -f ./css/generic/skeleton/frontend* && rm -fr ./css/generic/skeleton/vendor/frontend && cp -r ./vendor/drdplus/frontend-skeleton/css/generic ./css/ && chmod -R g+w ./css/generic/skeleton/vendor/frontend",
-      "rm -f ./js/generic/skeleton/frontend* && rm -fr ./js/generic/skeleton/vendor/frontend && cp -r ./vendor/drdplus/frontend-skeleton/js/generic ./js/ && chmod -R g+w ./js/generic/skeleton/vendor/frontend",
-      "find ./cache -mindepth 2 -type f -exec rm {} +",
-      "cp ./vendor/drdplus/frontend-skeleton/google8d8724e0c2818dfc.html .",
-      "cp ./vendor/drdplus/frontend-skeleton/phpunit.xml.dist .",
-      "cp './vendor/drdplus/frontend-skeleton/web/9 element with id and anchor inside.html' ./web/",
-      "cp './vendor/drdplus/frontend-skeleton/web/10 Only allowed elements are moved to anchor.html' ./web/",
-      "cp './vendor/drdplus/frontend-skeleton/web/15 calculations.html' ./web/"
-    ],
-    "post-update-cmd": [
-      "php ./vendor/bin/assets --css --dir=css"
-    ],
-    "post-install-cmd": [
-      "php ./vendor/bin/assets --css --dir=css"
-    ]
   }
 }
