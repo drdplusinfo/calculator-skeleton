@@ -3,20 +3,17 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\CookiesService;
-use DrdPlus\FrontendSkeleton\Dirs;
-use DrdPlus\FrontendSkeleton\HtmlHelper;
+use DrdPlus\FrontendSkeleton\ServicesContainer;
 
+/**
+ * @method CalculatorConfiguration getConfiguration()
+ */
 class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
 {
 
     public const DELETE_HISTORY = 'delete_history';
     public const REMEMBER_CURRENT = 'remember_current';
 
-    /** @var string */
-    private $sourceCodeUrl;
-    /** @var CookiesService */
-    private $cookiesService;
     /** @var Memory */
     private $memory;
     /** @var CurrentValues */
@@ -25,43 +22,25 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     private $history;
 
     /**
-     * @param string $googleAnalyticsId
-     * @param HtmlHelper $htmlHelper
-     * @param Dirs $dirs
-     * @param string $sourceCodeUrl
-     * @param CookiesService $cookiesService
-     * @param string $cookiesPostfix
-     * @param int|null $cookiesTtl
+     * @param ServicesContainer $servicesContainer
      * @param array|null $selectedValues
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
-    public function __construct(
-        string $googleAnalyticsId,
-        HtmlHelper $htmlHelper,
-        Dirs $dirs,
-        string $sourceCodeUrl,
-        CookiesService $cookiesService,
-        string $cookiesPostfix,
-        int $cookiesTtl = null,
-        array $selectedValues = null
-    )
+    public function __construct(ServicesContainer $servicesContainer, array $selectedValues = null)
     {
-        parent::__construct($googleAnalyticsId, $htmlHelper, $dirs);
-        if (!\filter_var($sourceCodeUrl, \FILTER_VALIDATE_URL)) {
-            throw new Exceptions\SourceCodeUrlIsNotValid("Given source code URL is not a valid one: '{$sourceCodeUrl}'");
-        }
-        $this->sourceCodeUrl = $sourceCodeUrl;
-        $this->cookiesService = $cookiesService;
+        parent::__construct($servicesContainer);
         $selectedValues = $selectedValues ?? $_GET;
+        $cookiesPostfix = $this->getConfiguration()->getCookiesPostfix();
+        $cookiesTtl = $this->getConfiguration()->getCookiesTtl();
         $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
         $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
         $this->history = $this->createHistory($selectedValues, $cookiesPostfix, $cookiesTtl);
     }
 
-    protected function createMemory(array $values, string $cookiesPostfix, int $cookiesTtl = null): Memory
+    protected function createMemory(array $values, string $cookiesPostfix, ?int $cookiesTtl): Memory
     {
         return new Memory(
-            $this->cookiesService,
+            $this->getServicesContainer()->getCookiesService(),
             !empty($_POST[self::DELETE_HISTORY]),
             $values,
             !empty($values[self::REMEMBER_CURRENT]),
@@ -75,24 +54,16 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
         return new CurrentValues($selectedValues, $memory);
     }
 
-    protected function createHistory(array $values, string $cookiesPostfix, int $cookiesTtl = null): History
+    protected function createHistory(array $values, string $cookiesPostfix, ?int $cookiesTtl): History
     {
         return new History(
-            $this->cookiesService,
+            $this->getServicesContainer()->getCookiesService(),
             !empty($_POST[self::DELETE_HISTORY]),
             $values,
             !empty($values[self::REMEMBER_CURRENT]),
             $cookiesPostfix,
             $cookiesTtl
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function getSourceCodeUrl(): string
-    {
-        return $this->sourceCodeUrl;
     }
 
     /**

@@ -6,7 +6,7 @@
         Máš nápad 😀? Vidíš chybu 😱?️ Sem s tím!
         <img src="/images/generic/skeleton/rpgforum-ico.png">
       </a>
-      <a class="float-right" href="<?= $controller->getSourceCodeUrl() ?>"
+      <a class="float-right" href="<?= $controller->getConfiguration()->getSourceCodeUrl() ?>"
          title="Fork me on GitHub"><img class="github" src="/images/generic/skeleton/GitHub-Mark-64px.png"></a>
     </div>
   </div>

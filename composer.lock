@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93cc2d0506b83175ef69c2b0af7ab3d9",
+    "content-hash": "51ce72e29435c8c300bf2b50b523bcf5",
     "packages": [
         {
             "name": "drdplus/frontend-skeleton",
@@ -158,6 +158,142 @@
                 "runtime"
             ],
             "time": "2017-02-19T12:25:30+00:00"
+        },
+        {
+            "name": "granam/integer",
+            "version": "6.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaroslavtyc/granam-integer.git",
+                "reference": "6930170eb737a01bba987804da63c3d3040028f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaroslavtyc/granam-integer/zipball/6930170eb737a01bba987804da63c3d3040028f7",
+                "reference": "6930170eb737a01bba987804da63c3d3040028f7",
+                "shasum": ""
+            },
+            "require": {
+                "granam/number": "^4.0",
+                "granam/object-history": "^1.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "granam/exceptions-hierarchy": "~4.0",
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Granam\\": "Granam/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaroslav Týc",
+                    "homepage": "http://jaroslavtyc.com",
+                    "role": "Original author"
+                }
+            ],
+            "description": "Lightweight integer container with stand-alone converter",
+            "homepage": "https://github.com/jaroslavtyc/granam-integer",
+            "keywords": [
+                "converter",
+                "integer",
+                "php"
+            ],
+            "time": "2018-07-10T12:10:02+00:00"
+        },
+        {
+            "name": "granam/number",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaroslavtyc/granam-number.git",
+                "reference": "1d6da206cdd0e9247f55b6f52af86dce327925e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaroslavtyc/granam-number/zipball/1d6da206cdd0e9247f55b6f52af86dce327925e4",
+                "reference": "1d6da206cdd0e9247f55b6f52af86dce327925e4",
+                "shasum": ""
+            },
+            "require": {
+                "granam/scalar": "^4.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "granam/exceptions-hierarchy": "~4.0",
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Granam\\": "Granam/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaroslav Týc",
+                    "homepage": "http://jaroslavtyc.com",
+                    "role": "Original author"
+                }
+            ],
+            "description": "Converter and wrapping object for a number (float or integer) value",
+            "homepage": "https://github.com/jaroslavtyc/granam-number",
+            "keywords": [
+                "float",
+                "integer",
+                "number",
+                "php"
+            ],
+            "time": "2018-07-10T12:01:41+00:00"
+        },
+        {
+            "name": "granam/object-history",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaroslavtyc/granam-object-history.git",
+                "reference": "f31ea2819e68b980458340eb4c6e2ddd42f8311e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaroslavtyc/granam-object-history/zipball/f31ea2819e68b980458340eb4c6e2ddd42f8311e",
+                "reference": "f31ea2819e68b980458340eb4c6e2ddd42f8311e",
+                "shasum": ""
+            },
+            "require": {
+                "granam/tools": "^3.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "granam/exceptions-hierarchy": "~4.0",
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Granam\\": "Granam/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Changes of an object fetched from debug_backtrace",
+            "time": "2018-07-10T11:17:10+00:00"
         },
         {
             "name": "granam/scalar",

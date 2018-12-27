@@ -10,14 +10,15 @@ $documentRoot = $documentRoot ?? (PHP_SAPI !== 'cli' ? \rtrim(\dirname($_SERVER[
 /** @noinspection PhpIncludeInspection */
 require_once $documentRoot . '/vendor/autoload.php';
 
-$dirs = new \DrdPlus\CalculatorSkeleton\Dirs($documentRoot);
+$dirs = $dirs ?? new \DrdPlus\FrontendSkeleton\Dirs($documentRoot);
 $htmlHelper = $htmlHelper ?? \DrdPlus\FrontendSkeleton\HtmlHelper::createFromGlobals($dirs);
 if (PHP_SAPI !== 'cli') {
     \DrdPlus\FrontendSkeleton\TracyDebugger::enable($htmlHelper->isInProduction());
 }
 
-$configuration = \DrdPlus\CalculatorSkeleton\Configuration::createFromYml($dirs);
-$controller = new \DrdPlus\CalculatorSkeleton\CalculatorController($configuration, $htmlHelper);
+$configuration = $configuration ?? \DrdPlus\CalculatorSkeleton\CalculatorConfiguration::createFromYml($dirs);
+$servicesContainer = $servicesContainer ?? new \DrdPlus\FrontendSkeleton\ServicesContainer($configuration, $htmlHelper);
+$controller = $controller ?? new \DrdPlus\CalculatorSkeleton\CalculatorController($servicesContainer);
 
 /** @noinspection PhpIncludeInspection */
-require $dirs->getVendorRoot() . '/drd-plus/frontend-skeleton/index.php';
+require $dirs->getVendorRoot() . '/drdplus/frontend-skeleton/index.php';

@@ -14,7 +14,8 @@
     "granam/string": "^3.1",
     "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
-    "drdplus/frontend-skeleton": "^1.0"
+    "drdplus/frontend-skeleton": "^1.0",
+    "granam/integer": "^6.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
