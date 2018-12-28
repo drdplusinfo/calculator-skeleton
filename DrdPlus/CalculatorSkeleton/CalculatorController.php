@@ -3,35 +3,34 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\ServicesContainer;
+use DrdPlus\RulesSkeleton\RulesController;
+use DrdPlus\RulesSkeleton\Web\Content;
 
-/**
- * @method CalculatorConfiguration getConfiguration()
- */
-class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
+class CalculatorController extends RulesController
 {
-
-    public const DELETE_HISTORY = 'delete_history';
-    public const REMEMBER_CURRENT = 'remember_current';
-
+    /** @var CalculatorServicesContainer */
+    private $calculatorServicesContainer;
     /** @var Memory */
     private $memory;
     /** @var CurrentValues */
     private $currentValues;
     /** @var History */
     private $history;
+    /** @var CalculatorContent */
+    private $calculatorContent;
 
     /**
-     * @param ServicesContainer $servicesContainer
-     * @param array|null $selectedValues
+     * @param CalculatorServicesContainer $calculationServicesContainer
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
      */
-    public function __construct(ServicesContainer $servicesContainer, array $selectedValues = null)
+    public function __construct(CalculatorServicesContainer $calculationServicesContainer)
     {
-        parent::__construct($servicesContainer);
-        $selectedValues = $selectedValues ?? $_GET;
-        $cookiesPostfix = $this->getConfiguration()->getCookiesPostfix();
-        $cookiesTtl = $this->getConfiguration()->getCookiesTtl();
+        parent::__construct($calculationServicesContainer);
+        $this->calculatorServicesContainer = $calculationServicesContainer;
+        $selectedValues = $this->calculatorServicesContainer->getRequest()->getValuesFromGet();
+        $calculatorConfiguration = $calculationServicesContainer->getConfiguration();
+        $cookiesPostfix = $calculatorConfiguration->getCookiesPostfix();
+        $cookiesTtl = $calculatorConfiguration->getCookiesTtl();
         $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
         $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
         $this->history = $this->createHistory($selectedValues, $cookiesPostfix, $cookiesTtl);
@@ -40,10 +39,10 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     protected function createMemory(array $values, string $cookiesPostfix, ?int $cookiesTtl): Memory
     {
         return new Memory(
-            $this->getServicesContainer()->getCookiesService(),
-            !empty($_POST[self::DELETE_HISTORY]),
+            $this->calculatorServicesContainer->getCookiesService(),
+            !empty($_POST[CalculatorRequest::DELETE_HISTORY]),
             $values,
-            !empty($values[self::REMEMBER_CURRENT]),
+            !empty($values[CalculatorRequest::REMEMBER_CURRENT]),
             $cookiesPostfix,
             $cookiesTtl
         );
@@ -57,13 +56,32 @@ class CalculatorController extends \DrdPlus\FrontendSkeleton\FrontendController
     protected function createHistory(array $values, string $cookiesPostfix, ?int $cookiesTtl): History
     {
         return new History(
-            $this->getServicesContainer()->getCookiesService(),
-            !empty($_POST[self::DELETE_HISTORY]),
+            $this->calculatorServicesContainer->getCookiesService(),
+            $this->calculatorServicesContainer->getCalculatorRequest()->isRequestedHistoryDeletion(),
             $values,
-            !empty($values[self::REMEMBER_CURRENT]),
+            $this->calculatorServicesContainer->getCalculatorRequest()->isRequestedRememberCurrent(),
             $cookiesPostfix,
             $cookiesTtl
         );
+    }
+
+    public function getContent(): Content
+    {
+        if ($this->calculatorContent) {
+            return $this->calculatorContent;
+        }
+        $servicesContainer = $this->calculatorServicesContainer;
+
+        $this->calculatorContent = new CalculatorContent(
+            $servicesContainer->getHtmlHelper(),
+            $servicesContainer->getWebVersions(),
+            $servicesContainer->getHead(),
+            $servicesContainer->getMenu(),
+            $servicesContainer->getCalculatorBody(),
+            $servicesContainer->getWebCache()
+        );
+
+        return $this->calculatorContent;
     }
 
     /**

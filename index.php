@@ -10,15 +10,15 @@ $documentRoot = $documentRoot ?? (PHP_SAPI !== 'cli' ? \rtrim(\dirname($_SERVER[
 /** @noinspection PhpIncludeInspection */
 require_once $documentRoot . '/vendor/autoload.php';
 
-$dirs = $dirs ?? new \DrdPlus\FrontendSkeleton\Dirs($documentRoot);
-$htmlHelper = $htmlHelper ?? \DrdPlus\FrontendSkeleton\HtmlHelper::createFromGlobals($dirs);
+$dirs = $dirs ?? new \DrdPlus\RulesSkeleton\Dirs($documentRoot);
+$htmlHelper = $htmlHelper ?? \DrdPlus\RulesSkeleton\HtmlHelper::createFromGlobals($dirs);
 if (PHP_SAPI !== 'cli') {
-    \DrdPlus\FrontendSkeleton\TracyDebugger::enable($htmlHelper->isInProduction());
+    \DrdPlus\RulesSkeleton\TracyDebugger::enable($htmlHelper->isInProduction());
 }
 
 $configuration = $configuration ?? \DrdPlus\CalculatorSkeleton\CalculatorConfiguration::createFromYml($dirs);
-$servicesContainer = $servicesContainer ?? new \DrdPlus\FrontendSkeleton\ServicesContainer($configuration, $htmlHelper);
+$servicesContainer = $servicesContainer ?? new \DrdPlus\CalculatorSkeleton\CalculatorServicesContainer($configuration, $htmlHelper);
 $controller = $controller ?? new \DrdPlus\CalculatorSkeleton\CalculatorController($servicesContainer);
 
 /** @noinspection PhpIncludeInspection */
-require $dirs->getVendorRoot() . '/drdplus/frontend-skeleton/index.php';
+require $dirs->getVendorRoot() . '/drdplus/rules-skeleton/index.php';

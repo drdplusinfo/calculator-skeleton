@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Strict\Object\StrictObject;
 
 class Memory extends StrictObject implements \IteratorAggregate
