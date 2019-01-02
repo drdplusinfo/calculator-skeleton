@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton\Partials;
 
-use DrdPlus\FrontendSkeleton\Dirs;
-use DrdPlus\FrontendSkeleton\HtmlHelper;
+use DrdPlus\RulesSkeleton\Dirs;
+use DrdPlus\RulesSkeleton\HtmlHelper;
 
 /**
  * @method Dirs createDirs
@@ -26,21 +26,13 @@ trait AbstractContentTestTrait
         self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getDocumentRoot(), true));
         $skeletonRootRealPath = \realpath($skeletonDocumentRoot ?? __DIR__ . '/../../../..');
         self::assertNotEmpty($skeletonRootRealPath, 'Can not find out real path of skeleton root ' . \var_export($skeletonRootRealPath, true));
-        self::assertSame('calculator-skeleton', \basename($skeletonRootRealPath), 'Expected different trailing dir of skeleton document root');
+        self::assertSame(
+            'kalkulator.skeleton',
+            \basename($skeletonRootRealPath),
+            'Expected different trailing dir of calculator skeleton document root to detect it'
+        );
 
         return $documentRootRealPath === $skeletonRootRealPath;
-    }
-
-    protected function getGenericPartsRoot(): string
-    {
-        return \file_exists($this->getDocumentRoot() . '/parts/calculator-skeleton')
-            ? $this->getDocumentRoot() . '/parts/calculator-skeleton'
-            : $this->getVendorRoot() . '/drd-plus/calculator-skeleton/parts/calculator-skeleton';
-    }
-
-    protected function getVendorRoot(): string
-    {
-        return $this->getDocumentRoot() . '/vendor';
     }
 
     /**
@@ -48,17 +40,15 @@ trait AbstractContentTestTrait
      * @param bool $inDevMode
      * @param bool $inForcedProductionMode
      * @param bool $shouldHideCovered
-     * @param bool $showIntroductionOnly
      * @return HtmlHelper|\Mockery\MockInterface
      */
     protected function createHtmlHelper(
         Dirs $dirs = null,
         bool $inForcedProductionMode = false,
         bool $inDevMode = false,
-        bool $shouldHideCovered = false,
-        bool $showIntroductionOnly = false
+        bool $shouldHideCovered = false
     ): HtmlHelper
     {
-        return new HtmlHelper($dirs ?? $this->createDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered, $showIntroductionOnly);
+        return new HtmlHelper($dirs ?? $this->createDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
     }
 }

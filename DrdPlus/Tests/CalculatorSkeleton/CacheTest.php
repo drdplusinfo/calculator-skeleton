@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\Cache;
+use DrdPlus\RulesSkeleton\Cache;
 
-class CacheTest extends \DrdPlus\Tests\FrontendSkeleton\CacheTest
+class CacheTest extends \DrdPlus\Tests\RulesSkeleton\CacheTest
 {
     use Partials\AbstractContentTestTrait;
 

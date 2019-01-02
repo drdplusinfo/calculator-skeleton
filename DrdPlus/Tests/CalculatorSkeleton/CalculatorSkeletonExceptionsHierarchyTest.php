@@ -5,7 +5,7 @@ namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CalculatorController;
 
-class CalculatorSkeletonExceptionsHierarchyTest extends FrontendSkeletonExceptionsHierarchyTest
+class CalculatorSkeletonExceptionsHierarchyTest extends RulesSkeletonExceptionsHierarchyTest
 {
     use Partials\AbstractContentTestTrait;
 

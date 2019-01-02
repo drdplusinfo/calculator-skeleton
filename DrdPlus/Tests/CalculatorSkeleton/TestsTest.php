@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\Tests\FrontendSkeleton\FrontendControllerTest;
-use PHPUnit\Framework\TestCase;
+use DrdPlus\Tests\RulesSkeleton\RulesControllerTest;
 
-class TestsTest extends TestCase
+class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 {
     use Partials\AbstractContentTestTrait;
 
@@ -14,50 +13,31 @@ class TestsTest extends TestCase
      * @test
      * @throws \ReflectionException
      */
-    public function Every_test_lives_in_drd_plus_tests_namespace(): void
+    public function All_rules_skeleton_tests_are_used(): void
     {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $testsDir = \dirname($reflectionClass->getFileName());
-        $testClasses = $this->getClassesFromDir($testsDir);
-        self::assertNotEmpty($testClasses, "No test classes found in {$testsDir}");
-        foreach ($testClasses as $testClass) {
-            self::assertStringStartsWith(
-                'DrdPlus\\Tests',
-                (new \ReflectionClass($testClass))->getNamespaceName(),
-                "Class {$testClass} should be in DrdPlus\\Test namespace"
-            );
-        }
-    }
-
-    /**
-     * @test
-     * @throws \ReflectionException
-     */
-    public function All_frontend_skeleton_tests_are_used(): void
-    {
-        $reflectionClass = new \ReflectionClass(\DrdPlus\Tests\FrontendSkeleton\ContentTest::class);
-        $frontendSkeletonDir = \dirname($reflectionClass->getFileName());
-        foreach ($this->getClassesFromDir($frontendSkeletonDir) as $frontendSkeletonTestClass) {
-            if (\is_a($frontendSkeletonTestClass, \Throwable::class, true)
-                || \is_a($frontendSkeletonTestClass, FrontendControllerTest::class, true) // it is solved via CalculatorController
+        $reflectionClass = new \ReflectionClass(\DrdPlus\Tests\RulesSkeleton\WebContentTest::class);
+        $rulesSkeletonDir = \dirname($reflectionClass->getFileName());
+        foreach ($this->getClassesFromDir($rulesSkeletonDir) as $rulesSkeletonTestClass) {
+            if (\is_a($rulesSkeletonTestClass, \Throwable::class, true)
+                || \is_a($rulesSkeletonTestClass, RulesControllerTest::class, true) // it is solved via CalculatorController
             ) {
                 continue;
             }
-            $frontendSkeletonTestClassReflection = new \ReflectionClass($frontendSkeletonTestClass);
-            if ($frontendSkeletonTestClassReflection->isAbstract()
-                || $frontendSkeletonTestClassReflection->isInterface()
-                || $frontendSkeletonTestClassReflection->isTrait()
+            $rulesSkeletonTestClassReflection = new \ReflectionClass($rulesSkeletonTestClass);
+            if ($rulesSkeletonTestClassReflection->isAbstract()
+                || $rulesSkeletonTestClassReflection->isInterface()
+                || $rulesSkeletonTestClassReflection->isTrait()
             ) {
                 continue;
             }
-            $expectedCalculatorTestClass = \str_replace('\\FrontendSkeleton', '\\CalculatorSkeleton', $frontendSkeletonTestClass);
+            $expectedCalculatorTestClass = \str_replace('\\RulesSkeleton', '\\CalculatorSkeleton', $rulesSkeletonTestClass);
             self::assertTrue(
                 \class_exists($expectedCalculatorTestClass),
-                "Missing test class {$expectedCalculatorTestClass} adopted from frontend skeleton test class {$frontendSkeletonTestClass}"
+                "Missing test class {$expectedCalculatorTestClass} adopted from rules skeleton test class {$rulesSkeletonTestClass}"
             );
             self::assertTrue(
-                \is_a($expectedCalculatorTestClass, $frontendSkeletonTestClass, true),
-                "$expectedCalculatorTestClass should be a child of $frontendSkeletonTestClass"
+                \is_a($expectedCalculatorTestClass, $rulesSkeletonTestClass, true),
+                "$expectedCalculatorTestClass should be a child of $rulesSkeletonTestClass"
             );
         }
     }

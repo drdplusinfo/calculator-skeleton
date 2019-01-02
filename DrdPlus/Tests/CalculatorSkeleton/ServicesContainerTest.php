@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\WebVersions;
+use DrdPlus\RulesSkeleton\ServicesContainer;
 
-class WebVersionsTest extends \DrdPlus\Tests\RulesSkeleton\WebVersionsTest
+class ServicesContainerTest extends \DrdPlus\Tests\RulesSkeleton\ServicesContainerTest
 {
     use Partials\AbstractContentTestTrait;
 
     protected static function getSutClass(string $sutTestClass = null, string $regexp = '~\\\Tests(.+)Test$~'): string
     {
-        return WebVersions::class;
+        return ServicesContainer::class;
     }
 }

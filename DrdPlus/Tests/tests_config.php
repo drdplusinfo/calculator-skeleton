@@ -1,11 +1,27 @@
 <?php
 global $testsConfiguration;
-$testsConfiguration = new \DrdPlus\Tests\FrontendSkeleton\TestsConfiguration('http://kalkulator.drdplus.loc:88');
-$testsConfiguration->disableHasCustomBodyContent();
-$testsConfiguration->disableHasTables();
-$testsConfiguration->disableHasNotes();
-$testsConfiguration->disableHasExternalAnchorsWithHashes();
-$testsConfiguration->disableHasLinksToAltar();
-$testsConfiguration->setExpectedWebName('HTML kostra pro DrD+ kalkulátory');
-$testsConfiguration->setExpectedPageTitle('HTML kostra pro DrD+ kalkulátory');
-$testsConfiguration->disableHasLinksToAltar();
+$testsConfiguration = new \DrdPlus\Tests\CalculatorSkeleton\TestsConfiguration('https://kalkulator.skeleton.drdplus.info');
+$testsConfiguration->disableHasCustomBodyContent()
+    ->setTooShortFailureNames([])
+    ->setTooShortSuccessNames([])
+    ->disableHasTables()
+    ->setSomeExpectedTableIds([])
+    ->disableHasNotes()
+    ->disableHasExternalAnchorsWithHashes()
+    ->disableHasLinksToAltar()
+    ->setExpectedWebName('HTML kostra pro DrD+ kalkulátory')
+    ->setExpectedPageTitle('HTML kostra pro DrD+ kalkulátory')
+    ->disableHasLinksToAltar()
+    ->disableHasAuthors()
+    ->disableHasProtectedAccess()
+    ->disableCanBeBoughtOnEshop()
+    ->disableHasCharacterSheet()
+    ->disableHasLinksToJournals()
+    ->disableHasLinkToSingleJournal()
+    ->disableHasTableOfContents()
+    ->disableHasHeadings()
+    ->setBlockNamesToExpectedContent([])
+    ->disableHasLocalLinks()
+    ->disableHasNotes()
+    ->setExpectedGoogleAnalyticsId('UA-121206931-1')
+    ->setExpectedLicence(\DrdPlus\Tests\RulesSkeleton\TestsConfiguration::LICENCE_MIT);

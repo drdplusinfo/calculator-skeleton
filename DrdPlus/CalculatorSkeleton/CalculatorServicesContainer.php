@@ -15,6 +15,14 @@ class CalculatorServicesContainer extends ServicesContainer
     private $calculatorBody;
     /** @var CalculatorRequest */
     private $calculatorRequest;
+    /** @var Memory */
+    private $memory;
+    /** @var CurrentValues */
+    private $currentValues;
+    /** @var History */
+    private $history;
+    /** @var CalculatorContent */
+    private $calculatorContent;
 
     public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
     {
@@ -39,4 +47,62 @@ class CalculatorServicesContainer extends ServicesContainer
         return $this->calculatorRequest;
     }
 
+    public function getMemory(): Memory
+    {
+        if ($this->memory === null) {
+            $this->memory = new Memory(
+                $this->getCookiesService(),
+                $this->getCalculatorRequest()->isRequestedHistoryDeletion(),
+                $this->getRequest()->getValuesFromGet(),
+                $this->getCalculatorRequest()->isRequestedRememberCurrent(),
+                $this->getConfiguration()->getCookiesPostfix(),
+                $this->getConfiguration()->getCookiesTtl()
+            );
+        }
+
+        return $this->memory;
+    }
+
+    public function createCurrentValues(): CurrentValues
+    {
+        if ($this->currentValues === null) {
+            $this->currentValues = new CurrentValues($this->getRequest()->getValuesFromGet(), $this->getMemory());
+        }
+
+        return $this->currentValues;
+    }
+
+    public function createHistory(): History
+    {
+        if ($this->history === null) {
+            $this->history = new History(
+                $this->getCookiesService(),
+                $this->getCalculatorRequest()->isRequestedHistoryDeletion(),
+                $this->getRequest()->getValuesFromGet(),
+                $this->getCalculatorRequest()->isRequestedRememberCurrent(),
+                $this->getConfiguration()->getCookiesPostfix(),
+                $this->getConfiguration()->getCookiesTtl()
+            );
+        }
+
+        return $this->history;
+    }
+
+    public function getCalculatorContent(): CalculatorContent
+    {
+        if ($this->calculatorContent === null) {
+            $this->calculatorContent = new CalculatorContent(
+                $this->getHtmlHelper(),
+                $this->getWebVersions(),
+                $this->getHead(),
+                $this->getMenu(),
+                $this->getCalculatorBody(),
+                $this->getWebCache()
+            );
+
+        }
+
+        return $this->calculatorContent;
+
+    }
 }

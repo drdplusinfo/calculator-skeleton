@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\Memory;
-use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Tests\Tools\TestWithMockery;
 
 class MemoryTest extends TestWithMockery

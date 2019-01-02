@@ -10,14 +10,6 @@ class CalculatorController extends RulesController
 {
     /** @var CalculatorServicesContainer */
     private $calculatorServicesContainer;
-    /** @var Memory */
-    private $memory;
-    /** @var CurrentValues */
-    private $currentValues;
-    /** @var History */
-    private $history;
-    /** @var CalculatorContent */
-    private $calculatorContent;
 
     /**
      * @param CalculatorServicesContainer $calculationServicesContainer
@@ -27,85 +19,11 @@ class CalculatorController extends RulesController
     {
         parent::__construct($calculationServicesContainer);
         $this->calculatorServicesContainer = $calculationServicesContainer;
-        $selectedValues = $this->calculatorServicesContainer->getRequest()->getValuesFromGet();
-        $calculatorConfiguration = $calculationServicesContainer->getConfiguration();
-        $cookiesPostfix = $calculatorConfiguration->getCookiesPostfix();
-        $cookiesTtl = $calculatorConfiguration->getCookiesTtl();
-        $this->memory = $this->createMemory($selectedValues /* as values to remember */, $cookiesPostfix, $cookiesTtl);
-        $this->currentValues = $this->createCurrentValues($selectedValues, $this->getMemory());
-        $this->history = $this->createHistory($selectedValues, $cookiesPostfix, $cookiesTtl);
-    }
-
-    protected function createMemory(array $values, string $cookiesPostfix, ?int $cookiesTtl): Memory
-    {
-        return new Memory(
-            $this->calculatorServicesContainer->getCookiesService(),
-            !empty($_POST[CalculatorRequest::DELETE_HISTORY]),
-            $values,
-            !empty($values[CalculatorRequest::REMEMBER_CURRENT]),
-            $cookiesPostfix,
-            $cookiesTtl
-        );
-    }
-
-    protected function createCurrentValues(array $selectedValues, Memory $memory): CurrentValues
-    {
-        return new CurrentValues($selectedValues, $memory);
-    }
-
-    protected function createHistory(array $values, string $cookiesPostfix, ?int $cookiesTtl): History
-    {
-        return new History(
-            $this->calculatorServicesContainer->getCookiesService(),
-            $this->calculatorServicesContainer->getCalculatorRequest()->isRequestedHistoryDeletion(),
-            $values,
-            $this->calculatorServicesContainer->getCalculatorRequest()->isRequestedRememberCurrent(),
-            $cookiesPostfix,
-            $cookiesTtl
-        );
     }
 
     public function getContent(): Content
     {
-        if ($this->calculatorContent) {
-            return $this->calculatorContent;
-        }
-        $servicesContainer = $this->calculatorServicesContainer;
-
-        $this->calculatorContent = new CalculatorContent(
-            $servicesContainer->getHtmlHelper(),
-            $servicesContainer->getWebVersions(),
-            $servicesContainer->getHead(),
-            $servicesContainer->getMenu(),
-            $servicesContainer->getCalculatorBody(),
-            $servicesContainer->getWebCache()
-        );
-
-        return $this->calculatorContent;
-    }
-
-    /**
-     * @return Memory
-     */
-    protected function getMemory(): Memory
-    {
-        return $this->memory;
-    }
-
-    /**
-     * @return History
-     */
-    protected function getHistory(): History
-    {
-        return $this->history;
-    }
-
-    /**
-     * @return CurrentValues
-     */
-    public function getCurrentValues(): CurrentValues
-    {
-        return $this->currentValues;
+        return $this->calculatorServicesContainer->getCalculatorContent();
     }
 
     /**
@@ -240,7 +158,7 @@ class CalculatorController extends RulesController
      */
     public function getSelectedValues(): array
     {
-        return $this->getMemory()->getIterator()->getArrayCopy();
+        return $this->calculatorServicesContainer->getMemory()->getIterator()->getArrayCopy();
     }
 
     /**

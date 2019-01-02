@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class RequestTest extends \DrdPlus\Tests\RulesSkeleton\RequestTest
+class RedirectTest extends \DrdPlus\Tests\RulesSkeleton\RedirectTest
 {
     use Partials\AbstractContentTestTrait;
 }

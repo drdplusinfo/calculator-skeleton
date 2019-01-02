@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\RulesSkeleton\CookiesService;
 
-class CookiesServiceTest extends \DrdPlus\Tests\FrontendSkeleton\CookiesServiceTest
+class CookiesServiceTest extends \DrdPlus\Tests\RulesSkeleton\CookiesServiceTest
 {
     use Partials\AbstractContentTestTrait;
 

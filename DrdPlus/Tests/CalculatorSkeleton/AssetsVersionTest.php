@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\FrontendSkeleton\AssetsVersion;
+use DrdPlus\RulesSkeleton\AssetsVersion;
 
-class AssetsVersionTest extends \DrdPlus\Tests\FrontendSkeleton\AssetsVersionTest
+class AssetsVersionTest extends \DrdPlus\Tests\RulesSkeleton\AssetsVersionTest
 {
     use Partials\AbstractContentTestTrait;
 
