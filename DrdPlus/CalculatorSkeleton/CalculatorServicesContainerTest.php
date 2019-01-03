@@ -28,11 +28,11 @@ class CalculatorServicesContainerTest extends ServicesContainerTest
         $_GET['qux'] = 'baz';
         $_GET[CalculatorRequest::REMEMBER_CURRENT] = true;
         $calculatorServicesContainer = new CalculatorServicesContainer();
-        $history = $calculatorServicesContainer->createHistory();
+        $history = $calculatorServicesContainer->getHistory();
         self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('qux'));
         unset($_GET['qux']);
-        $nextHistory = $calculatorServicesContainer->createHistory(); // creates history again
+        $nextHistory = $calculatorServicesContainer->getHistory(); // creates history again
         self::assertSame('baz', $nextHistory->getValue('qux'));
     }
 

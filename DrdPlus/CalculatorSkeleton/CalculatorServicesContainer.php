@@ -63,7 +63,7 @@ class CalculatorServicesContainer extends ServicesContainer
         return $this->memory;
     }
 
-    public function createCurrentValues(): CurrentValues
+    public function getCurrentValues(): CurrentValues
     {
         if ($this->currentValues === null) {
             $this->currentValues = new CurrentValues($this->getRequest()->getValuesFromGet(), $this->getMemory());
@@ -72,7 +72,7 @@ class CalculatorServicesContainer extends ServicesContainer
         return $this->currentValues;
     }
 
-    public function createHistory(): History
+    public function getHistory(): History
     {
         if ($this->history === null) {
             $this->history = new History(
