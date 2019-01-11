@@ -11,7 +11,15 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "/home/jaroslav/projects/drdplus/rules/rules.skeleton"
+      "url": "/var/www/rules.skeleton"
+    },
+    {
+      "type": "vcs",
+      "url": "/var/www/rules.skeleton/web"
+    },
+    {
+      "type": "vcs",
+      "url": "/home/jaroslav/projects/granam/web-content-builder"
     }
   ],
   "require": {
@@ -20,14 +28,18 @@
     "granam/string": "^3.1",
     "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
-    "drdplus/rules-skeleton": "^1.0",
+    "drdplus/rules-skeleton": "master",
     "granam/integer": "^6.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
     "phpunit/phpunit": "~7.0",
     "mockery/mockery": "~1.0",
-    "granam/tools": "^3.0",
-    "drdplus/rules-skeleton-web": "^1.0"
+    "granam/tools": "^3.0"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
   }
 }

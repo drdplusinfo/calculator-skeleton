@@ -23,6 +23,8 @@ class CalculatorServicesContainer extends ServicesContainer
     private $history;
     /** @var CalculatorContent */
     private $calculatorContent;
+    /** @var CalculatorWebContent */
+    private $calculatorWebContent;
 
     public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
     {
@@ -92,11 +94,10 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->calculatorContent === null) {
             $this->calculatorContent = new CalculatorContent(
+                $this->getCalculatorWebContent(),
                 $this->getHtmlHelper(),
                 $this->getWebVersions(),
-                $this->getHead(),
                 $this->getMenu(),
-                $this->getCalculatorBody(),
                 $this->getWebCache()
             );
 
@@ -104,5 +105,18 @@ class CalculatorServicesContainer extends ServicesContainer
 
         return $this->calculatorContent;
 
+    }
+
+    public function getCalculatorWebContent(): CalculatorWebContent
+    {
+        if ($this->calculatorWebContent === null) {
+            $this->calculatorWebContent = new CalculatorWebContent(
+                $this->getHtmlHelper(),
+                $this->getHead(),
+                $this->getCalculatorBody()
+            );
+        }
+
+        return $this->calculatorWebContent;
     }
 }

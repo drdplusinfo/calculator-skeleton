@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06e41a111f07215381142d05a5358371",
+    "content-hash": "107a01f0f0f439c1704a94daec5e375c",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -62,14 +62,15 @@
         },
         {
             "name": "drdplus/rules-skeleton",
-            "version": "1.0.71",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "/home/jaroslav/projects/drdplus/rules/rules.skeleton",
-                "reference": "64bb6bb238130b07cb96493c408e49eff7cf6241"
+                "url": "/var/www/rules.skeleton",
+                "reference": "bbe2d313f0dd0190ce07db13ef0ca50f1187731e"
             },
             "require": {
                 "composer-plugin-api": "^1.0",
+                "drdplus/rules-skeleton-web": "dev-master",
                 "erusev/parsedown": "^1.7",
                 "ext-curl": "*",
                 "ext-dom": "*",
@@ -82,6 +83,7 @@
                 "granam/strict-object": "^3.0",
                 "granam/string": "^3.2",
                 "granam/tools": "^3.0",
+                "granam/yaml-reader": "^1.0",
                 "mockery/mockery": "^1.1",
                 "php": ">=7.1",
                 "phpgt/dom": "~1.0",
@@ -92,12 +94,8 @@
             },
             "require-dev": {
                 "composer/composer": "^1.7",
-                "drdplus/rules-skeleton-web": "dev-master",
                 "roave/security-advisories": "dev-master"
             },
-            "bin": [
-                "bin/assets"
-            ],
             "type": "composer-plugin",
             "extra": {
                 "class": "DrdPlus\\RulesSkeleton\\SkeletonInjectorComposerPlugin"
@@ -125,7 +123,48 @@
                 "rules",
                 "skeleton"
             ],
-            "time": "2019-01-02T16:37:50+00:00"
+            "time": "2019-01-11T11:17:44+00:00"
+        },
+        {
+            "name": "drdplus/rules-skeleton-web",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "/var/www/rules.skeleton/web",
+                "reference": "13d553b49ec2734491e61600a1dcb198a4aa84c7"
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-yaml": "*",
+                "granam/exceptions-hierarchy": "^4.0",
+                "granam/strict-object": "^3.0",
+                "granam/string": "^3.2",
+                "granam/web-content-builder": "dev-master",
+                "granam/yaml-reader": "^1.0",
+                "phpgt/dom": "^1.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "^7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DrdPlus\\": "DrdPlus/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Content for DrD+ rules skeleton",
+            "keywords": [
+                "content",
+                "drd plus",
+                "helper",
+                "rules",
+                "skeleton"
+            ],
+            "time": "2019-01-11T07:09:57+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -178,12 +217,12 @@
             "version": "4.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jaroslavtyc/granam-exceptions-hierarchy.git",
+                "url": "https://github.com/granam/exceptions-hierarchy.git",
                 "reference": "846b8592c8b673818569bbb103016723130bbf98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jaroslavtyc/granam-exceptions-hierarchy/zipball/846b8592c8b673818569bbb103016723130bbf98",
+                "url": "https://api.github.com/repos/granam/exceptions-hierarchy/zipball/846b8592c8b673818569bbb103016723130bbf98",
                 "reference": "846b8592c8b673818569bbb103016723130bbf98",
                 "shasum": ""
             },
@@ -558,6 +597,97 @@
                 "string"
             ],
             "time": "2018-07-20T06:12:40+00:00"
+        },
+        {
+            "name": "granam/web-content-builder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "/home/jaroslav/projects/granam/web-content-builder",
+                "reference": "5d995593494ac293c92e0873bcea0fbb0f23bf94"
+            },
+            "require": {
+                "composer-plugin-api": "^1.1",
+                "erusev/parsedown": "^1.7",
+                "ext-dom": "*",
+                "ext-json": "*",
+                "granam/strict-object": "^3.0",
+                "granam/string": "^3.2",
+                "php": ">=7.1",
+                "phpgt/dom": "^1.1",
+                "piwik/device-detector": "^3.11"
+            },
+            "require-dev": {
+                "composer/composer": "^1.7",
+                "granam/exceptions-hierarchy": "^4.0",
+                "mockery/mockery": "^1.2",
+                "phpunit/phpunit": "~7.0",
+                "roave/security-advisories": "dev-master"
+            },
+            "bin": [
+                "bin/assets"
+            ],
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Granam\\WebContentBuilder\\WebContentBuilderInjectorComposerPlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Granam\\": "Granam/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Builds HTML from HTML files, markdown or PHP script",
+            "keywords": [
+                "builder",
+                "content",
+                "html",
+                "web"
+            ],
+            "time": "2019-01-11T07:07:58+00:00"
+        },
+        {
+            "name": "granam/yaml-reader",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/granam/yaml-reader.git",
+                "reference": "bd5821b77051971825d870fbaeb164f2dec6c8f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/granam/yaml-reader/zipball/bd5821b77051971825d870fbaeb164f2dec6c8f1",
+                "reference": "bd5821b77051971825d870fbaeb164f2dec6c8f1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-yaml": "*",
+                "granam/strict-object": "^3.0",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~7.0",
+                "roave/security-advisories": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Granam\\": "Granam/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Just parse YAML content to array",
+            "keywords": [
+                "content",
+                "reader",
+                "yaml"
+            ],
+            "time": "2019-01-03T14:21:02+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -2457,49 +2587,17 @@
     ],
     "packages-dev": [
         {
-            "name": "drdplus/rules-skeleton-web",
-            "version": "1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/drdplusinfo/rules-skeleton-web.git",
-                "reference": "0a8799f861d0046233b1f86f6cbfbbee939b2272"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/drdplusinfo/rules-skeleton-web/zipball/0a8799f861d0046233b1f86f6cbfbbee939b2272",
-                "reference": "0a8799f861d0046233b1f86f6cbfbbee939b2272",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.3"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Content for DrD+ rules skeleton",
-            "keywords": [
-                "Skeleton",
-                "content",
-                "drd plus",
-                "helper",
-                "rules"
-            ],
-            "time": "2018-09-26T07:16:47+00:00"
-        },
-        {
             "name": "roave/security-advisories",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5f3e0c82ada2d16fdd637b24e095888f4abac43f"
+                "reference": "7989c51d910c456aa07e8e149a98afac5de69e7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5f3e0c82ada2d16fdd637b24e095888f4abac43f",
-                "reference": "5f3e0c82ada2d16fdd637b24e095888f4abac43f",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7989c51d910c456aa07e8e149a98afac5de69e7a",
+                "reference": "7989c51d910c456aa07e8e149a98afac5de69e7a",
                 "shasum": ""
             },
             "conflict": {
@@ -2689,15 +2787,15 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-12-30T13:00:21+00:00"
+            "time": "2019-01-08T04:52:50+00:00"
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "roave/security-advisories": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.1"

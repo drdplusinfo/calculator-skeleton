@@ -3,17 +3,14 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\CalculatorSkeleton\CalculatorConfiguration;
 use DrdPlus\CalculatorSkeleton\CalculatorController;
 use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 use DrdPlus\RulesSkeleton\Configuration;
-use DrdPlus\RulesSkeleton\Dirs;
 use DrdPlus\RulesSkeleton\HtmlHelper;
-use DrdPlus\RulesSkeleton\ServicesContainer;
 use DrdPlus\Tests\RulesSkeleton\Partials\AbstractContentTest;
 
 /**
- * @method CalculatorConfiguration getConfiguration(Dirs $dirs = null)
+ * @method CalculatorServicesContainer createServicesContainer(Configuration $configuration = null, HtmlHelper $htmlHelper = null)
  */
 class CalculatorControllerTest extends AbstractContentTest
 {
@@ -43,27 +40,5 @@ class CalculatorControllerTest extends AbstractContentTest
             \str_replace(['remember_current=1', '[]'], ['remember_current=0', \urlencode('[]')], $_SERVER['REQUEST_URI']),
             $controller->getRequestUrl(['remember_current' => '0'])
         );
-    }
-    /**
-     * @param string|null $documentRoot
-     * @param Configuration|null $configuration
-     * @param HtmlHelper|null $htmlHelper
-     * @return ServicesContainer|CalculatorServicesContainer
-     */
-    protected function createServicesContainer(
-        string $documentRoot = null,
-        Configuration $configuration = null,
-        HtmlHelper $htmlHelper = null
-    ): ServicesContainer
-    {
-        return new CalculatorServicesContainer(
-            $configuration ?? $this->getConfiguration(),
-            $htmlHelper ?? $this->createHtmlHelper($this->createDirs(), false, false, false)
-        );
-    }
-
-    protected function getConfigurationClass(): string
-    {
-        return CalculatorConfiguration::class;
     }
 }

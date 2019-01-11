@@ -1,10 +1,15 @@
 <?php
-namespace DrdPlus\CalculatorSkeleton;
+declare(strict_types=1);
 
-use DrdPlus\Tests\CalculatorSkeleton\ServicesContainerTest;
+namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class CalculatorServicesContainerTest extends ServicesContainerTest
+use DrdPlus\CalculatorSkeleton\CalculatorRequest;
+use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
+
+class CalculatorServicesContainerTest extends \DrdPlus\Tests\RulesSkeleton\ServicesContainerTest
 {
+    use Partials\AbstractContentTestTrait;
+
     /**
      * @test
      * @backupGlobals enabled
@@ -27,13 +32,10 @@ class CalculatorServicesContainerTest extends ServicesContainerTest
     {
         $_GET['qux'] = 'baz';
         $_GET[CalculatorRequest::REMEMBER_CURRENT] = true;
-        $calculatorServicesContainer = new CalculatorServicesContainer();
+        $calculatorServicesContainer = new CalculatorServicesContainer($this->getConfiguration(), $this->createHtmlHelper());
         $history = $calculatorServicesContainer->getHistory();
         self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('qux'));
-        unset($_GET['qux']);
-        $nextHistory = $calculatorServicesContainer->getHistory(); // creates history again
-        self::assertSame('baz', $nextHistory->getValue('qux'));
     }
 
 }

@@ -3,13 +3,17 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton\Partials;
 
+use DrdPlus\CalculatorSkeleton\CalculatorConfiguration;
+use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
+use DrdPlus\RulesSkeleton\Configuration;
 use DrdPlus\RulesSkeleton\Dirs;
 use DrdPlus\RulesSkeleton\HtmlHelper;
+use DrdPlus\RulesSkeleton\ServicesContainer;
+use DrdPlus\Tests\CalculatorSkeleton\TestsConfiguration;
+use DrdPlus\Tests\RulesSkeletonWeb\WebTestsConfiguration;
 
 /**
- * @method Dirs createDirs
- * @method string getDocumentRoot
- * @method TestsConfigurationReader getTestsConfiguration
+ * @method CalculatorConfiguration getConfiguration(Dirs $dirs = null)
  * @method static assertTrue($value, $message = '')
  * @method static assertFalse($value, $message = '')
  * @method static assertSame($expected, $actual, $message = '')
@@ -19,11 +23,48 @@ use DrdPlus\RulesSkeleton\HtmlHelper;
  */
 trait AbstractContentTestTrait
 {
+    /**
+     * @param Configuration|CalculatorConfiguration|null $configuration
+     * @param HtmlHelper|null $htmlHelper
+     * @return ServicesContainer
+     */
+    protected function createServicesContainer(
+        Configuration $configuration = null,
+        HtmlHelper $htmlHelper = null
+    ): ServicesContainer
+    {
+
+        return new CalculatorServicesContainer(
+            $configuration ?? $this->getConfiguration(),
+            $htmlHelper ?? $this->createHtmlHelper($this->getDirs())
+        );
+    }
+
+    /**
+     * @return string|CalculatorConfiguration
+     */
+    protected function getConfigurationClass(): string
+    {
+        return CalculatorConfiguration::class;
+    }
+
+    /**
+     * @return TestsConfiguration|WebTestsConfiguration
+     */
+    protected function getTestsConfiguration(): WebTestsConfiguration
+    {
+        static $testsConfiguration;
+        if ($testsConfiguration === null) {
+            $testsConfiguration = TestsConfiguration::createFromYaml(\DRD_PLUS_TESTS_ROOT . '/tests_configuration.yml');
+        }
+
+        return $testsConfiguration;
+    }
 
     protected function isSkeletonChecked(string $skeletonDocumentRoot = null): bool
     {
-        $documentRootRealPath = \realpath($this->getDocumentRoot());
-        self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getDocumentRoot(), true));
+        $documentRootRealPath = \realpath($this->getProjectRoot());
+        self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getProjectRoot(), true));
         $skeletonRootRealPath = \realpath($skeletonDocumentRoot ?? __DIR__ . '/../../../..');
         self::assertNotEmpty($skeletonRootRealPath, 'Can not find out real path of skeleton root ' . \var_export($skeletonRootRealPath, true));
         self::assertSame(
@@ -49,6 +90,6 @@ trait AbstractContentTestTrait
         bool $shouldHideCovered = false
     ): HtmlHelper
     {
-        return new HtmlHelper($dirs ?? $this->createDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
+        return new HtmlHelper($dirs ?? $this->getDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
     }
 }
