@@ -13,7 +13,7 @@ class CalculatorController extends RulesController
 
     /**
      * @param CalculatorServicesContainer $calculationServicesContainer
-     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\CookiesPostfixIsMissing
      */
     public function __construct(CalculatorServicesContainer $calculationServicesContainer)
     {

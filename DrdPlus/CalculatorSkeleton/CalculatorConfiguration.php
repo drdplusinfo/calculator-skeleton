@@ -24,12 +24,12 @@ class CalculatorConfiguration extends Configuration
 
     /**
      * @param array $settings
-     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\CookiesPostfixIsMissing
      */
     protected function guardValidCookiesPostfix(array $settings): void
     {
         if (($settings[static::WEB][static::COOKIES_POSTFIX] ?? '') === '') {
-            throw new Exceptions\SourceCodeUrlIsNotValid(
+            throw new Exceptions\CookiesPostfixIsMissing(
                 sprintf(
                     'Given cookies postfix are empty in web: %s, got %s',
                     static::COOKIES_POSTFIX,
