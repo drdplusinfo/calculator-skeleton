@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
+use DrdPlus\CalculatorSkeletonWeb\CalculatorWebContent;
 use DrdPlus\RulesSkeleton\Cache;
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\RulesSkeleton\Web\Content;
