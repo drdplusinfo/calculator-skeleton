@@ -8,20 +8,6 @@
       "DrdPlus\\": "DrdPlus/"
     }
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "/var/www/rules.skeleton"
-    },
-    {
-      "type": "vcs",
-      "url": "/var/www/rules.skeleton/web"
-    },
-    {
-      "type": "vcs",
-      "url": "/home/jaroslav/projects/granam/web-content-builder"
-    }
-  ],
   "require": {
     "php": ">=7.1",
     "granam/strict-object": "^3.0",
