@@ -10,7 +10,7 @@ $documentRoot = $documentRoot ?? (PHP_SAPI !== 'cli' ? \rtrim(\dirname($_SERVER[
 /** @noinspection PhpIncludeInspection */
 require_once $documentRoot . '/vendor/autoload.php';
 
-$dirs = $dirs ?? new \DrdPlus\RulesSkeleton\Dirs($documentRoot);
+$dirs = $dirs ?? new \DrdPlus\CalculatorSkeleton\CalculatorDirs($documentRoot);
 $htmlHelper = $htmlHelper ?? \DrdPlus\RulesSkeleton\HtmlHelper::createFromGlobals($dirs);
 if (PHP_SAPI !== 'cli') {
     \DrdPlus\RulesSkeleton\TracyDebugger::enable($htmlHelper->isInProduction());

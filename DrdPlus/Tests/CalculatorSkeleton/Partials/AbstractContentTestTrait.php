@@ -1,9 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton\Partials;
 
 use DrdPlus\CalculatorSkeleton\CalculatorConfiguration;
+use DrdPlus\CalculatorSkeleton\CalculatorDirs;
 use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 use DrdPlus\RulesSkeleton\Configuration;
 use DrdPlus\RulesSkeleton\Dirs;
@@ -13,7 +14,7 @@ use DrdPlus\Tests\CalculatorSkeleton\TestsConfiguration;
 use DrdPlus\Tests\RulesSkeletonWeb\WebTestsConfiguration;
 
 /**
- * @method CalculatorConfiguration getConfiguration(Dirs $dirs = null)
+ * @method CalculatorConfiguration getConfiguration(CalculatorDirs $dirs = null)
  * @method static assertTrue($value, $message = '')
  * @method static assertFalse($value, $message = '')
  * @method static assertSame($expected, $actual, $message = '')
@@ -23,73 +24,76 @@ use DrdPlus\Tests\RulesSkeletonWeb\WebTestsConfiguration;
  */
 trait AbstractContentTestTrait
 {
-    /**
-     * @param Configuration|CalculatorConfiguration|null $configuration
-     * @param HtmlHelper|null $htmlHelper
-     * @return ServicesContainer
-     */
-    protected function createServicesContainer(
-        Configuration $configuration = null,
-        HtmlHelper $htmlHelper = null
-    ): ServicesContainer
-    {
 
-        return new CalculatorServicesContainer(
-            $configuration ?? $this->getConfiguration(),
-            $htmlHelper ?? $this->createHtmlHelper($this->getDirs())
-        );
-    }
+	/**
+	 * @param Configuration|CalculatorConfiguration|null $configuration
+	 * @param HtmlHelper|null $htmlHelper
+	 * @return ServicesContainer
+	 */
+	protected function createServicesContainer(
+		Configuration $configuration = null,
+		HtmlHelper $htmlHelper = null
+	): ServicesContainer {
+		return new CalculatorServicesContainer(
+			$configuration ?? $this->getConfiguration(),
+			$htmlHelper ?? $this->createHtmlHelper($this->getDirs())
+		);
+	}
 
-    /**
-     * @return string|CalculatorConfiguration
-     */
-    protected function getConfigurationClass(): string
-    {
-        return CalculatorConfiguration::class;
-    }
+	/**
+	 * @return string|CalculatorConfiguration
+	 */
+	protected function getConfigurationClass(): string
+	{
+		return CalculatorConfiguration::class;
+	}
 
-    /**
-     * @return TestsConfiguration|WebTestsConfiguration
-     */
-    protected function getTestsConfiguration(): WebTestsConfiguration
-    {
-        static $testsConfiguration;
-        if ($testsConfiguration === null) {
-            $testsConfiguration = TestsConfiguration::createFromYaml(\DRD_PLUS_TESTS_ROOT . '/tests_configuration.yml');
-        }
+	protected function getDirsClass(): string
+	{
+		return CalculatorDirs::class;
+	}
 
-        return $testsConfiguration;
-    }
+	/**
+	 * @return TestsConfiguration|WebTestsConfiguration
+	 */
+	protected function getTestsConfiguration(): WebTestsConfiguration
+	{
+		static $testsConfiguration;
+		if ($testsConfiguration === null) {
+			$testsConfiguration = TestsConfiguration::createFromYaml(\DRD_PLUS_TESTS_ROOT . '/tests_configuration.yml');
+		}
 
-    protected function isSkeletonChecked(string $skeletonDocumentRoot = null): bool
-    {
-        $documentRootRealPath = \realpath($this->getProjectRoot());
-        self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getProjectRoot(), true));
-        $skeletonRootRealPath = \realpath($skeletonDocumentRoot ?? __DIR__ . '/../../../..');
-        self::assertNotEmpty($skeletonRootRealPath, 'Can not find out real path of skeleton root ' . \var_export($skeletonRootRealPath, true));
-        self::assertSame(
-            'kalkulator.skeleton',
-            \basename($skeletonRootRealPath),
-            'Expected different trailing dir of calculator skeleton document root to detect it'
-        );
+		return $testsConfiguration;
+	}
 
-        return $documentRootRealPath === $skeletonRootRealPath;
-    }
+	protected function isSkeletonChecked(string $skeletonDocumentRoot = null): bool
+	{
+		$documentRootRealPath = \realpath($this->getProjectRoot());
+		self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getProjectRoot(), true));
+		$skeletonRootRealPath = \realpath($skeletonDocumentRoot ?? __DIR__ . '/../../../..');
+		self::assertNotEmpty($skeletonRootRealPath, 'Can not find out real path of skeleton root ' . \var_export($skeletonRootRealPath, true));
+		self::assertSame(
+			'kalkulator.skeleton',
+			\basename($skeletonRootRealPath),
+			'Expected different trailing dir of calculator skeleton document root to detect it'
+		);
 
-    /**
-     * @param Dirs $dirs
-     * @param bool $inDevMode
-     * @param bool $inForcedProductionMode
-     * @param bool $shouldHideCovered
-     * @return HtmlHelper|\Mockery\MockInterface
-     */
-    protected function createHtmlHelper(
-        Dirs $dirs = null,
-        bool $inForcedProductionMode = false,
-        bool $inDevMode = false,
-        bool $shouldHideCovered = false
-    ): HtmlHelper
-    {
-        return new HtmlHelper($dirs ?? $this->getDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
-    }
+		return $documentRootRealPath === $skeletonRootRealPath;
+	}
+
+	/**
+	 * @param CalculatorDirs|Dirs $dirs
+	 * @param bool $inDevMode
+	 * @param bool $inForcedProductionMode
+	 * @param bool $shouldHideCovered
+	 * @return HtmlHelper|\Mockery\MockInterface
+	 */
+	protected function createHtmlHelper(
+		Dirs $dirs = null,
+		bool $inForcedProductionMode = false,
+		bool $inDevMode = false,
+		bool $shouldHideCovered = false
+	): HtmlHelper {
+		return new HtmlHelper($dirs ?? $this->getDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
+	}
 }

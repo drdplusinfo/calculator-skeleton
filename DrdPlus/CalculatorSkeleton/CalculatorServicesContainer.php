@@ -1,123 +1,161 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\CalculatorSkeletonWeb\CalculatorWebContent;
+use DrdPlus\RulesSkeleton\Git;
 use DrdPlus\RulesSkeleton\HtmlHelper;
+use DrdPlus\RulesSkeleton\Request;
 use DrdPlus\RulesSkeleton\ServicesContainer;
+use DrdPlus\RulesSkeleton\WebVersions;
+use DrdPlus\RulesSkeletonWeb\RulesWebContent;
 
 /**
  * @method CalculatorConfiguration getConfiguration()
+ * @method CalculatorDirs getDirs()
  */
 class CalculatorServicesContainer extends ServicesContainer
 {
-    /** @var CalculatorBody */
-    private $calculatorBody;
-    /** @var CalculatorRequest */
-    private $calculatorRequest;
-    /** @var Memory */
-    private $memory;
-    /** @var CurrentValues */
-    private $currentValues;
-    /** @var History */
-    private $history;
-    /** @var CalculatorContent */
-    private $calculatorContent;
-    /** @var CalculatorWebContent */
-    private $calculatorWebContent;
 
-    public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
-    {
-        parent::__construct($calculatorConfiguration, $htmlHelper);
-    }
+	/** @var CalculatorBody */
+	private $calculatorBody;
 
-    public function getCalculatorBody(): CalculatorBody
-    {
-        if ($this->calculatorBody === null) {
-            $this->calculatorBody = new CalculatorBody($this->getWebFiles(), $this->getCalculatorRequest());
-        }
+	/** @var CalculatorRequest */
+	private $calculatorRequest;
 
-        return $this->calculatorBody;
-    }
+	/** @var Memory */
+	private $memory;
 
-    public function getCalculatorRequest(): CalculatorRequest
-    {
-        if ($this->calculatorRequest === null) {
-            $this->calculatorRequest = new CalculatorRequest($this->getBotParser());
-        }
+	/** @var CurrentValues */
+	private $currentValues;
 
-        return $this->calculatorRequest;
-    }
+	/** @var History */
+	private $history;
 
-    public function getMemory(): Memory
-    {
-        if ($this->memory === null) {
-            $this->memory = new Memory(
-                $this->getCookiesService(),
-                $this->getCalculatorRequest()->isRequestedHistoryDeletion(),
-                $this->getRequest()->getValuesFromGet(),
-                $this->getCalculatorRequest()->isRequestedRememberCurrent(),
-                $this->getConfiguration()->getCookiesPostfix(),
-                $this->getConfiguration()->getCookiesTtl()
-            );
-        }
+	/** @var CalculatorContent */
+	private $calculatorContent;
 
-        return $this->memory;
-    }
+	/** @var RulesWebContent */
+	private $calculatorWebContent;
 
-    public function getCurrentValues(): CurrentValues
-    {
-        if ($this->currentValues === null) {
-            $this->currentValues = new CurrentValues($this->getRequest()->getValuesFromGet(), $this->getMemory());
-        }
+	/** @var CalculatorWebVersions */
+	private $calculatorWebVersions;
 
-        return $this->currentValues;
-    }
+	/** @var GitReader */
+	private $gitReader;
 
-    public function getHistory(): History
-    {
-        if ($this->history === null) {
-            $this->history = new History(
-                $this->getCookiesService(),
-                $this->getCalculatorRequest()->isRequestedHistoryDeletion(),
-                $this->getRequest()->getValuesFromGet(),
-                $this->getCalculatorRequest()->isRequestedRememberCurrent(),
-                $this->getConfiguration()->getCookiesPostfix(),
-                $this->getConfiguration()->getCookiesTtl()
-            );
-        }
+	public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
+	{
+		parent::__construct($calculatorConfiguration, $htmlHelper);
+	}
 
-        return $this->history;
-    }
+	public function getCalculatorBody(): CalculatorBody
+	{
+		if ($this->calculatorBody === null) {
+			$this->calculatorBody = new CalculatorBody($this->getWebFiles(), $this->getRequest());
+		}
 
-    public function getCalculatorContent(): CalculatorContent
-    {
-        if ($this->calculatorContent === null) {
-            $this->calculatorContent = new CalculatorContent(
-                $this->getCalculatorWebContent(),
-                $this->getHtmlHelper(),
-                $this->getWebVersions(),
-                $this->getMenu(),
-                $this->getWebCache()
-            );
+		return $this->calculatorBody;
+	}
 
-        }
+	/**
+	 * @return Request|CalculatorRequest
+	 */
+	public function getRequest(): Request
+	{
+		if ($this->calculatorRequest === null) {
+			$this->calculatorRequest = new CalculatorRequest($this->getBotParser());
+		}
 
-        return $this->calculatorContent;
+		return $this->calculatorRequest;
+	}
 
-    }
+	public function getMemory(): Memory
+	{
+		if ($this->memory === null) {
+			$this->memory = new Memory(
+				$this->getCookiesService(),
+				$this->getRequest()->isRequestedHistoryDeletion(),
+				$this->getRequest()->getValuesFromGet(),
+				$this->getRequest()->isRequestedRememberCurrent(),
+				$this->getConfiguration()->getCookiesPostfix(),
+				$this->getConfiguration()->getCookiesTtl()
+			);
+		}
 
-    public function getCalculatorWebContent(): CalculatorWebContent
-    {
-        if ($this->calculatorWebContent === null) {
-            $this->calculatorWebContent = new CalculatorWebContent(
-                $this->getHtmlHelper(),
-                $this->getHead(),
-                $this->getCalculatorBody()
-            );
-        }
+		return $this->memory;
+	}
 
-        return $this->calculatorWebContent;
-    }
+	public function getCurrentValues(): CurrentValues
+	{
+		if ($this->currentValues === null) {
+			$this->currentValues = new CurrentValues($this->getRequest()->getValuesFromGet(), $this->getMemory());
+		}
+
+		return $this->currentValues;
+	}
+
+	public function getHistory(): History
+	{
+		if ($this->history === null) {
+			$this->history = new History(
+				$this->getCookiesService(),
+				$this->getRequest()->isRequestedHistoryDeletion(),
+				$this->getRequest()->getValuesFromGet(),
+				$this->getRequest()->isRequestedRememberCurrent(),
+				$this->getConfiguration()->getCookiesPostfix(),
+				$this->getConfiguration()->getCookiesTtl()
+			);
+		}
+
+		return $this->history;
+	}
+
+	public function getCalculatorContent(): CalculatorContent
+	{
+		if ($this->calculatorContent === null) {
+			$this->calculatorContent = new CalculatorContent(
+				$this->getRulesWebContent(),
+				$this->getHtmlHelper(),
+				$this->getWebVersions(),
+				$this->getMenu(),
+				$this->getWebCache()
+			);
+		}
+
+		return $this->calculatorContent;
+	}
+
+	public function getRulesWebContent(): RulesWebContent
+	{
+		if ($this->calculatorWebContent === null) {
+			$this->calculatorWebContent = new RulesWebContent(
+				$this->getHtmlHelper(),
+				$this->getHead(),
+				$this->getCalculatorBody()
+			);
+		}
+
+		return $this->calculatorWebContent;
+	}
+
+	public function getWebVersions(): WebVersions
+	{
+		if ($this->calculatorWebVersions === null) {
+			$this->calculatorWebVersions = new CalculatorWebVersions(
+				$this->getConfiguration(),
+				$this->getRequest(),
+				$this->getGit()
+			);
+		}
+		return $this->calculatorWebVersions;
+	}
+
+	public function getGit(): Git
+	{
+		if ($this->gitReader === null) {
+			$this->gitReader = new GitReader();
+		}
+		return $this->gitReader;
+	}
 }

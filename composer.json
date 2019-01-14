@@ -19,10 +19,6 @@
     },
     {
       "type": "vcs",
-      "url": "/var/www/kalkulator.skeleton/web"
-    },
-    {
-      "type": "vcs",
       "url": "/home/jaroslav/projects/granam/web-content-builder"
     }
   ],
@@ -33,7 +29,6 @@
     "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
     "drdplus/rules-skeleton": "dev-master",
-    "drdplus/calculator-skeleton-web": "dev-master",
     "granam/integer": "^6.1"
   },
   "require-dev": {
