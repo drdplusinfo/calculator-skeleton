@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\Git;
+use Granam\Git\Git;
 
 class GitReader extends Git
 {

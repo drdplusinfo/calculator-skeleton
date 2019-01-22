@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\Tests\RulesSkeleton\RulesControllerTest;
-use DrdPlus\Tests\RulesSkeleton\WebVersionsTest;
 
 class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 {
@@ -17,7 +16,7 @@ class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 	 */
 	public function All_rules_skeleton_tests_are_used(): void
 	{
-		$reflectionClass = new \ReflectionClass(\DrdPlus\Tests\RulesSkeleton\WebContentTest::class);
+		$reflectionClass = new \ReflectionClass(static::class);
 		$rulesSkeletonDir = \dirname($reflectionClass->getFileName());
 		foreach ($this->getClassesFromDir($rulesSkeletonDir) as $rulesSkeletonTestClass) {
 			if (\is_a($rulesSkeletonTestClass, \Throwable::class, true)
@@ -32,9 +31,6 @@ class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 			) {
 				continue;
 			}
-			if ($this->isExtendedByCalculator($rulesSkeletonTestClass)) {
-				continue;
-			}
 			$expectedCalculatorTestClass = \str_replace('\\RulesSkeleton', '\\CalculatorSkeleton', $rulesSkeletonTestClass);
 			self::assertTrue(
 				\class_exists($expectedCalculatorTestClass),
@@ -45,13 +41,6 @@ class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 				"$expectedCalculatorTestClass should be a child of $rulesSkeletonTestClass"
 			);
 		}
-	}
-
-	private function isExtendedByCalculator(string $testClass): bool
-	{
-		return $testClass === WebVersionsTest::class
-			   && \class_exists(CalculatorWebVersionsTest::class)
-			   && \is_a(CalculatorWebVersionsTest::class, WebVersionsTest::class, true);
 	}
 
 	private function getClassesFromDir(string $dir): array

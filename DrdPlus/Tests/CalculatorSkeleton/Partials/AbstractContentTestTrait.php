@@ -11,7 +11,6 @@ use DrdPlus\RulesSkeleton\Dirs;
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\RulesSkeleton\ServicesContainer;
 use DrdPlus\Tests\CalculatorSkeleton\TestsConfiguration;
-use DrdPlus\Tests\RulesSkeletonWeb\WebTestsConfiguration;
 
 /**
  * @method CalculatorConfiguration getConfiguration(CalculatorDirs $dirs = null)
@@ -54,9 +53,9 @@ trait AbstractContentTestTrait
 	}
 
 	/**
-	 * @return TestsConfiguration|WebTestsConfiguration
+	 * @return TestsConfiguration|\DrdPlus\Tests\RulesSkeleton\TestsConfiguration
 	 */
-	protected function getTestsConfiguration(): WebTestsConfiguration
+	protected function getTestsConfiguration(): \DrdPlus\Tests\RulesSkeleton\TestsConfiguration
 	{
 		static $testsConfiguration;
 		if ($testsConfiguration === null) {

@@ -4,22 +4,20 @@ declare(strict_types=1);
 namespace DrdPlus\CalculatorSkeleton;
 
 use DrdPlus\RulesSkeleton\Cache;
-use DrdPlus\RulesSkeleton\HtmlHelper;
-use DrdPlus\RulesSkeleton\Web\Content;
+use DrdPlus\RulesSkeleton\CurrentWebVersion;
 use DrdPlus\RulesSkeleton\Web\Menu;
-use DrdPlus\RulesSkeleton\WebVersions;
-use DrdPlus\RulesSkeletonWeb\RulesWebContent;
+use DrdPlus\RulesSkeleton\Web\RulesContent;
+use DrdPlus\RulesSkeleton\Web\RulesMainContent;
 
-class CalculatorContent extends Content
+class CalculatorContent extends RulesContent
 {
     public function __construct(
-        RulesWebContent $rulesWebContent,
-        HtmlHelper $htmlHelper,
-        WebVersions $webVersions,
+        RulesMainContent $rulesMainContent,
         Menu $menu,
+        CurrentWebVersion $currentWebVersion,
         Cache $cache
     )
     {
-        parent::__construct($rulesWebContent, $htmlHelper, $webVersions, $menu, $cache, self::FULL, null);
+        parent::__construct($rulesMainContent, $menu, $currentWebVersion, $cache, self::FULL, null);
     }
 }

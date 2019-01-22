@@ -1,5 +1,4 @@
-/vendor/
+/vendor
 /composer.lock
 /config.local.yml
-/images/background.png
-/.idea/
+/.idea
