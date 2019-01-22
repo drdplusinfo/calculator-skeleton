@@ -9,22 +9,20 @@
     }
   },
   "require": {
-    "php": ">=7.1",
+    "drdplus/rules-skeleton": "~1.1",
     "granam/strict-object": "^3.0",
     "granam/string": "^3.1",
     "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
-    "drdplus/rules-skeleton": "dev-master",
-    "granam/integer": "^6.1"
+    "granam/integer": "^6.1",
+    "granam/tools": "^3.0",
+    "php": ">=7.1"
   },
   "require-dev": {
-    "roave/security-advisories": "dev-master",
-    "phpunit/phpunit": "~7.0",
     "mockery/mockery": "~1.0",
-    "granam/tools": "^3.0"
+    "phpunit/phpunit": "~7.0",
+    "roave/security-advisories": "dev-master"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "config": {
     "sort-packages": true
   }
