@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace DrdPlus\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\Web\HistoryDeletionBody;
-use DrdPlus\CalculatorSkeleton\Web\IssuesBody;
+use DrdPlus\CalculatorSkeleton\Web\CalculatorDebugContactsBody;
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\RulesSkeleton\Request;
 use DrdPlus\RulesSkeleton\ServicesContainer;
@@ -40,8 +40,8 @@ class CalculatorServicesContainer extends ServicesContainer
     /** @var HistoryDeletionBody */
     private $historyDeletionBody;
 
-    /** @var IssuesBody */
-    private $issuesBody;
+    /** @var CalculatorDebugContactsBody */
+    private $calculatorDebugContactsBody;
 
     public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
     {
@@ -51,9 +51,8 @@ class CalculatorServicesContainer extends ServicesContainer
     public function getRulesMainBodyParameters(): array
     {
         return [
-            'debugContacts' => $this->getDebugContactsBody(),
             'historyDeletion' => $this->getHistoryDeletionBody(),
-            'issues' => $this->getIssuesBody(),
+            'calculatorDebugContacts' => $this->getCalculatorDebugContactsBody(),
         ];
     }
 
@@ -66,13 +65,13 @@ class CalculatorServicesContainer extends ServicesContainer
         return $this->historyDeletionBody;
     }
 
-    public function getIssuesBody(): IssuesBody
+    public function getCalculatorDebugContactsBody(): CalculatorDebugContactsBody
     {
-        if ($this->issuesBody === null) {
-            $this->issuesBody = new IssuesBody();
+        if ($this->calculatorDebugContactsBody === null) {
+            $this->calculatorDebugContactsBody = new CalculatorDebugContactsBody();
         }
 
-        return $this->issuesBody;
+        return $this->calculatorDebugContactsBody;
     }
 
     /**

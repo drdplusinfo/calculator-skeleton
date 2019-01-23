@@ -1,2 +1,2 @@
 <?= /** @noinspection PhpUndefinedVariableInspection */
-$debugContacts;
+$calculatorDebugContacts;
