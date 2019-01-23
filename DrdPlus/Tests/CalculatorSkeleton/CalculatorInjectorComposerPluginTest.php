@@ -35,5 +35,6 @@ class CalculatorInjectorComposerPluginTest extends AbstractContentTest
         }
         self::assertSame('composer-plugin', $this->getComposerConfig()['type']);
         self::assertSame(CalculatorInjectorComposerPlugin::class, $this->getComposerConfig()['extra']['class']);
+        self::assertArrayHasKey('composer-plugin-api', $this->getComposerConfig()['require']);
     }
 }

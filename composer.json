@@ -9,14 +9,15 @@
     }
   },
   "require": {
+    "php": ">=7.1",
+    "composer-plugin-api": "^1.1",
     "drdplus/rules-skeleton": "~1.1",
-    "granam/strict-object": "^3.0",
-    "granam/string": "^3.1",
-    "granam/scalar": "^4.0",
     "granam/exceptions-hierarchy": "^4.0",
     "granam/integer": "^6.1",
-    "granam/tools": "^3.0",
-    "php": ">=7.1"
+    "granam/scalar": "^4.0",
+    "granam/strict-object": "^3.0",
+    "granam/string": "^3.1",
+    "granam/tools": "^3.0"
   },
   "require-dev": {
     "composer/composer": "^1.8",
