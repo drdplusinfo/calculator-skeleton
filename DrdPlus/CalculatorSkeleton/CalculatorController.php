@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace DrdPlus\CalculatorSkeleton;
 
 use DrdPlus\RulesSkeleton\RulesController;
-use DrdPlus\RulesSkeleton\Web\Content;
+use DrdPlus\RulesSkeleton\Web\RulesContent;
 
 class CalculatorController extends RulesController
 {
@@ -21,7 +21,10 @@ class CalculatorController extends RulesController
         $this->calculatorServicesContainer = $calculationServicesContainer;
     }
 
-    public function getContent(): Content
+    /**
+     * @return RulesContent|CalculatorContent
+     */
+    public function getRulesContent(): RulesContent
     {
         return $this->calculatorServicesContainer->getCalculatorContent();
     }

@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
+use DrdPlus\CalculatorSkeleton\CalculatorContent;
 use DrdPlus\CalculatorSkeleton\CalculatorController;
 use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 use DrdPlus\RulesSkeleton\Configuration;
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\Tests\RulesSkeleton\Partials\AbstractContentTest;
+use Mockery\MockInterface;
 
 /**
  * @method CalculatorServicesContainer createServicesContainer(Configuration $configuration = null, HtmlHelper $htmlHelper = null)
@@ -40,5 +42,31 @@ class CalculatorControllerTest extends AbstractContentTest
             \str_replace(['remember_current=1', '[]'], ['remember_current=0', \urlencode('[]')], $_SERVER['REQUEST_URI']),
             $controller->getRequestUrl(['remember_current' => '0'])
         );
+    }
+
+    /**
+     * @test
+     */
+    public function I_can_get_content(): void
+    {
+        /** @var CalculatorContent $calculatorContent */
+        $calculatorContent = $this->mockery(CalculatorContent::class);
+        $controller = new CalculatorController($this->createServicesContainerWithContent($calculatorContent));
+        self::assertSame($calculatorContent, $controller->getRulesContent());
+    }
+
+    /**
+     * @param CalculatorContent $calculatorContent
+     * @return CalculatorServicesContainer|MockInterface
+     */
+    protected function createServicesContainerWithContent(CalculatorContent $calculatorContent): CalculatorServicesContainer
+    {
+        $servicesContainer = $this->mockery(CalculatorServicesContainer::class);
+        $servicesContainer->shouldReceive('getConfiguration')
+            ->andReturn($this->getConfiguration());
+        $servicesContainer->shouldReceive('getCalculatorContent')
+            ->andReturn($calculatorContent);
+
+        return $servicesContainer;
     }
 }
