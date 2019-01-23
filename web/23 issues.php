@@ -1,1 +1,2 @@
-<?php include __DIR__ . '/shared/issues.html';
+<?= /** @noinspection PhpUndefinedVariableInspection */
+$issues;

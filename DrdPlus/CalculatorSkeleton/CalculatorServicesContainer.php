@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
+use DrdPlus\CalculatorSkeleton\Web\HistoryDeletionBody;
+use DrdPlus\CalculatorSkeleton\Web\IssuesBody;
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\RulesSkeleton\Request;
 use DrdPlus\RulesSkeleton\ServicesContainer;
@@ -14,10 +16,6 @@ use Granam\Git\Git;
  */
 class CalculatorServicesContainer extends ServicesContainer
 {
-
-    /** @var CalculatorBody */
-    private $calculatorBody;
-
     /** @var CalculatorRequest */
     private $calculatorRequest;
 
@@ -39,18 +37,42 @@ class CalculatorServicesContainer extends ServicesContainer
     /** @var GitReader */
     private $gitReader;
 
+    /** @var HistoryDeletionBody */
+    private $historyDeletionBody;
+
+    /** @var IssuesBody */
+    private $issuesBody;
+
     public function __construct(CalculatorConfiguration $calculatorConfiguration, HtmlHelper $htmlHelper)
     {
         parent::__construct($calculatorConfiguration, $htmlHelper);
     }
 
-    public function getCalculatorBody(): CalculatorBody
+    public function getRulesMainBodyParameters(): array
     {
-        if ($this->calculatorBody === null) {
-            $this->calculatorBody = new CalculatorBody($this->getWebFiles(), $this->getDebugContactsBody(), $this->getRequest());
+        return [
+            'debugContacts' => $this->getDebugContactsBody(),
+            'historyDeletion' => $this->getHistoryDeletionBody(),
+            'issues' => $this->getIssuesBody(),
+        ];
+    }
+
+    public function getHistoryDeletionBody(): HistoryDeletionBody
+    {
+        if ($this->historyDeletionBody === null) {
+            $this->historyDeletionBody = new HistoryDeletionBody();
         }
 
-        return $this->calculatorBody;
+        return $this->historyDeletionBody;
+    }
+
+    public function getIssuesBody(): IssuesBody
+    {
+        if ($this->issuesBody === null) {
+            $this->issuesBody = new IssuesBody();
+        }
+
+        return $this->issuesBody;
     }
 
     /**
@@ -126,7 +148,7 @@ class CalculatorServicesContainer extends ServicesContainer
             $this->calculatorWebContent = new RulesMainContent(
                 $this->getHtmlHelper(),
                 $this->getHead(),
-                $this->getCalculatorBody()
+                $this->getRulesMainBody()
             );
         }
 

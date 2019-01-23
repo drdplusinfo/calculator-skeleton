@@ -1,3 +1,2 @@
-<?php
-/** @noinspection PhpUndefinedVariableInspection */
-echo $debugContacts;
+<?= /** @noinspection PhpUndefinedVariableInspection */
+$debugContacts;

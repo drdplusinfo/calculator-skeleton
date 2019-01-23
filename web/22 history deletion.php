@@ -1,1 +1,2 @@
-<?php include __DIR__ . '/shared/history_deletion.html';
+<?= /** @noinspection PhpUndefinedVariableInspection */
+$historyDeletion;
