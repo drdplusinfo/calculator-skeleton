@@ -1,7 +1,7 @@
 {
   "name": "drdplus/calculator-skeleton",
   "license": "MIT",
-  "type": "library",
+  "type": "composer-plugin",
   "description": "Style and functionality helper of a DrD+ calculator",
   "autoload": {
     "psr-4": {
@@ -26,5 +26,8 @@
   },
   "config": {
     "sort-packages": true
+  },
+  "extra": {
+    "class": "DrdPlus\\CalculatorSkeleton\\CalculatorInjectorComposerPlugin"
   }
 }

@@ -22,4 +22,18 @@ class CalculatorInjectorComposerPluginTest extends AbstractContentTest
         }
         self::assertSame(CalculatorInjectorComposerPlugin::CALCULATOR_SKELETON_PACKAGE_NAME, $this->getComposerConfig()['name']);
     }
+
+    /**
+     * @test
+     */
+    public function Package_is_injected(): void
+    {
+        if (!$this->isCalculatorSkeletonChecked()) {
+            self::assertFalse(false, 'Intended for skeleton only');
+
+            return;
+        }
+        self::assertSame('composer-plugin', $this->getComposerConfig()['type']);
+        self::assertSame(CalculatorInjectorComposerPlugin::class, $this->getComposerConfig()['extra']['class']);
+    }
 }
