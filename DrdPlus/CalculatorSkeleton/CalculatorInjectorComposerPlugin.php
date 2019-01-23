@@ -120,8 +120,8 @@ class CalculatorInjectorComposerPlugin extends StrictObject implements PluginInt
     {
         $this->passThrough(
             [
-                'rm -fr ./js/generic/skeleton/',
-                'mkdir -p ./js/generic/skeleton/',
+                'rm -fr ./js/generic/calculator/',
+                'mkdir -p ./js/generic/calculator/',
                 "cp -r ./vendor/{$this->skeletonPackageName}/js/generic/calculator/* ./js/generic/calculator/",
             ],
             $documentRoot
