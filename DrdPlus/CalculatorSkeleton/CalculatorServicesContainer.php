@@ -11,7 +11,6 @@ use Granam\Git\Git;
 
 /**
  * @method CalculatorConfiguration getConfiguration()
- * @method CalculatorDirs getDirs()
  */
 class CalculatorServicesContainer extends ServicesContainer
 {
