@@ -91,4 +91,14 @@ trait AbstractContentTestTrait
     {
         return new HtmlHelper($dirs ?? $this->getDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
     }
+
+    protected function isCalculatorSkeletonChecked(): bool
+    {
+        return $this->isSkeletonChecked($this->getCalculatorSkeletonProjectRoot());
+    }
+
+    private function getCalculatorSkeletonProjectRoot(): string
+    {
+        return __DIR__ . '/../../../..';
+    }
 }
