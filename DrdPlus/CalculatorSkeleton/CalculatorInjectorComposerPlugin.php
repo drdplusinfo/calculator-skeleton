@@ -9,8 +9,8 @@ use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
-use DrdPlus\RulesSkeleton\AssetsVersion;
 use Granam\Strict\Object\StrictObject;
+use Granam\WebContentBuilder\AssetsVersion;
 
 class CalculatorInjectorComposerPlugin extends StrictObject implements PluginInterface, EventSubscriberInterface
 {
