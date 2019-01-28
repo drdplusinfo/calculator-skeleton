@@ -1,31 +1,31 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var inputs = document.getElementsByTagName('input');
-    var selects = document.getElementsByTagName('select');
-    var buttons = document.getElementsByTagName('button');
-    var controls = [];
-    for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength; inputIndex++) {
-        var input = inputs[inputIndex];
-        if (input.type !== 'hidden' && !input.classList.contains('manual')) {
-            controls.push(inputs[inputIndex]);
+    var allInputs = document.getElementsByTagName('input');
+    var allSelects = document.getElementsByTagName('select');
+    var allButtons = document.getElementsByTagName('button');
+    var allControls = [];
+    for (var inputIndex = 0, inputsLength = allInputs.length; inputIndex < inputsLength; inputIndex++) {
+        var input = allInputs[inputIndex];
+        if (input.type !== 'hidden' && input.type !== 'submit' && !input.classList.contains('manual')) {
+            allControls.push(input);
         }
     }
-    for (var selectIndex = 0, selectsLength = selects.length; selectIndex < selectsLength; selectIndex++) {
-        var select = selects[selectIndex];
+    for (var selectIndex = 0, selectsLength = allSelects.length; selectIndex < selectsLength; selectIndex++) {
+        var select = allSelects[selectIndex];
         if (!select.classList.contains('manual')) {
-            controls.push(select);
+            allControls.push(select);
         }
     }
-    for (var buttonIndex = 0, buttonsLength = buttons.length; buttonIndex < buttonsLength; buttonIndex++) {
-        var button = buttons[buttonIndex];
+    for (var buttonIndex = 0, buttonsLength = allButtons.length; buttonIndex < buttonsLength; buttonIndex++) {
+        var button = allButtons[buttonIndex];
         if (button.type === 'button' && !button.classList.contains('manual')) {
-            controls.push(button);
+            allControls.push(button);
         }
     }
 
     for (selectIndex = 0; selectIndex < selectsLength; selectIndex++) {
-        selects[selectIndex].addEventListener('change', (function (selectIndex) {
+        allSelects[selectIndex].addEventListener('change', (function (selectIndex) {
             return function () {
-                var inputsWithSelects = selects[selectIndex].parentNode.parentNode.getElementsByTagName('input');
+                var inputsWithSelects = allSelects[selectIndex].parentNode.parentNode.getElementsByTagName('input');
                 for (var inputWithSelectIndex = 0, inputsWithSelectsLength = inputsWithSelects.length;
                      inputWithSelectIndex < inputsWithSelectsLength;
                      inputWithSelectIndex++
@@ -36,16 +36,18 @@ document.addEventListener('DOMContentLoaded', function () {
         })(selectIndex));
     }
 
-    for (var i = 0, controlsLength = controls.length; i < controlsLength; i++) {
-        var control = controls[i];
-        if (typeof control.type === 'undefined' || control.type !== 'button') {
-            control.addEventListener('change', function () {
-                submitOnChange(this)
-            });
-        } else {
-            control.addEventListener('click', function () {
-                submitOnChange(this)
-            });
+    for (var i = 0, controlsLength = allControls.length; i < controlsLength; i++) {
+        var control = allControls[i];
+        if (typeof control.type !== 'undefined' && control.type !== 'submit') {
+            if (typeof control.type === 'undefined' || control.type !== 'button') {
+                control.addEventListener('change', function () {
+                    submitOnChange(this)
+                });
+            } else {
+                control.addEventListener('click', function () {
+                    submitOnChange(this)
+                });
+            }
         }
     }
 
@@ -57,23 +59,54 @@ document.addEventListener('DOMContentLoaded', function () {
             node = form;
         } while (form && form.tagName.toUpperCase() !== 'FORM');
         if (!form || form.tagName.toUpperCase() !== 'FORM') {
-            console.log(input);
-            throw 'No form found for an input ' + changedInput.tagName
+            throw 'No form found for an input ' + changedInput.outerHTML
         }
-        submit(form);
-        disableControls(5000);
-        invalidateResult();
+        if (submit(form) && requiredInputsAreFilled(form)) {
+            disableControls(5000);
+            invalidateResult();
+        }
+    }
+
+    function submit(form) {
+        var formButtons = form.getElementsByTagName('button');
+        for (var buttonIndex = 0, buttonsLength = formButtons.length; buttonIndex < buttonsLength; buttonIndex++) {
+            var button = formButtons[buttonIndex];
+            if (button.type === 'submit' && !button.disabled) {
+                button.click();
+                return true;
+            }
+        }
+        var formInputs = form.getElementsByTagName('input');
+        for (var inputIndex = 0, inputsLength = formInputs.length; inputIndex < inputsLength; inputIndex++) {
+            var input = formInputs[inputIndex];
+            if (input.type === 'submit' && !input.disabled) {
+                input.click();
+                return true;
+            }
+        }
+        throw 'No submit has been found in form ' + form.outerHTML;
+    }
+
+    function requiredInputsAreFilled(form) {
+        var inputs = form.getElementsByTagName('input');
+        for (var i = 0, inputsLength = inputs.length; i < inputsLength; i++) {
+            var input = inputs[i];
+            if (input.required && input.value.toString() === '') {
+                return false;
+            }
+        }
+        return true;
     }
 
     function enableControls() {
-        for (var j = 0, length = controls.length; j < length; j++) {
-            controls[j].disabled = null;
+        for (var j = 0, length = allControls.length; j < length; j++) {
+            allControls[j].disabled = null;
         }
     }
 
     function disableControls(forMilliSeconds) {
-        for (var j = 0, length = controls.length; j < length; j++) {
-            controls[j].disabled = true;
+        for (var j = 0, length = allControls.length; j < length; j++) {
+            allControls[j].disabled = true;
         }
         if (forMilliSeconds) {
             window.setTimeout(enableControls, forMilliSeconds /* unlock after */)
@@ -87,25 +120,5 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         result.classList.add('obsolete');
         result.style.opacity = '0.5';
-    }
-
-    function submit(form) {
-        var buttons = form.getElementsByTagName('button');
-        for (var buttonIndex = 0, buttonsLength = buttons.length; buttonIndex < buttonsLength; buttonIndex++) {
-            var button = buttons[buttonIndex];
-            if (button.getAttribute('type') === 'submit' && !button.disabled) {
-                button.click();
-                return;
-            }
-        }
-        var inputs = form.getElementsByTagName('input');
-        for (var inputIndex = 0, inputsLength = inputs.length; inputIndex < inputsLength; inputIndex++) {
-            var input = inputs[inputIndex];
-            if (input.getAttribute('type') === 'submit' && !input.disabled) {
-                input.click();
-                return;
-            }
-        }
-        form.submit();
     }
 });
