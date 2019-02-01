@@ -14,7 +14,7 @@ use Mockery\MockInterface;
 /**
  * @method CalculatorServicesContainer createServicesContainer(Configuration $configuration = null, HtmlHelper $htmlHelper = null)
  */
-class CalculatorControllerTest extends AbstractContentTest
+class CalculatorApplicationTest extends AbstractContentTest
 {
     use Partials\AbstractContentTestTrait;
 
