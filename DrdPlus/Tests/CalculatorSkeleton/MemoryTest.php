@@ -7,6 +7,9 @@ use DrdPlus\CalculatorSkeleton\Memory;
 use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Tests\Tools\TestWithMockery;
 
+/**
+ * @backupGlobals enabled
+ */
 class MemoryTest extends TestWithMockery
 {
     use Partials\AbstractCalculatorContentTestTrait;
