@@ -3,13 +3,8 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\Tests\RulesSkeleton\RulesApplicationTest;
-
 class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 {
-
-    use Partials\AbstractContentTestTrait;
-
     /**
      * @test
      * @throws \ReflectionException
@@ -39,30 +34,5 @@ class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
                 "$expectedCalculatorTestClass should be a child of $rulesSkeletonTestClass"
             );
         }
-    }
-
-    private function getClassesFromDir(string $dir): array
-    {
-        $classes = [];
-        foreach (\scandir($dir, SCANDIR_SORT_NONE) as $folder) {
-            if ($folder === '.' || $folder === '..') {
-                continue;
-            }
-            if (!\preg_match('~\.php$~', $folder)) {
-                if (\is_dir($dir . '/' . $folder)) {
-                    foreach ($this->getClassesFromDir($dir . '/' . $folder) as $class) {
-                        $classes[] = $class;
-                    }
-                }
-                continue;
-            }
-            self::assertNotEmpty(
-                \preg_match('~(?<className>DrdPlus/[^/].+)\.php~', $dir . '/' . $folder, $matches),
-                "DrdPlus class name has not been determined from $dir/$folder"
-            );
-            $classes[] = \str_replace('/', '\\', $matches['className']);
-        }
-
-        return $classes;
     }
 }
