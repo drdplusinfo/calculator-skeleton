@@ -8,7 +8,7 @@ use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 
 class CalculatorServicesContainerTest extends \DrdPlus\Tests\RulesSkeleton\ServicesContainerTest
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\AbstractCalculatorContentTestTrait;
 
     /**
      * @test
