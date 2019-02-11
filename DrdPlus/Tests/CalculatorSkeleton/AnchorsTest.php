@@ -8,7 +8,7 @@ namespace DrdPlus\Tests\CalculatorSkeleton;
  */
 class AnchorsTest extends \DrdPlus\Tests\RulesSkeleton\AnchorsTest
 {
-    use Partials\AbstractCalculatorContentTestTrait;
+    use Partials\CalculatorContentTestTrait;
 
     /**
      * @test

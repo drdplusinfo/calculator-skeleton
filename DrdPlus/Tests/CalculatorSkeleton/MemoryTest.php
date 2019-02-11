@@ -12,7 +12,7 @@ use Granam\Tests\Tools\TestWithMockery;
  */
 class MemoryTest extends TestWithMockery
 {
-    use Partials\AbstractCalculatorContentTestTrait;
+    use Partials\CalculatorContentTestTrait;
 
     /** @var CookiesService */
     private $cookiesService;
