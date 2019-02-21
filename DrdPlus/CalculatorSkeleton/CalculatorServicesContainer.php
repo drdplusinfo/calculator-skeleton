@@ -119,7 +119,13 @@ class CalculatorServicesContainer extends ServicesContainer
     public function getWebPartsContainer(): \DrdPlus\RulesSkeleton\Web\WebPartsContainer
     {
         if ($this->calculatorWebPartsContainer === null) {
-            $this->calculatorWebPartsContainer = new CalculatorWebPartsContainer($this);
+            $this->calculatorWebPartsContainer = new CalculatorWebPartsContainer(
+                $this->getPass(),
+                $this->getWebFiles(),
+                $this->getDirs(),
+                $this->getHtmlHelper(),
+                $this->getRequest()
+            );
         }
         return $this->calculatorWebPartsContainer;
     }
