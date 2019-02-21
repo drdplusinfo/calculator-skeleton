@@ -28,22 +28,43 @@ class HistoryTest extends AbstractCalculatorContentTest
     {
         $history = new History(
             $this->cookiesService,
-            true, // remove previous history, if any
+            History::DELETE_PREVIOUS_HISTORY,
             ['from' => 'inner memory'],
-            true, // remember current values
-            'foo'
+            'foo' // cookies postfix
         );
-        self::assertFalse($history->shouldForgotHistory());
         self::assertNull($history->getValue('from'));
         $nextHistory = new History(
             $this->cookiesService,
-            false, // do not remove previous history
+            History::KEEP_PREVIOUS_HISTORY,
             [], // no values to remember this time
-            true, // remember current values
             'foo'
         );
         self::assertSame('inner memory', $nextHistory->getValue('from')); // taken from previous history life-cycle
         $_GET['from'] = 'get';
+        self::assertNull($history->getValue('from'), 'Should not be affected by any change');
+        self::assertSame('inner memory', $nextHistory->getValue('from'), 'Should not be affected by current GET values');
+    }
+
+    /**
+     * @test
+     */
+    public function Values_from_post_are_ignored(): void
+    {
+        $history = new History(
+            $this->cookiesService,
+            History::DELETE_PREVIOUS_HISTORY,
+            ['from' => 'inner memory'],
+            'foo' // cookies postfix
+        );
+        self::assertNull($history->getValue('from'));
+        $nextHistory = new History(
+            $this->cookiesService,
+            History::KEEP_PREVIOUS_HISTORY,
+            [], // no values to remember this time
+            'foo'
+        );
+        self::assertSame('inner memory', $nextHistory->getValue('from')); // taken from previous history life-cycle
+        $_POST['from'] = 'post';
         self::assertNull($history->getValue('from'), 'Should not be affected by any change');
         self::assertSame('inner memory', $nextHistory->getValue('from'), 'Should not be affected by current GET values');
     }

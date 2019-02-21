@@ -3,96 +3,60 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Strict\Object\StrictObject;
 
 class History extends StrictObject
 {
-    private const CONFIGURATOR_HISTORY = 'configurator_history';
-    private const CONFIGURATOR_HISTORY_TOKEN = 'configurator_history_token';
-    private const FORGOT_HISTORY = 'forgot_configurator_history';
+    public const CALCULATOR_HISTORY = 'configurator_history';
 
-    /** @var CookiesService */
-    private $cookiesService;
-    /** @var string */
-    private $cookiesPostfix;
-    /** @var array */
-    private $historyValues = [];
-
-    public function __construct(
-        CookiesService $cookiesService,
-        bool $deletePreviousHistory,
-        array $valuesToRemember,
-        bool $rememberHistory,
-        string $cookiesPostfix,
-        int $cookiesTtl = null
-    )
-    {
-        $this->cookiesService = $cookiesService;
-        $this->cookiesPostfix = $cookiesPostfix;
-        if ($deletePreviousHistory) {
-            $this->deleteHistory();
-        }
-        if (\count($valuesToRemember) > 0) {
-            if (!$rememberHistory) {
-                $this->deleteHistory();
-                $cookiesService->setCookie(self::FORGOT_HISTORY . '-' . $cookiesPostfix, '1', false, $this->createCookiesTtlDate($cookiesTtl));
-            }
-        } elseif (!$this->cookieHistoryIsValid()) {
-            $this->deleteHistory();
-        }
-        if (!empty($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix])) {
-            $historyValues = \unserialize($_COOKIE[self::CONFIGURATOR_HISTORY . '-' . $cookiesPostfix], ['allowed_classes' => []]);
-            if (\is_array($historyValues)) {
-                $this->historyValues = $historyValues;
-            }
-        }
-        if ($rememberHistory && \count($valuesToRemember) > 0) {
-            $this->remember($valuesToRemember, $this->createCookiesTtlDate($cookiesTtl));
-        }
-    }
-
-    protected function createCookiesTtlDate(?int $cookiesTtl): \DateTime
+    public static function createCookiesTtlDate(?int $cookiesTtl): \DateTimeImmutable
     {
         return $cookiesTtl !== null
-            ? new \DateTime('@' . (\time() + $cookiesTtl))
-            : new \DateTime('+ 1 year');
+            ? new \DateTimeImmutable('@' . (\time() + $cookiesTtl))
+            : new \DateTimeImmutable('+ 1 year');
     }
 
-    protected function remember(array $valuesToRemember, \DateTime $cookiesTtlDate): void
+    public static function createStorageKey(string $postfix): string
     {
-        $this->cookiesService->deleteCookie(self::FORGOT_HISTORY . '-' . $this->cookiesPostfix);
-        $this->cookiesService->setCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix, \serialize($valuesToRemember), false, $cookiesTtlDate);
-        $this->cookiesService->setCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix, \md5_file(__FILE__), false, $cookiesTtlDate);
+        return self::CALCULATOR_HISTORY . '-' . $postfix;
     }
 
-    protected function deleteHistory(): void
+    /** @var array */
+    private $historyValues;
+    /** @var bool */
+    private $cookiesStorage;
+
+    public function __construct(CookiesStorage $cookiesStorage)
     {
-        $this->cookiesService->deleteCookie(self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix);
-        $this->cookiesService->deleteCookie(self::CONFIGURATOR_HISTORY . '-' . $this->cookiesPostfix);
+        $this->cookiesStorage = $cookiesStorage;
     }
 
-    private function cookieHistoryIsValid(): bool
+    public function saveHistory(array $valuesToRemember): void
     {
-        return !empty($_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix])
-            && $_COOKIE[self::CONFIGURATOR_HISTORY_TOKEN . '-' . $this->cookiesPostfix] === \md5_file(__FILE__);
+        $this->loadsHistoryValues(); // loads previous history as they would be overwritten now
+        $this->cookiesStorage->storeValues($valuesToRemember);
     }
 
-    public function shouldForgotHistory(): bool
+    private function loadsHistoryValues(): void
     {
-        return !empty($_COOKIE[self::FORGOT_HISTORY . '-' . $this->cookiesPostfix]);
+        $this->historyValues = $this->getHistoryValues();
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
+    public function deleteHistory(): void
+    {
+        $this->cookiesStorage->deleteAll();
+    }
+
     public function getValue(string $name)
     {
-        if (\array_key_exists($name, $this->historyValues) && $this->cookieHistoryIsValid()) {
-            return $this->historyValues[$name];
-        }
+        return $this->getHistoryValues()[$name] ?? null;
+    }
 
-        return null;
+    public function getHistoryValues(): array
+    {
+        if ($this->historyValues === null) {
+            $this->loadsHistoryValues();
+        }
+        return $this->historyValues;
     }
 }

@@ -59,12 +59,11 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->memory === null) {
             $this->memory = new Memory(
-                $this->getCookiesService(),
-                $this->getRequest()->isRequestedHistoryDeletion(),
-                $this->getRequest()->getValuesFromGet(),
-                $this->getRequest()->isRequestedRememberCurrent(),
-                $this->getConfiguration()->getCookiesPostfix(),
-                $this->getConfiguration()->getCookiesTtl()
+                new CookiesStorage(
+                    $this->getCookiesService(),
+                    Memory::createStorageKey($this->getConfiguration()->getCookiesPostfix()),
+                    Memory::createCookiesTtlDate($this->getConfiguration()->getCookiesTtl())
+                )
             );
         }
         return $this->memory;
@@ -82,12 +81,11 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->history === null) {
             $this->history = new History(
-                $this->getCookiesService(),
-                $this->getRequest()->isRequestedHistoryDeletion(),
-                $this->getRequest()->getValuesFromGet(),
-                $this->getRequest()->isRequestedRememberCurrent(),
-                $this->getConfiguration()->getCookiesPostfix(),
-                $this->getConfiguration()->getCookiesTtl()
+                new CookiesStorage(
+                    $this->getCookiesService(),
+                    History::createStorageKey($this->getConfiguration()->getCookiesPostfix()),
+                    History::createCookiesTtlDate($this->getConfiguration()->getCookiesTtl())
+                )
             );
         }
         return $this->history;
