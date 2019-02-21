@@ -35,11 +35,13 @@ class CookiesStorage extends StrictObject
     public function storeValues(array $valuesToRemember): void
     {
         $this->cookiesService->setCookie($this->storageKey, \serialize($valuesToRemember), false, $this->cookiesTtlDate);
+        $this->values = $valuesToRemember;
     }
 
     public function deleteAll(): void
     {
         $this->cookiesService->deleteCookie($this->storageKey);
+        $this->values = [];
     }
 
     public function getValue(string $name)
