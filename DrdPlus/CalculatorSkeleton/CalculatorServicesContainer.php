@@ -85,7 +85,7 @@ class CalculatorServicesContainer extends ServicesContainer
         return $this->dateTimeProvider;
     }
 
-    private function getCookiesStorageKeyPrefix(): string
+    protected function getCookiesStorageKeyPrefix(): string
     {
         return StringTools::getClassBaseName(static::class) . '-' . $this->getConfiguration()->getCookiesPostfix();
     }
