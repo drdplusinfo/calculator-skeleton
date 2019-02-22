@@ -6,7 +6,7 @@ namespace DrdPlus\CalculatorSkeleton;
 use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Strict\Object\StrictObject;
 
-class CookiesStorage extends StrictObject
+class CookiesStorage extends StrictObject implements StorageInterface
 {
     /**
      * @var CookiesService
@@ -17,25 +17,20 @@ class CookiesStorage extends StrictObject
      */
     private $storageKey;
     /**
-     * @var \DateTimeInterface|null
-     */
-    private $cookiesTtlDate;
-    /**
      * @var array
      */
     private $values;
 
-    public function __construct(CookiesService $cookiesService, string $storageKey, ?\DateTimeInterface $cookiesTtlDate)
+    public function __construct(CookiesService $cookiesService, string $storageKey)
     {
         $this->cookiesService = $cookiesService;
         $this->storageKey = $storageKey;
-        $this->cookiesTtlDate = $cookiesTtlDate;
     }
 
-    public function storeValues(array $valuesToRemember): void
+    public function storeValues(array $values, ?\DateTimeInterface $cookiesTtlDate): void
     {
-        $this->cookiesService->setCookie($this->storageKey, \serialize($valuesToRemember), false, $this->cookiesTtlDate);
-        $this->values = $valuesToRemember;
+        $this->cookiesService->setCookie($this->storageKey, \serialize($values), false, $cookiesTtlDate);
+        $this->values = $values;
     }
 
     public function deleteAll(): void
@@ -49,7 +44,7 @@ class CookiesStorage extends StrictObject
         return $this->getValues()[$name] ?? null;
     }
 
-    public function getValues()
+    public function getValues(): array
     {
         if ($this->values === null) {
             $this->values = $this->fetchMemoryValues();

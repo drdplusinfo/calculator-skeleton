@@ -19,9 +19,9 @@ class CookiesStorageTest extends TestWithMockery
      */
     public function Values_from_global_request_values_are_ignored(): void
     {
-        $cookiesStorage = new CookiesStorage(new CookiesService(), 'foo', null);
+        $cookiesStorage = new CookiesStorage(new CookiesService(), 'foo');
         self::assertNull($cookiesStorage->getValue('from'));
-        $cookiesStorage->storeValues(['from' => 'inner memory']);
+        $cookiesStorage->storeValues(['from' => 'inner memory'], null);
         self::assertSame('inner memory', $cookiesStorage->getValue('from'));
         $_GET['from'] = 'get';
         $_POST['from'] = 'post';
@@ -35,15 +35,15 @@ class CookiesStorageTest extends TestWithMockery
      */
     public function Values_can_be_stored_replaced_and_deleted(): void
     {
-        $cookiesStorage = new CookiesStorage(new CookiesService(), 'foo', null);
+        $cookiesStorage = new CookiesStorage(new CookiesService(), 'foo');
         self::assertSame([], $cookiesStorage->getValues());
         self::assertNull($cookiesStorage->getValue('bar'));
 
-        $cookiesStorage->storeValues($values = ['bar' => 'baz']);
+        $cookiesStorage->storeValues($values = ['bar' => 'baz'], null);
         self::assertSame($values, $cookiesStorage->getValues());
         self::assertSame('baz', $cookiesStorage->getValue('bar'));
 
-        $cookiesStorage->storeValues($newValues = ['qux' => 'FOO']);
+        $cookiesStorage->storeValues($newValues = ['qux' => 'FOO'], null);
         self::assertSame($newValues, $cookiesStorage->getValues());
         self::assertNull($cookiesStorage->getValue('bar'));
         self::assertSame('FOO', $cookiesStorage->getValue('qux'));

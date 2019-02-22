@@ -9,6 +9,7 @@ use DrdPlus\RulesSkeleton\Request;
 use DrdPlus\RulesSkeleton\ServicesContainer;
 use DrdPlus\RulesSkeleton\Web\RulesMainContent;
 use Granam\Git\Git;
+use Granam\String\StringTools;
 
 /**
  * @method CalculatorConfiguration getConfiguration()
@@ -20,6 +21,9 @@ class CalculatorServicesContainer extends ServicesContainer
 
     /** @var Memory */
     private $memory;
+
+    /** @var DateTimeProvider */
+    private $dateTimeProvider;
 
     /** @var CurrentValues */
     private $currentValues;
@@ -59,14 +63,26 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->memory === null) {
             $this->memory = new Memory(
-                new CookiesStorage(
-                    $this->getCookiesService(),
-                    Memory::createStorageKey($this->getConfiguration()->getCookiesPostfix()),
-                    Memory::createCookiesTtlDate($this->getConfiguration()->getCookiesTtl())
-                )
+                new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-history'),
+                $this->getDateTimeProvider(),
+                $this->getConfiguration()->getCookiesTtl()
             );
         }
         return $this->memory;
+    }
+
+    public function getDateTimeProvider(): DateTimeProvider
+    {
+        if ($this->dateTimeProvider === null) {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $this->dateTimeProvider = new DateTimeProvider(new \DateTimeImmutable());
+        }
+        return $this->dateTimeProvider;
+    }
+
+    private function getCookiesStorageKeyPrefix(): string
+    {
+        return StringTools::getClassBaseName(static::class) . '-' . $this->getConfiguration()->getCookiesPostfix();
     }
 
     public function getCurrentValues(): CurrentValues
@@ -81,11 +97,9 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->history === null) {
             $this->history = new History(
-                new CookiesStorage(
-                    $this->getCookiesService(),
-                    History::createStorageKey($this->getConfiguration()->getCookiesPostfix()),
-                    History::createCookiesTtlDate($this->getConfiguration()->getCookiesTtl())
-                )
+                new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-history'),
+                $this->getDateTimeProvider(),
+                $this->getConfiguration()->getCookiesTtl()
             );
         }
         return $this->history;

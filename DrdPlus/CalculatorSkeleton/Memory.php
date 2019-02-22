@@ -7,41 +7,46 @@ use Granam\Strict\Object\StrictObject;
 
 class Memory extends StrictObject
 {
-    private const CALCULATOR_MEMORY = 'configurator_memory';
+    /** @var StorageInterface */
+    private $storage;
+    /** @var int|null */
+    private $ttl;
+    /** @var null|\DateTimeImmutable */
+    private $ttlDate = false;
+    /**
+     * @var DateTimeProvider
+     */
+    private $dateTimeProvider;
 
-    public static function createCookiesTtlDate(?int $cookiesTtl): ?\DateTimeImmutable
+    public function __construct(StorageInterface $storage, DateTimeProvider $dateTimeProvider, ?int $ttl)
     {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        return $cookiesTtl !== null
-            ? new \DateTimeImmutable('@' . (\time() + $cookiesTtl))
-            : null; // at the end of session
-    }
-
-    public static function createStorageKey(string $postfix): string
-    {
-        return self::CALCULATOR_MEMORY . '-' . $postfix;
-    }
-
-    /** @var CookiesStorage */
-    private $cookiesStorage;
-
-    public function __construct(CookiesStorage $cookiesStorage)
-    {
-        $this->cookiesStorage = $cookiesStorage;
+        $this->storage = $storage;
+        $this->dateTimeProvider = $dateTimeProvider;
+        $this->ttl = $ttl;
     }
 
     public function saveMemory(array $valuesToRemember): void
     {
-        $this->cookiesStorage->storeValues($valuesToRemember);
+        $this->storage->storeValues($valuesToRemember, $this->getTtlDate());
+    }
+
+    private function getTtlDate(): ?\DateTimeImmutable
+    {
+        if ($this->ttlDate === false) {
+            $this->ttlDate = $this->ttl !== null
+                ? $this->dateTimeProvider->getNow()->modify('+ ' . $this->ttl . ' seconds')
+                : null; // end of session
+        }
+        return $this->ttlDate;
     }
 
     public function deleteMemory(): void
     {
-        $this->cookiesStorage->deleteAll();
+        $this->storage->deleteAll();
     }
 
     public function getValue(string $name)
     {
-        return $this->cookiesStorage->getValues()[$name] ?? null;
+        return $this->storage->getValues()[$name] ?? null;
     }
 }
