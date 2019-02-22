@@ -63,12 +63,17 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->memory === null) {
             $this->memory = new Memory(
-                new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-history'),
+                $this->getMemoryStorage(),
                 $this->getDateTimeProvider(),
                 $this->getConfiguration()->getCookiesTtl()
             );
         }
         return $this->memory;
+    }
+
+    protected function getMemoryStorage(): CookiesStorage
+    {
+        return new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-memory');
     }
 
     public function getDateTimeProvider(): DateTimeProvider
@@ -97,12 +102,17 @@ class CalculatorServicesContainer extends ServicesContainer
     {
         if ($this->history === null) {
             $this->history = new History(
-                new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-history'),
+                $this->getHistoryStorage(),
                 $this->getDateTimeProvider(),
                 $this->getConfiguration()->getCookiesTtl()
             );
         }
         return $this->history;
+    }
+
+    protected function getHistoryStorage(): CookiesStorage
+    {
+        return new CookiesStorage($this->getCookiesService(), $this->getCookiesStorageKeyPrefix() . '-history');
     }
 
     public function getCalculatorContent(): CalculatorContent
