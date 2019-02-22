@@ -33,7 +33,7 @@ class History extends StrictObject
         $this->storage->storeValues($valuesToRemember, $this->getTtlDate());
     }
 
-    private function getTtlDate(): \DateTimeImmutable
+    protected function getTtlDate(): \DateTimeImmutable
     {
         if ($this->ttlDate === null) {
             $this->ttlDate = $this->ttl !== null
