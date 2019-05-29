@@ -12,12 +12,14 @@ use DrdPlus\Tests\RulesSkeleton\CurrentWebVersionTest;
 use DrdPlus\Tests\RulesSkeleton\DirsTest;
 use DrdPlus\Tests\RulesSkeleton\EnvironmentTest;
 use DrdPlus\Tests\RulesSkeleton\HtmlHelperTest;
+use DrdPlus\Tests\RulesSkeleton\PassingTest;
 use DrdPlus\Tests\RulesSkeleton\RedirectTest;
 use DrdPlus\Tests\RulesSkeleton\RequestTest;
 use DrdPlus\Tests\RulesSkeleton\RouterTest;
 use DrdPlus\Tests\RulesSkeleton\RulesApplicationTest;
 use DrdPlus\Tests\RulesSkeleton\ServicesContainerTest;
 use DrdPlus\Tests\RulesSkeleton\SkeletonInjectorComposerPluginTest;
+use DrdPlus\Tests\RulesSkeleton\TableOfContentsTest;
 use DrdPlus\Tests\RulesSkeleton\UsagePolicyTest;
 use DrdPlus\Tests\RulesSkeleton\Web\HeadTest;
 use DrdPlus\Tests\RulesSkeleton\Web\MainContentTest;
@@ -88,6 +90,8 @@ class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
             RequestTest::class,
             ContentIrrelevantParametersFilterTest::class,
             CacheTest::class,
+            TableOfContentsTest::class,
+            PassingTest::class,
         ];
     }
 

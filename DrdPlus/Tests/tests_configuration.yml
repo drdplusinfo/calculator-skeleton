@@ -4,6 +4,7 @@ has_notes: false
 has_external_anchors_with_hashes: false
 has_links_to_altar: false
 has_protected_access: false
+can_be_bought_on_eshop: false
 expected_web_name: 'HTML kostra pro DrD+ kalkulátory'
 expected_page_title: 'HTML kostra pro DrD+ kalkulátory'
 expected_public_url: 'https://kalkulator.skeleton.drdplus.info'

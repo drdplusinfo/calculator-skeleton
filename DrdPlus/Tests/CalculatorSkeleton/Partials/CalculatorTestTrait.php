@@ -57,7 +57,7 @@ trait CalculatorTestTrait
         bool $shouldHideCovered = false
     ): HtmlHelper
     {
-        return new HtmlHelper($dirs ?? $this->getDirs(), $this->getEnvironment(), $inForcedProductionMode, $inDevMode, $shouldHideCovered);
+        return new HtmlHelper($dirs ?? $this->getDirs(), $this->getEnvironment(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
     }
 
     protected function getEnvironment(): Environment
