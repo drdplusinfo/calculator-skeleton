@@ -3,87 +3,101 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\Tests\FrontendSkeleton\FrontendControllerTest;
-use PHPUnit\Framework\TestCase;
+use DrdPlus\Tests\RulesSkeleton\AbstractPublicFilesTest;
+use DrdPlus\Tests\RulesSkeleton\CacheTest;
+use DrdPlus\Tests\RulesSkeleton\ConfigurationTest;
+use DrdPlus\Tests\RulesSkeleton\ContentIrrelevantParametersFilterTest;
+use DrdPlus\Tests\RulesSkeleton\CookiesServiceTest;
+use DrdPlus\Tests\RulesSkeleton\CurrentWebVersionTest;
+use DrdPlus\Tests\RulesSkeleton\DirsTest;
+use DrdPlus\Tests\RulesSkeleton\EnvironmentTest;
+use DrdPlus\Tests\RulesSkeleton\HtmlHelperTest;
+use DrdPlus\Tests\RulesSkeleton\RedirectTest;
+use DrdPlus\Tests\RulesSkeleton\RequestTest;
+use DrdPlus\Tests\RulesSkeleton\RouterTest;
+use DrdPlus\Tests\RulesSkeleton\RulesApplicationTest;
+use DrdPlus\Tests\RulesSkeleton\ServicesContainerTest;
+use DrdPlus\Tests\RulesSkeleton\SkeletonInjectorComposerPluginTest;
+use DrdPlus\Tests\RulesSkeleton\UsagePolicyTest;
+use DrdPlus\Tests\RulesSkeleton\Web\HeadTest;
+use DrdPlus\Tests\RulesSkeleton\Web\MainContentTest;
+use DrdPlus\Tests\RulesSkeleton\Web\MenuTest;
+use DrdPlus\Tests\RulesSkeleton\Web\PassContentTest;
+use DrdPlus\Tests\RulesSkeleton\Web\RulesMainContentTest;
 
-class TestsTest extends TestCase
+class TestsTest extends \DrdPlus\Tests\RulesSkeleton\TestsTest
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\CalculatorTestTrait;
 
     /**
      * @test
      * @throws \ReflectionException
      */
-    public function Every_test_lives_in_drd_plus_tests_namespace(): void
+    public function All_rules_skeleton_tests_are_used(): void
     {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $testsDir = \dirname($reflectionClass->getFileName());
-        $testClasses = $this->getClassesFromDir($testsDir);
-        self::assertNotEmpty($testClasses, "No test classes found in {$testsDir}");
-        foreach ($testClasses as $testClass) {
-            self::assertStringStartsWith(
-                'DrdPlus\\Tests',
-                (new \ReflectionClass($testClass))->getNamespaceName(),
-                "Class {$testClass} should be in DrdPlus\\Test namespace"
-            );
-        }
-    }
-
-    /**
-     * @test
-     * @throws \ReflectionException
-     */
-    public function All_frontend_skeleton_tests_are_used(): void
-    {
-        $reflectionClass = new \ReflectionClass(\DrdPlus\Tests\FrontendSkeleton\ContentTest::class);
+        $reflectionClass = new \ReflectionClass(RulesApplicationTest::class);
         $frontendSkeletonDir = \dirname($reflectionClass->getFileName());
-        foreach ($this->getClassesFromDir($frontendSkeletonDir) as $frontendSkeletonTestClass) {
-            if (\is_a($frontendSkeletonTestClass, \Throwable::class, true)
-                || \is_a($frontendSkeletonTestClass, FrontendControllerTest::class, true) // it is solved via CalculatorController
+        foreach ($this->getClassesFromDir($frontendSkeletonDir) as $parentSkeletonTestClass) {
+            if (\is_a($parentSkeletonTestClass, \Throwable::class, true)
+                || \is_a($parentSkeletonTestClass, RulesApplicationTest::class, true) // it is solved via CalculatorApplication
             ) {
                 continue;
             }
-            $frontendSkeletonTestClassReflection = new \ReflectionClass($frontendSkeletonTestClass);
+            $frontendSkeletonTestClassReflection = new \ReflectionClass($parentSkeletonTestClass);
             if ($frontendSkeletonTestClassReflection->isAbstract()
                 || $frontendSkeletonTestClassReflection->isInterface()
                 || $frontendSkeletonTestClassReflection->isTrait()
             ) {
                 continue;
             }
-            $expectedCalculatorTestClass = \str_replace('\\FrontendSkeleton', '\\CalculatorSkeleton', $frontendSkeletonTestClass);
+            if (in_array($parentSkeletonTestClass, $this->getIgnoredParentTestClasses(), true)) {
+                continue;
+            }
+            $expectedCalculatorTestClass = \str_replace('\\RulesSkeleton', '\\CalculatorSkeleton', $parentSkeletonTestClass);
             self::assertTrue(
                 \class_exists($expectedCalculatorTestClass),
-                "Missing test class {$expectedCalculatorTestClass} adopted from frontend skeleton test class {$frontendSkeletonTestClass}"
+                "Missing test class {$expectedCalculatorTestClass} adopted from parent skeleton test class {$parentSkeletonTestClass}"
             );
             self::assertTrue(
-                \is_a($expectedCalculatorTestClass, $frontendSkeletonTestClass, true),
-                "$expectedCalculatorTestClass should be a child of $frontendSkeletonTestClass"
+                \is_a($expectedCalculatorTestClass, $parentSkeletonTestClass, true),
+                "$expectedCalculatorTestClass should be a child of $parentSkeletonTestClass"
             );
         }
     }
 
-    private function getClassesFromDir(string $dir): array
+    protected function getIgnoredParentTestClasses(): array
     {
-        $classes = [];
-        foreach (\scandir($dir, SCANDIR_SORT_NONE) as $folder) {
-            if ($folder === '.' || $folder === '..') {
-                continue;
-            }
-            if (!\preg_match('~\.php$~', $folder)) {
-                if (\is_dir($dir . '/' . $folder)) {
-                    foreach ($this->getClassesFromDir($dir . '/' . $folder) as $class) {
-                        $classes[] = $class;
-                    }
-                }
-                continue;
-            }
-            self::assertNotEmpty(
-                \preg_match('~(?<className>DrdPlus/[^/].+)\.php~', $dir . '/' . $folder, $matches),
-                "DrdPlus class name has not been determined from $dir/$folder"
-            );
-            $classes[] = \str_replace('/', '\\', $matches['className']);
-        }
+        return [
+            DirsTest::class,
+            ServicesContainerTest::class,
+            HeadTest::class,
+            EnvironmentTest::class,
+            CurrentWebVersionTest::class,
+            SkeletonInjectorComposerPluginTest::class,
+            RedirectTest::class,
+            HtmlHelperTest::class,
+            UsagePolicyTest::class,
+            MenuTest::class,
+            MainContentTest::class,
+            PassContentTest::class,
+            RulesMainContentTest::class,
+            ConfigurationTest::class,
+            CookiesServiceTest::class,
+            AbstractPublicFilesTest::class,
+            RouterTest::class,
+            RequestTest::class,
+            ContentIrrelevantParametersFilterTest::class,
+            CacheTest::class,
+        ];
+    }
 
-        return $classes;
+    protected function getTestingClassesWithoutSut(): array
+    {
+        return array_map(
+            function (string $className) {
+                return str_replace('RulesSkeleton', 'CalculatorSkeleton', $className);
+            },
+            parent::getTestingClassesWithoutSut()
+        );
     }
 }

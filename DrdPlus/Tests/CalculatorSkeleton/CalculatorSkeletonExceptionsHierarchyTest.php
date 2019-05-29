@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\CalculatorSkeleton\CalculatorController;
+use DrdPlus\CalculatorSkeleton\CalculatorApplication;
+use DrdPlus\Tests\RulesSkeleton\RulesSkeletonExceptionsHierarchyTest;
+use Granam\Tests\ExceptionsHierarchy\Exceptions\AbstractExceptionsHierarchyTest;
 
-class CalculatorSkeletonExceptionsHierarchyTest extends FrontendSkeletonExceptionsHierarchyTest
+class CalculatorSkeletonExceptionsHierarchyTest extends RulesSkeletonExceptionsHierarchyTest
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\CalculatorTestTrait;
 
     /**
      * @return string
@@ -15,7 +17,7 @@ class CalculatorSkeletonExceptionsHierarchyTest extends FrontendSkeletonExceptio
      */
     protected function getTestedNamespace(): string
     {
-        return (new \ReflectionClass(CalculatorController::class))->getNamespaceName();
+        return (new \ReflectionClass(CalculatorApplication::class))->getNamespaceName();
     }
 
     /**

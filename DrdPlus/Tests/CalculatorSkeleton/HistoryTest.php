@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\History;
-use DrdPlus\FrontendSkeleton\CookiesService;
+use DrdPlus\RulesSkeleton\CookiesService;
 use Granam\Tests\Tools\TestWithMockery;
 
 class HistoryTest extends TestWithMockery
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\CalculatorTestTrait;
 
     /** @var CookiesService */
     private $cookiesService;

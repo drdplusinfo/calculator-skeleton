@@ -24,25 +24,6 @@ class CalculatorConfiguration extends Configuration
 
     /**
      * @param array $settings
-     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
-     */
-    protected function guardValidCookiesPostfix(array $settings): void
-    {
-        if (($settings[static::WEB][static::COOKIES_POSTFIX] ?? '') === '') {
-            throw new Exceptions\SourceCodeUrlIsNotValid(
-                sprintf(
-                    'Given cookies postfix are empty in web: %s, got %s',
-                    static::COOKIES_POSTFIX,
-                    array_key_exists(static::COOKIES_POSTFIX, $settings)
-                        ? "'{$settings[static::WEB][static::COOKIES_POSTFIX]}'"
-                        : 'nothing'
-                )
-            );
-        }
-    }
-
-    /**
-     * @param array $settings
      * @throws \DrdPlus\CalculatorSkeleton\Exceptions\InvalidCookiesTtl
      */
     protected function sanitizeCookiesTtl(array &$settings): void
@@ -51,7 +32,33 @@ class CalculatorConfiguration extends Configuration
             $settings[static::WEB][static::COOKIES_TTL] = ToInteger::toPositiveIntegerOrNull($settings[static::WEB][static::COOKIES_TTL] ?? null);
         } catch (\Granam\Integer\Tools\Exceptions\Runtime $runtime) {
             throw new Exceptions\InvalidCookiesTtl(
-                'Expected positive integer or null, got ' . var_export($settings[static::WEB][static::COOKIES_TTL] ?? null, true)
+                sprintf(
+                    'Expected positive integer or null, got %s (%s)',
+                    array_key_exists(static::COOKIES_TTL, $settings[static::WEB])
+                        ? var_export($settings[static::WEB][static::COOKIES_TTL], true)
+                        : 'nothing',
+                    $runtime->getMessage()
+                )
+            );
+        }
+    }
+
+    /**
+     * @param array $settings
+     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\InvalidCookiesPostfix
+     */
+    protected function guardValidCookiesPostfix(array $settings): void
+    {
+        if (($settings[static::WEB][static::COOKIES_POSTFIX] ?? '') === '') {
+            throw new Exceptions\InvalidCookiesPostfix(
+                sprintf(
+                    'Given cookies postfix are empty in %s.%s, got %s',
+                    static::WEB,
+                    static::COOKIES_POSTFIX,
+                    array_key_exists(static::COOKIES_POSTFIX, $settings[static::WEB])
+                        ? var_export($settings[static::WEB][static::COOKIES_POSTFIX], true)
+                        : 'nothing'
+                )
             );
         }
     }

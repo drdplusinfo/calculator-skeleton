@@ -5,13 +5,16 @@ namespace DrdPlus\CalculatorSkeleton;
 
 use DrdPlus\RulesSkeleton\HtmlHelper;
 use DrdPlus\RulesSkeleton\ServicesContainer;
+use DrdPlus\RulesSkeleton\Web\RulesMainContent;
 
 /**
  * @method CalculatorConfiguration getConfiguration()
  */
 class CalculatorServicesContainer extends ServicesContainer
 {
-    /** @var CalculatorBody */
+    /** @var CalculatorContent */
+    private $calculatorMainContent;
+    /** @var CalculatorMainBody */
     private $calculatorBody;
     /** @var CalculatorRequest */
     private $calculatorRequest;
@@ -21,10 +24,22 @@ class CalculatorServicesContainer extends ServicesContainer
         parent::__construct($calculatorConfiguration, $htmlHelper);
     }
 
-    public function getCalculatorBody(): CalculatorBody
+    public function getCalculatorMainContent(): CalculatorMainContent
+    {
+        if ($this->calculatorMainContent === null) {
+            $this->calculatorMainContent = new CalculatorMainContent(
+                $this->getHtmlHelper(),
+                $this->getHead(),
+                $this->getCalculatorBody()
+            );
+        }
+        return $this->calculatorMainContent;
+    }
+
+    public function getCalculatorBody(): CalculatorMainBody
     {
         if ($this->calculatorBody === null) {
-            $this->calculatorBody = new CalculatorBody($this->getWebFiles(), $this->getCalculatorRequest());
+            $this->calculatorBody = new CalculatorMainBody($this->getWebFiles(), $this->getCalculatorRequest());
         }
 
         return $this->calculatorBody;

@@ -3,20 +3,19 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\Web\Body;
+use DrdPlus\RulesSkeleton\Web\RulesBodyInterface;
 use DrdPlus\RulesSkeleton\Web\WebFiles;
+use Granam\WebContentBuilder\HtmlDocument;
+use Granam\WebContentBuilder\Web\Body;
 
-class CalculatorBody extends Body
+class CalculatorMainBody extends Body implements RulesBodyInterface
 {
     /**
      * @var CalculatorRequest
      */
     private $calculatorRequest;
 
-    public function __construct(
-        WebFiles $webFiles,
-        CalculatorRequest $calculatorRequest
-    )
+    public function __construct(WebFiles $webFiles, CalculatorRequest $calculatorRequest)
     {
         parent::__construct($webFiles);
         $this->calculatorRequest = $calculatorRequest;
@@ -26,11 +25,16 @@ class CalculatorBody extends Body
     {
         /** @noinspection PhpUnusedLocalVariableInspection */
         $calculatorRequest = $this->calculatorRequest;
-        \ob_start();
+        ob_start();
         /** @noinspection PhpIncludeInspection */
         include $file;
 
-        return \ob_get_clean();
+        return ob_get_clean();
+    }
+
+    public function postProcessDocument(HtmlDocument $htmlDocument): HtmlDocument
+    {
+        return $htmlDocument; // no post-process
     }
 
 }

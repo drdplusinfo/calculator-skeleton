@@ -9,7 +9,7 @@ use Granam\Tests\Tools\TestWithMockery;
 
 class CurrentValuesTest extends TestWithMockery
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\CalculatorTestTrait;
 
     /**
      * @test

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class AnchorsTest extends \DrdPlus\Tests\FrontendSkeleton\AnchorsTest
+class AnchorsTest extends \DrdPlus\Tests\RulesSkeleton\AnchorsTest
 {
-    use Partials\AbstractContentTestTrait;
+    use Partials\CalculatorTestTrait;
 }

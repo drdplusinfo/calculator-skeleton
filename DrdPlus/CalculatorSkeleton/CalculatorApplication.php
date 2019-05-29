@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace DrdPlus\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\RulesController;
-use DrdPlus\RulesSkeleton\Web\Content;
+use DrdPlus\RulesSkeleton\RulesApplication;
+use DrdPlus\RulesSkeleton\Web\RulesContent;
 
-class CalculatorController extends RulesController
+class CalculatorApplication extends RulesApplication
 {
     /** @var CalculatorServicesContainer */
     private $calculatorServicesContainer;
@@ -21,7 +21,7 @@ class CalculatorController extends RulesController
 
     /**
      * @param CalculatorServicesContainer $calculationServicesContainer
-     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\SourceCodeUrlIsNotValid
+     * @throws \DrdPlus\CalculatorSkeleton\Exceptions\InvalidCookiesPostfix
      */
     public function __construct(CalculatorServicesContainer $calculationServicesContainer)
     {
@@ -65,7 +65,10 @@ class CalculatorController extends RulesController
         );
     }
 
-    public function getContent(): Content
+    /**
+     * @return RulesContent|CalculatorContent
+     */
+    protected function getContent(): RulesContent
     {
         if ($this->calculatorContent) {
             return $this->calculatorContent;
@@ -73,12 +76,10 @@ class CalculatorController extends RulesController
         $servicesContainer = $this->calculatorServicesContainer;
 
         $this->calculatorContent = new CalculatorContent(
-            $servicesContainer->getHtmlHelper(),
-            $servicesContainer->getWebVersions(),
-            $servicesContainer->getHead(),
+            $servicesContainer->getCalculatorMainContent(),
             $servicesContainer->getMenu(),
-            $servicesContainer->getCalculatorBody(),
-            $servicesContainer->getWebCache()
+            $servicesContainer->getCurrentWebVersion(),
+            $servicesContainer->getPassedWebCache()
         );
 
         return $this->calculatorContent;
@@ -109,16 +110,16 @@ class CalculatorController extends RulesController
     }
 
     /**
-     * Its almost same as @see getBagEnds, but gives in a flat array BOTH array values AND indexes from given array
-     *
-     * @param array $values
+     * Its almost same as @param array $values
      * @return array
+     * @see getBagEnds, but gives in a flat array BOTH array values AND indexes from given array
+     *
      */
     protected function toFlatArray(array $values): array
     {
         $flat = [];
         foreach ($values as $index => $value) {
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 $flat[] = $index;
                 foreach ($this->toFlatArray($value) as $subItem) {
                     $flat[] = $subItem;
@@ -132,16 +133,16 @@ class CalculatorController extends RulesController
     }
 
     /**
-     * Its almost same as @see toFlatArray, but gives array values only, not indexes
-     *
-     * @param array $values
+     * Its almost same as @param array $values
      * @return array
+     * @see toFlatArray, but gives array values only, not indexes
+     *
      */
     protected function getBagEnds(array $values): array
     {
         $bagEnds = [];
         foreach ($values as $value) {
-            if (\is_array($value)) {
+            if (is_array($value)) {
                 foreach ($this->getBagEnds($value) as $subItem) {
                     $bagEnds[] = $subItem;
                 }
@@ -162,7 +163,7 @@ class CalculatorController extends RulesController
         if (!$additionalParameters) {
             return $_SERVER['REQUEST_URI'] ?? '';
         }
-        $values = \array_merge($_GET, $additionalParameters); // values from GET can be overwritten
+        $values = array_merge($_GET, $additionalParameters); // values from GET can be overwritten
 
         return $this->buildUrl($values);
     }
@@ -179,14 +180,14 @@ class CalculatorController extends RulesController
                 $query[] = $pair;
             }
         }
-        $urlParts = \parse_url($_SERVER['REQUEST_URI'] ?? '');
+        $urlParts = parse_url($_SERVER['REQUEST_URI'] ?? '');
         $host = '';
         if (!empty($urlParts['scheme'] && !empty($urlParts['host']))) {
             $host = $urlParts['scheme'] . '://' . $urlParts['host'];
         }
         $queryString = '';
         if ($query) {
-            $queryString = '/?' . \implode('&', $query);
+            $queryString = '/?' . implode('&', $query);
         }
 
         return $host . $queryString;
@@ -199,8 +200,8 @@ class CalculatorController extends RulesController
      */
     private function buildUrlParts(string $name, $value): array
     {
-        if (!\is_array($value)) {
-            return [\urlencode($name) . '=' . \urlencode($value)];
+        if (!is_array($value)) {
+            return [urlencode($name) . '=' . urlencode($value)];
         }
         $pairs = [];
         foreach ((array)$value as $part) {
@@ -220,19 +221,19 @@ class CalculatorController extends RulesController
     {
         $html = [];
         foreach ($this->getSelectedValues() as $name => $value) {
-            if (\in_array($name, $except, true)) {
+            if (in_array($name, $except, true)) {
                 continue;
             }
-            if (!\is_array($value)) {
-                $html[] = "<input type='hidden' name='" . \htmlspecialchars($name) . "' value='" . \htmlspecialchars($value) . "'>";
+            if (!is_array($value)) {
+                $html[] = "<input type='hidden' name='" . htmlspecialchars($name) . "' value='" . htmlspecialchars($value) . "'>";
             } else {
                 foreach ($value as $item) {
-                    $html[] = "<input type='hidden' name='" . \htmlspecialchars($name) . "[]' value='" . \htmlspecialchars($item) . "'>";
+                    $html[] = "<input type='hidden' name='" . htmlspecialchars($name) . "[]' value='" . htmlspecialchars($item) . "'>";
                 }
             }
         }
 
-        return \implode("\n", $html);
+        return implode("\n", $html);
     }
 
     /**
@@ -251,7 +252,7 @@ class CalculatorController extends RulesController
     {
         $values = $_GET;
         foreach ($exceptParameterNames as $name) {
-            if (\array_key_exists($name, $values)) {
+            if (array_key_exists($name, $values)) {
                 unset($values[$name]);
             }
         }
