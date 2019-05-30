@@ -89,7 +89,13 @@ trait CalculatorContentTestTrait
         bool $shouldHideCovered = false
     ): HtmlHelper
     {
-        return new HtmlHelper($dirs ?? $this->getDirs(), $inDevMode, $inForcedProductionMode, $shouldHideCovered);
+        return new HtmlHelper(
+            $dirs ?? $this->getDirs(),
+            $this->getEnvironment(),
+            $inDevMode,
+            $inForcedProductionMode,
+            $shouldHideCovered
+        );
     }
 
     protected function isCalculatorSkeletonChecked(): bool
