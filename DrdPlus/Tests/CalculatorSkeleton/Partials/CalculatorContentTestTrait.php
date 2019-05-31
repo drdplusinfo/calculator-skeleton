@@ -72,11 +72,6 @@ trait CalculatorContentTestTrait
         self::assertNotEmpty($documentRootRealPath, 'Can not find out real path of document root ' . \var_export($this->getProjectRoot(), true));
         $skeletonRootRealPath = \realpath($skeletonDocumentRoot ?? __DIR__ . '/../../../..');
         self::assertNotEmpty($skeletonRootRealPath, 'Can not find out real path of skeleton root ' . \var_export($skeletonRootRealPath, true));
-        self::assertRegExp(
-            '~\Wskeleton$~',
-            \basename($skeletonRootRealPath),
-            'Expected different trailing dir of calculator skeleton document root to detect it'
-        );
 
         return $documentRootRealPath === $skeletonRootRealPath;
     }
