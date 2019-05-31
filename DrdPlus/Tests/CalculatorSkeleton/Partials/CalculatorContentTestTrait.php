@@ -33,10 +33,16 @@ trait CalculatorContentTestTrait
         HtmlHelper $htmlHelper = null
     ): ServicesContainer
     {
-        return new CalculatorServicesContainer(
+        $servicesContainerClass = $this->getServicesContainerClass();
+        return new $servicesContainerClass(
             $configuration ?? $this->getConfiguration(),
             $htmlHelper ?? $this->createHtmlHelper($this->getDirs())
         );
+    }
+
+    protected function getServicesContainerClass(): string
+    {
+        return CalculatorServicesContainer::class;
     }
 
     /**
