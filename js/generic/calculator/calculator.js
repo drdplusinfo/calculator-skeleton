@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var inputIndex = 0, inputsLength = formInputs.length; inputIndex < inputsLength; inputIndex++) {
             var input = formInputs[inputIndex];
             if (input.type === 'submit' && !input.disabled) {
-                if (button.classList.contains('manual')) {
+                if (input.classList.contains('manual')) {
                     hasManualSubmit = true;
                 } else {
                     input.click();
