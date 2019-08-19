@@ -7,30 +7,4 @@ use DrdPlus\Tests\CalculatorSkeleton\Partials\CalculatorContentTestTrait;
 class RulesMainContentTest extends \DrdPlus\Tests\RulesSkeleton\Web\RulesMainContentTest
 {
     use CalculatorContentTestTrait;
-
-    /**
-     * @test
-     */
-    public function Authors_got_heading(): void
-    {
-        if (!$this->getTestsConfiguration()->hasAuthors()) {
-            self::assertFalse(false, 'Calculator does not have rules authors');
-
-            return;
-        }
-        parent::Authors_got_heading();
-    }
-
-    /**
-     * @test
-     */
-    public function Authors_are_mentioned(): void
-    {
-        if (!$this->getTestsConfiguration()->hasAuthors()) {
-            self::assertFalse(false, 'Calculator does not have rules authors');
-
-            return;
-        }
-        parent::Authors_are_mentioned();
-    }
 }
