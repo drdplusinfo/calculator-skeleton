@@ -2,15 +2,15 @@
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-use DrdPlus\RulesSkeleton\Cache;
+use DrdPlus\RulesSkeleton\RoutedDirs;
 
-class CacheTest extends \DrdPlus\Tests\RulesSkeleton\CacheTest
+class RoutedDirsTest extends \DrdPlus\Tests\RulesSkeleton\RoutedDirsTest
 {
     use Partials\CalculatorContentTestTrait;
 
     protected static function getSutClass(string $sutTestClass = null, string $regexp = '~\\\Tests(.+)Test$~'): string
     {
-        return Cache::class;
+        return RoutedDirs::class;
     }
 
 }

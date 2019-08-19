@@ -1,9 +1,9 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
 use DrdPlus\CalculatorSkeleton\CalculatorApplication;
+use DrdPlus\CalculatorSkeleton\CalculatorRequest;
 use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 use DrdPlus\CalculatorSkeleton\History;
 use DrdPlus\CalculatorSkeleton\Memory;
@@ -62,11 +62,11 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
 
     /**
      * @param bool $isRequestedHistoryDeletion
-     * @return Request|MockInterface
+     * @return CalculatorRequest|MockInterface
      */
-    private function createRequestMock(bool $isRequestedHistoryDeletion): Request
+    private function createRequestMock(bool $isRequestedHistoryDeletion): CalculatorRequest
     {
-        $request = $this->mockery(Request::class);
+        $request = $this->mockery(CalculatorRequest::class);
         $request->shouldReceive('isRequestedHistoryDeletion')
             ->atLeast()->once()
             ->andReturn($isRequestedHistoryDeletion);
