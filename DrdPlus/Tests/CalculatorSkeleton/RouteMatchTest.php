@@ -2,7 +2,7 @@
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class ConfigurationTest extends \DrdPlus\Tests\RulesSkeleton\ConfigurationTest
+class RouteMatchTest extends \DrdPlus\Tests\RulesSkeleton\RouteMatchTest
 {
     use Partials\CalculatorContentTestTrait;
 }

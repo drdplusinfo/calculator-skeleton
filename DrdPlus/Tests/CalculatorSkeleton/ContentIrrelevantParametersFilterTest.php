@@ -2,7 +2,7 @@
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class ConfigurationTest extends \DrdPlus\Tests\RulesSkeleton\ConfigurationTest
+class ContentIrrelevantParametersFilterTest extends \DrdPlus\Tests\RulesSkeleton\ContentIrrelevantParametersFilterTest
 {
     use Partials\CalculatorContentTestTrait;
 }

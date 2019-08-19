@@ -2,7 +2,7 @@
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class ConfigurationTest extends \DrdPlus\Tests\RulesSkeleton\ConfigurationTest
+class SkeletonInjectorComposerPluginTest extends \DrdPlus\Tests\RulesSkeleton\SkeletonInjectorComposerPluginTest
 {
     use Partials\CalculatorContentTestTrait;
 }

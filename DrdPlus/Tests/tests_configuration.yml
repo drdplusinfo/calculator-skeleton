@@ -16,6 +16,7 @@ has_link_to_single_journal: false
 has_table_of_contents: false
 has_headings: false
 has_local_links: false
+has_pdf: false
 too_short_failure_names: []
 too_short_success_names: []
 too_short_result_names: []

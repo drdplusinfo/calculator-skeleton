@@ -1,8 +1,8 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace DrdPlus\Tests\CalculatorSkeleton\Partials;
 
+use DrdPlus\CalculatorSkeleton\CalculatorApplication;
 use DrdPlus\CalculatorSkeleton\CalculatorConfiguration;
 use DrdPlus\CalculatorSkeleton\CalculatorServicesContainer;
 use DrdPlus\RulesSkeleton\Configuration;
@@ -51,6 +51,14 @@ trait CalculatorContentTestTrait
     protected function getConfigurationClass(): string
     {
         return CalculatorConfiguration::class;
+    }
+
+    /**
+     * @return string|CalculatorApplication
+     */
+    protected function getRulesApplicationClass(): string
+    {
+        return CalculatorApplication::class;
     }
 
     /**
