@@ -44,9 +44,9 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
                 ->atLeast()->once();
         }
         $calculatorServicesContainer = $this->createServicesContainerMock($request, $memory, $history);
-        $sutClass = static::getSutClass();
+        $applicationClass = $this->getRulesApplicationClass();
         /** @var CalculatorApplication $calculatorApplication */
-        $calculatorApplication = new $sutClass($calculatorServicesContainer);
+        $calculatorApplication = new $applicationClass($calculatorServicesContainer);
         \ob_start();
         $calculatorApplication->run();
         \ob_end_clean();
