@@ -23,11 +23,11 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
      */
     public function History_and_memory_is_solved_before_run(bool $historyDeletionRequested): void
     {
-        $request = $this->createRequestMock($historyDeletionRequested);
+        $request = $this->createRequestForHistoryDeletion($historyDeletionRequested);
         $request->shouldReceive('getValuesFromGet')
             ->atLeast()->once()
             ->andReturn($valuesFromGet = ['foo' => 'bar']);
-        $memory = $this->createMemoryMock();
+        $memory = $this->createMemoryForHistoryDeletion();
         $memory->shouldReceive('saveMemory')
             ->atLeast()->once()
             ->with($valuesFromGet);
@@ -35,7 +35,7 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
             $memory->shouldReceive('deleteMemory')
                 ->atLeast()->once();
         }
-        $history = $this->createHistoryMock();
+        $history = $this->createHistoryForHistoryDeletion();
         $history->shouldReceive('saveHistory')
             ->atLeast()->once()
             ->with($valuesFromGet);
@@ -64,7 +64,7 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
      * @param bool $isRequestedHistoryDeletion
      * @return CalculatorRequest|MockInterface
      */
-    private function createRequestMock(bool $isRequestedHistoryDeletion): CalculatorRequest
+    protected function createRequestForHistoryDeletion(bool $isRequestedHistoryDeletion): CalculatorRequest
     {
         $request = $this->mockery(CalculatorRequest::class);
         $request->shouldReceive('isRequestedHistoryDeletion')
@@ -77,7 +77,7 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
     /**
      * @return Memory|MockInterface
      */
-    private function createMemoryMock(): Memory
+    protected function createMemoryForHistoryDeletion(): Memory
     {
         return $this->mockery(Memory::class);
     }
@@ -85,7 +85,7 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
     /**
      * @return History|MockInterface
      */
-    private function createHistoryMock(): History
+    protected function createHistoryForHistoryDeletion(): History
     {
         return $this->mockery(History::class);
     }
