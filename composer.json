@@ -26,15 +26,5 @@
   },
   "extra": {
     "class": "DrdPlus\\CalculatorSkeleton\\CalculatorInjectorComposerPlugin"
-  },
-  "repositories": [
-    {
-      "url": "/home/jaroslav/projects/granam/integer",
-      "type": "git"
-    },
-    {
-      "url": "/home/jaroslav/projects/granam/web-content-builder",
-      "type": "git"
-    }
-  ]
+  }
 }
