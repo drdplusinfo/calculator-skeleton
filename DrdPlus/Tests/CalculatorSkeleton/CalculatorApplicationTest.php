@@ -80,6 +80,8 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
     protected function createMemoryForHistoryDeletion(): Memory
     {
         $memory = $this->mockery(Memory::class);
+        $memory->shouldReceive('getValue')
+            ->andReturnNull();
         $memory->makePartial();
         return $memory;
     }
@@ -90,6 +92,8 @@ class CalculatorApplicationTest extends AbstractCalculatorContentTest
     protected function createHistoryForHistoryDeletion(): History
     {
         $history = $this->mockery(History::class);
+        $history->shouldReceive('getValue')
+            ->andReturnNull();
         $history->makePartial();
         return $history;
     }
