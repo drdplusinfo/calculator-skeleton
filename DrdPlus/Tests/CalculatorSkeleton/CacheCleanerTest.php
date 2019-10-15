@@ -2,7 +2,7 @@
 
 namespace DrdPlus\Tests\CalculatorSkeleton;
 
-class RouterTest extends \DrdPlus\Tests\RulesSkeleton\RouterTest
+class CacheCleanerTest extends \DrdPlus\Tests\RulesSkeleton\CacheCleanerTest
 {
     use Partials\CalculatorContentTestTrait;
 }
